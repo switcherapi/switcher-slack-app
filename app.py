@@ -1,6 +1,8 @@
 import os
 from slack_bolt import App
 from dotenv import load_dotenv
+from payloads.app_home_opened import app_home_opened_payload
+
 load_dotenv()
 
 app = App(
@@ -13,41 +15,7 @@ def app_home_opened(client, event, logger):
   try:
     client.views_publish(
       user_id = event["user"],
-      view = {
-        "type": "home",
-        "callback_id": "home_view",
-        "blocks": [
-          {
-            "type": "section",
-            "text": {
-              "type": "mrkdwn",
-              "text": "*Welcome to Switcher API App"
-            }
-          },
-          {
-            "type": "divider"
-          },
-          {
-            "type": "section",
-            "text": {
-              "type": "mrkdwn",
-              "text": "Press the button to save a turtle."
-            }
-          },
-          {
-            "type": "actions",
-            "elements": [
-              {
-                "type": "button",
-                "text": {
-                  "type": "plain_text",
-                  "text": "Save"
-                }
-              }
-            ]
-          }
-        ]
-      }
+      view = app_home_opened_payload
     )
   except Exception as e:
     logger.error(f"Error publishing home tab: {e}")
