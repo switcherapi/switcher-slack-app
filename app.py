@@ -154,6 +154,7 @@ def handle_submission(ack, body, client, view):
     # Redirect approval
     client.chat_postMessage(
       channel = "C01SH298R6C",
+      text = "The following request is waiting for approval."
       blocks = REQUEST_SUBMISSION_BLOCKS
     )
 
