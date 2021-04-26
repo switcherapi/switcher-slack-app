@@ -1,4 +1,4 @@
-modal_change_request = {
+MODAL_REQUEST = {
 	"callback_id": "change_request_view",
 	"type": "modal",
 	"title": {
@@ -38,22 +38,7 @@ modal_change_request = {
 					"type": "plain_text",
 					"text": "Select an item"
 				},
-				"options": [
-					{
-						"text": {
-							"type": "plain_text",
-							"text": "Production"
-						},
-						"value": "default"
-					},
-					{
-						"text": {
-							"type": "plain_text",
-							"text": "Development"
-						},
-						"value": "Development"
-					}
-				],
+				"options": [],
 				"action_id": "selection_environment"
 			}
 		},
@@ -73,16 +58,9 @@ modal_change_request = {
 					{
 						"text": {
 							"type": "plain_text",
-							"text": "Release 1"
+							"text": "-"
 						},
-						"value": "Release 1"
-					},
-					{
-						"text": {
-							"type": "plain_text",
-							"text": "Release 2"
-						},
-						"value": "Release 2"
+						"value": "-"
 					}
 				],
 				"action_id": "selection_group"
@@ -104,16 +82,9 @@ modal_change_request = {
 					{
 						"text": {
 							"type": "plain_text",
-							"text": "MY_FEATURE01"
+							"text": "-"
 						},
-						"value": "MY_FEATURE01"
-					},
-					{
-						"text": {
-							"type": "plain_text",
-							"text": "MY_FEATURE02"
-						},
-						"value": "MY_FEATURE02"
+						"value": "-"
 					}
 				],
 				"action_id": "selection_switcher"
@@ -135,16 +106,9 @@ modal_change_request = {
 					{
 						"text": {
 							"type": "plain_text",
-							"text": "Activate"
+							"text": "-"
 						},
-						"value": "true"
-					},
-					{
-						"text": {
-							"type": "plain_text",
-							"text": "Deactivate"
-						},
-						"value": "false"
+						"value": "-"
 					}
 				],
 				"action_id": "selection_status"
@@ -163,4 +127,131 @@ modal_change_request = {
 			}
 		}
 	]
+}
+
+APP_HOME = {
+	"type": "home",
+	"blocks": [
+		{
+			"type": "context",
+			"elements": [
+				{
+					"type": "plain_text",
+					"text": "What are you up today?"
+				}
+			]
+		},
+		{
+			"type": "divider"
+		},
+		{
+			"type": "actions",
+			"elements": [
+				{
+					"type": "button",
+					"text": {
+						"type": "plain_text",
+						"text": "Request Change"
+					},
+					"value": "test",
+					"action_id": "request_change"
+				}
+			]
+		}
+	]
+}
+
+REQUEST_SUBMISSION_BLOCKS = [
+	{
+		"type": "header",
+		"text": {
+			"type": "plain_text",
+			"text": "Change Request Submitted"
+		}
+	},
+	{
+		"type": "section",
+		"text": {
+			"type": "plain_text",
+			"text": "The following request has been opened for aproval."
+		}
+	},
+	{
+		"type": "divider"
+	},
+	{
+		"type": "section",
+		"text": {
+			"type": "mrkdwn",
+			"text": "```Ennvironment```"
+		}
+	},
+	{
+		"type": "section",
+		"text": {
+			"type": "mrkdwn",
+			"text": "> default"
+		}
+	},
+	{
+		"type": "section",
+		"text": {
+			"type": "mrkdwn",
+			"text": "```Group```"
+		}
+	},
+	{
+		"type": "section",
+		"text": {
+			"type": "mrkdwn",
+			"text": "> Release 1"
+		}
+	},
+	{
+		"type": "section",
+		"text": {
+			"type": "mrkdwn",
+			"text": "```Switcher```"
+		}
+	},
+	{
+		"type": "section",
+		"text": {
+			"type": "mrkdwn",
+			"text": "> MY_FEATURE1"
+		}
+	},
+	{
+		"type": "section",
+		"text": {
+			"type": "mrkdwn",
+			"text": "```Status```"
+		}
+	},
+	{
+		"type": "section",
+		"text": {
+			"type": "mrkdwn",
+			"text": "> Activate"
+		}
+	},
+	{
+		"type": "header",
+		"text": {
+			"type": "plain_text",
+			"text": "Observations"
+		}
+	},
+	{
+		"type": "section",
+		"text": {
+			"type": "plain_text",
+			"text": "Feature is now ready to deploy"
+		}
+	}
+]
+
+REQUEST_SUBMISSION = {
+	"type": "home",
+	"blocks": REQUEST_SUBMISSION_BLOCKS
 }
