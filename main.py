@@ -3,8 +3,19 @@ import copy
 
 from slack_bolt import App
 from dotenv import load_dotenv
-from utils.app_utils import populateSelection, prepareBody, getStateValue
-from payloads.constants import MODAL_REQUEST, APP_HOME, REQUEST_SUBMISSION, REQUEST_SUBMISSION_BLOCKS
+from util.utils import (
+  populateSelection, 
+  prepareBody, 
+  getStateValue,
+  addField,
+  addSummary,
+  addHeaderValue,
+)
+from payloads.constants import (
+  MODAL_REQUEST, 
+  APP_HOME, REQUEST_SUMMARY, 
+  REQUEST_MESSAGE
+)
 
 load_dotenv()
 
@@ -129,6 +140,7 @@ def selection_status(ack, body, client, logger):
 # Submit Change Request for verification and approval
 @app.view("change_request_view")
 def handle_submission(ack, body, client, view):
+  print(body)
   user = body["user"]
   ack()
 
@@ -138,25 +150,78 @@ def handle_submission(ack, body, client, view):
   optionStatus = getStateValue(view, "selection_status")
   optionObs = getStateValue(view, "selection_observation")
 
-  msg = ""
+  summary = copy.deepcopy(REQUEST_SUMMARY)
+  addSummary(summary["blocks"], "Environment", optionEnv)
+  addSummary(summary["blocks"], "Group", optionGroup)
+  addSummary(summary["blocks"], "Switcher", optionSwitcher)
+  addSummary(summary["blocks"], "Status", optionStatus)
+  addHeaderValue(summary["blocks"], "Observations", optionObs)
+
+  message = copy.deepcopy(REQUEST_MESSAGE)
+  addField(message[1]["fields"], "Environment", optionEnv)
+  addField(message[1]["fields"], "Group", optionGroup)
+  addField(message[1]["fields"], "Switcher", optionSwitcher)
+  addField(message[1]["fields"], "Status", optionStatus)
+  addField(message[1]["fields"], "Observations", optionObs)
+
   try:
-    msg = f"{user['name']}, your request was successfully sent"
-  except Exception as e:
-    msg = "There was an error with your submission"
-  finally:
     # Request preview
     client.views_publish(
       response_action = "push",
       user_id = user["id"],
-      view = REQUEST_SUBMISSION
+      view = summary
     )
 
     # Redirect approval
     client.chat_postMessage(
       channel = "C01SH298R6C",
-      text = "The following request is waiting for approval."
-      blocks = REQUEST_SUBMISSION_BLOCKS
+      text = "The following request has been opened for approval.",
+      blocks = message
     )
+  except Exception as e:
+    client.chat_postMessage(
+      channel = user, 
+      text = "There was an error with your submission"
+    )
+
+# Request approved
+@app.action("request_approved")
+def request_approved(ack, body, client):
+  message_ts = body["message"]["ts"]
+  ack()
+
+  client.chat_update(
+    channel = "C01SH298R6C",
+    text = "Change request approved",
+    ts = message_ts,
+    blocks = [
+      {
+          "type": "section",
+          "text": {
+              "type": "mrkdwn",
+              "text": "Change request approved."
+          }
+      }]
+  )
+
+# Request denied
+@app.action("request_denied")
+def request_denied(ack, body, client, logger):
+  ack()
+
+  client.chat_update(
+    channel = "C01SH298R6C",
+    text = "Change request denied",
+    ts = message_ts,
+    blocks = [
+      {
+          "type": "section",
+          "text": {
+              "type": "mrkdwn",
+              "text": "Change request denied."
+          }
+      }]
+  )
 
 if __name__ == "__main__":
     app.start(port=int(os.environ.get("PORT", 3000)))

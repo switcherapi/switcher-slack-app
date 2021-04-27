@@ -161,97 +161,64 @@ APP_HOME = {
 	]
 }
 
-REQUEST_SUBMISSION_BLOCKS = [
-	{
-		"type": "header",
-		"text": {
-			"type": "plain_text",
-			"text": "Change Request Submitted"
+REQUEST_SUMMARY = {
+	"type": "home",
+	"blocks": [
+		{
+			"type": "header",
+			"text": {
+				"type": "plain_text",
+				"text": "Change Request Submitted"
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "plain_text",
+				"text": "The following request has been opened for approval."
+			}
+		},
+		{
+			"type": "divider"
 		}
-	},
-	{
-		"type": "section",
-		"text": {
-			"type": "plain_text",
-			"text": "The following request has been opened for aproval."
-		}
-	},
-	{
-		"type": "divider"
-	},
-	{
-		"type": "section",
-		"text": {
-			"type": "mrkdwn",
-			"text": "```Ennvironment```"
-		}
-	},
-	{
-		"type": "section",
-		"text": {
-			"type": "mrkdwn",
-			"text": "> default"
-		}
-	},
+	]
+}
+
+REQUEST_MESSAGE = [
 	{
 		"type": "section",
 		"text": {
 			"type": "mrkdwn",
-			"text": "```Group```"
+			"text": "The following request has been opened for approval"
 		}
 	},
 	{
 		"type": "section",
-		"text": {
-			"type": "mrkdwn",
-			"text": "> Release 1"
-		}
+		"fields": []
 	},
 	{
-		"type": "section",
-		"text": {
-			"type": "mrkdwn",
-			"text": "```Switcher```"
-		}
-	},
-	{
-		"type": "section",
-		"text": {
-			"type": "mrkdwn",
-			"text": "> MY_FEATURE1"
-		}
-	},
-	{
-		"type": "section",
-		"text": {
-			"type": "mrkdwn",
-			"text": "```Status```"
-		}
-	},
-	{
-		"type": "section",
-		"text": {
-			"type": "mrkdwn",
-			"text": "> Activate"
-		}
-	},
-	{
-		"type": "header",
-		"text": {
-			"type": "plain_text",
-			"text": "Observations"
-		}
-	},
-	{
-		"type": "section",
-		"text": {
-			"type": "plain_text",
-			"text": "Feature is now ready to deploy"
-		}
+		"type": "actions",
+		"elements": [
+			{
+				"type": "button",
+				"text": {
+					"type": "plain_text",
+					"text": "Approve"
+				},
+				"style": "primary",
+				"value": "request_approved",
+				"action_id": "request_approved"
+			},
+			{
+				"type": "button",
+				"text": {
+					"type": "plain_text",
+					"text": "Deny"
+				},
+				"style": "danger",
+				"value": "request_denied",
+				"action_id": "request_denied"
+			}
+		]
 	}
 ]
-
-REQUEST_SUBMISSION = {
-	"type": "home",
-	"blocks": REQUEST_SUBMISSION_BLOCKS
-}

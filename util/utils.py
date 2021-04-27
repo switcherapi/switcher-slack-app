@@ -13,6 +13,40 @@ def populateSelection(body, item, values):
                     "value": value["value"]
                 })
 
+# Add custom header (label) body (value) to block
+def addSummary(block, label, value):
+    block.append({
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": f"```{label}```\n> {value}"
+			}
+		})
+
+def addField(fields, label, value):
+    fields.append({
+            "type": "mrkdwn",
+            "text": f"*{label}:*\n{value}"
+        })
+
+# Add bold header title followed by plain text
+def addHeaderValue(block, label, value):
+    block.append({
+			"type": "header",
+			"text": {
+				"type": "plain_text",
+				"text": label
+			}
+		})
+
+    block.append({
+			"type": "section",
+			"text": {
+				"type": "plain_text",
+				"text": value
+			}
+		})
+
 # Prepare view to be forwarded 
 def prepareBody(body):
     body["view"].pop("id")

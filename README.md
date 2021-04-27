@@ -26,7 +26,7 @@ SLACK_SIGNING_SECRET=
 ```
 
 > 2. **Running the API**
-Start the API by running: py app.py
+Start the API by running: py main.py
 
 > 3. **Start ngrok**
 Expose the API using ngrok, for example: ngrok http 3000
