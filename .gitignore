@@ -16,3 +16,6 @@ coverage.xml
 
 # PyBuilder
 target/
+
+# Bolt
+data/

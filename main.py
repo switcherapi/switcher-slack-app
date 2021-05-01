@@ -1,6 +1,13 @@
 import os
 
 from slack_bolt import App
+from slack_bolt.oauth.oauth_settings import OAuthSettings
+from slack_sdk.oauth.installation_store import FileInstallationStore
+from slack_sdk.oauth.state_store import FileOAuthStateStore
+
+from slack_bolt.oauth.callback_options import CallbackOptions, SuccessArgs, FailureArgs
+from slack_bolt.response import BoltResponse
+
 from dotenv import load_dotenv
 from controller.home import onChangeRequesOpened, onHomeOpened
 from controller.change_request import (
@@ -15,9 +22,45 @@ from controller.change_request import (
 
 load_dotenv()
 
+def success(args: SuccessArgs) -> BoltResponse:
+  assert args.request is not None
+  t = args.installation.bot_token
+  ch = args.installation.incoming_webhook_channel
+  chid = args.installation.incoming_webhook_channel_id
+
+  return BoltResponse(
+    status = 308,
+    headers = {
+      "Location": f"https://switcherapi.github.io/switcher-management/?t={t}&ch={ch}&chid={chid}",
+    },
+    body = ""
+  )
+
+def failure(args: FailureArgs) -> BoltResponse:
+  assert args.request is not None
+  assert args.reason is not None
+  return BoltResponse(
+    status = 308,
+    headers = {
+      "Location": "https://switcherapi.github.io/switcher-management/documentation",
+    },
+    body = ""
+  )
+
 app = App(
-    token=os.environ.get("SLACK_BOT_TOKEN"),
-    signing_secret=os.environ.get("SLACK_SIGNING_SECRET")
+  signing_secret = os.environ.get("SLACK_SIGNING_SECRET"),
+  installation_store = FileInstallationStore(base_dir="./data"),
+  oauth_settings = OAuthSettings(
+    client_id = os.environ.get("SLACK_CLIENT_ID"),
+    client_secret = os.environ.get("SLACK_CLIENT_SECRET"),
+    scopes = ["chat:write", "commands", "incoming-webhook"],
+    user_scopes = ["im:history"],
+    redirect_uri = None,
+    install_path = "/slack/install",
+    redirect_uri_path = "/slack/oauth_redirect",
+    state_store = FileOAuthStateStore(expiration_seconds=600, base_dir="./data"),
+    callback_options = CallbackOptions(success=success, failure=failure)
+  )
 )
 
 # Show the app landing page 
