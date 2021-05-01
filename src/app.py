@@ -108,5 +108,28 @@ def request_approved(ack, body, client, logger):
 def request_denied(ack, body, client, logger):
   onRequestDenied(ack, body, client, logger)
 
+
+from flask import Flask, request, session, make_response
+from slack_bolt.adapter.flask import SlackRequestHandler
+
+flask_app = Flask(__name__)
+handler = SlackRequestHandler(app)
+
+# Handles requests from Slack API server
+@flask_app.route("/slack/events", methods=["POST"])
+def slack_events():
+    return handler.handle(request)
+
+# Starts Slack OAuth (=app installation) flow
+@flask_app.route("/slack/install", methods=["GET"])
+def install():
+    return handler.handle(request)
+
+# Handles the redirection from Slack's OAuth flow
+@flask_app.route("/slack/oauth_redirect", methods=["GET"])
+def oauth_redirect():
+    return handler.handle(request)
+
 if __name__ == "__main__":
     app.start(port = int(os.environ.get("PORT", 3000)))
+    flask_app.run(debug=True)
