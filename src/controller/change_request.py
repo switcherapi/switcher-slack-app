@@ -9,6 +9,9 @@ from payloads.change_request import (
   getRequestMessage
 )
 
+from payloads import change_request
+
+
 def onEnvironmentSelected(ack, body, client, logger):
   envSelected = body["actions"][0]["selected_option"]["value"]
   
