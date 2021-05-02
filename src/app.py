@@ -133,43 +133,5 @@ def install():
 def oauth_redirect():
   return handler.handle(request)
 
-
-##### Testing resource #####
-import json
-switcher_services = SwitcherInstallationStoreService()
-
-@flask_app.route("/switcher_api/saveinstallation", methods=["POST"])
-def saveinstallation():
-  installation_filepath = "./data/TUUUUUUU/installer-latest"
-  bot_filepath = "./data/TUUUUUUU/bot-latest"
-
-  with open(installation_filepath) as f:
-    inst_payload = json.loads(f.read())
-
-  with open(bot_filepath) as f:
-    bot_payload = json.loads(f.read())
-
-  return switcher_services.save_installation(
-    enterprise_id = None,
-    team_id = "TUUUUUUU", 
-    user_id = "UUUUUUUU",
-    installation_payload = inst_payload,
-    bot_payload = bot_payload
-  )
-
-@flask_app.route("/switcher_api/findbot", methods=["GET"])
-def findbot():
-  return switcher_services.find_bot(
-    enterprise_id = None,
-    team_id = "TUUUUUUU"
-  )
-
-@flask_app.route("/switcher_api/findinstallation", methods=["GET"])
-def findinstallation():
-  return switcher_services.find_installation(
-    enterprise_id = None,
-    team_id = "TUUUUUUU"
-  )
-
 if __name__ == "__main__":
   flask_app.run()
