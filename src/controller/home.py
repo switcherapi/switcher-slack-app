@@ -1,6 +1,6 @@
 import copy
 
-from util.utils import populateSelection
+from utils import populateSelection
 from payloads.home import MODAL_REQUEST, APP_HOME
 
 def onHomeOpened(client, event, logger):

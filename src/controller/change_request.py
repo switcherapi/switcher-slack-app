@@ -1,7 +1,8 @@
-from util.utils import (
+from utils import (
   populateSelection, 
   prepareBody, 
-  getStateValue
+  getStateValue,
+  getSelectedAction
 )
 from payloads.change_request import (
   createSummary,
@@ -11,9 +12,8 @@ from payloads.change_request import (
 
 from payloads import change_request
 
-
 def onEnvironmentSelected(ack, body, client, logger):
-  envSelected = body["actions"][0]["selected_option"]["value"]
+  envSelected = getSelectedAction(body)
   
   populateSelection(body["view"], "Group", [
     { "name": "Release 1", "value": "Release 1" },
@@ -36,7 +36,7 @@ def onEnvironmentSelected(ack, body, client, logger):
     logger.error(f"Error selecting environment: {e}")
 
 def onGroupSelected(ack, body, client, view, logger):
-  groupSelected = body["actions"][0]["selected_option"]["value"]
+  groupSelected = getSelectedAction(body)
 
   populateSelection(body["view"], "Switcher", [
     { "name": "MY_FEATURE1", "value": "MY_FEATURE1" },
@@ -59,7 +59,7 @@ def onGroupSelected(ack, body, client, view, logger):
     logger.error(f"Error selecting group: {e}")
 
 def onSwitcherSelected(ack, body, client, logger):
-  switcherSelected = body["actions"][0]["selected_option"]["value"]
+  switcherSelected = getSelectedAction(body)
 
   populateSelection(body["view"], "Status", [
     { "name": "Enable", "value": "true" },
@@ -91,8 +91,10 @@ def onSubmit(ack, body, client, view):
 
   ack()
 
+  environment = getStateValue(view, "selection_environment")
   context = {
-    "environment": getStateValue(view, "selection_environment"),
+    "environment": environment,
+    "environment_alias": "Production" if environment == "default" else environment,
     "group": getStateValue(view, "selection_group"),
     "switcher": getStateValue(view, "selection_switcher"),
     "status": getStateValue(view, "selection_status"),

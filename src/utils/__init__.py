@@ -1,5 +1,5 @@
-# Includes values to selection block
 def populateSelection(body, item, values):
+    """Includes values to selection block"""
     for block in body["blocks"]:
         text = block.get("text", {})
         if text.get("text", None) == item:
@@ -13,8 +13,8 @@ def populateSelection(body, item, values):
                     "value": value["value"]
                 })
 
-# Add custom header (label) body (value) to block
 def addSummary(block, label, value):
+    """Add custom header (label) body (value) to block"""
     block.append({
 			"type": "section",
 			"text": {
@@ -29,8 +29,8 @@ def addField(fields, label, value):
             "text": f"*{label}:*\n{value}"
         })
 
-# Add bold header title followed by plain text
 def addHeaderValue(block, label, value):
+    """Add bold header title followed by plain text"""
     block.append({
 			"type": "header",
 			"text": {
@@ -47,8 +47,8 @@ def addHeaderValue(block, label, value):
 			}
 		})
 
-# Prepare view to be forwarded 
 def prepareBody(body):
+    """Prepare view to be forwarded"""
     body["view"].pop("id")
     body["view"].pop("team_id")
     body["view"].pop("state")
@@ -59,12 +59,18 @@ def prepareBody(body):
     body["view"].pop("app_installed_team_id")
     body["view"].pop("bot_id")
 
-# Get selected values stored at the state element
 def getStateValue(view, option):
+    """Get selected values stored at the state element"""
     elementValue = ""
     for element in view["state"]["values"]:
         elementValue = view["state"]["values"][element].get(option, None)
-        if not (elementValue is None):
-            if not (elementValue.get("selected_option", None) is None):
+        if elementValue is not None:
+            if elementValue.get("selected_option", None) is not None:
                 return elementValue["selected_option"]["value"]
             return elementValue["value"]
+
+def getSelectedAction(body):
+    """Get selected value from an action event"""
+    if body["actions"] is not None and len(body["actions"]) > 0:
+        return body["actions"][0]["selected_option"]["value"]
+    return ""

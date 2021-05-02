@@ -9,6 +9,9 @@ from slack_bolt.oauth.callback_options import CallbackOptions, SuccessArgs, Fail
 from slack_bolt.response import BoltResponse
 
 from dotenv import load_dotenv
+
+from services import SwitcherService
+from store import SwitcherAppInstallationStore
 from controller.home import onChangeRequesOpened, onHomeOpened
 from controller.change_request import (
   onEnvironmentSelected,
@@ -21,6 +24,7 @@ from controller.change_request import (
 )
 
 load_dotenv()
+switcher_url = os.environ.get("SWITCHER_URL")
 
 def success(args: SuccessArgs) -> BoltResponse:
   assert args.request is not None
@@ -31,7 +35,7 @@ def success(args: SuccessArgs) -> BoltResponse:
   return BoltResponse(
     status = 308,
     headers = {
-      "Location": f"https://switcherapi.github.io/switcher-management/?t={t}&ch={ch}&chid={chid}",
+      "Location": f"{switcher_url}/?t={t}&ch={ch}&chid={chid}",
     },
     body = ""
   )
@@ -42,14 +46,14 @@ def failure(args: FailureArgs) -> BoltResponse:
   return BoltResponse(
     status = 308,
     headers = {
-      "Location": "https://switcherapi.github.io/switcher-management/documentation",
+      "Location": f"{switcher_url}/documentation",
     },
     body = ""
   )
 
 app = App(
   signing_secret = os.environ.get("SLACK_SIGNING_SECRET"),
-  installation_store = FileInstallationStore(base_dir="./data"),
+  installation_store = SwitcherAppInstallationStore(base_dir="./data"),
   oauth_settings = OAuthSettings(
     client_id = os.environ.get("SLACK_CLIENT_ID"),
     client_secret = os.environ.get("SLACK_CLIENT_SECRET"),
@@ -108,7 +112,6 @@ def request_approved(ack, body, client, logger):
 def request_denied(ack, body, client, logger):
   onRequestDenied(ack, body, client, logger)
 
-
 from flask import Flask, request, session, make_response
 from slack_bolt.adapter.flask import SlackRequestHandler
 
@@ -118,18 +121,17 @@ handler = SlackRequestHandler(app)
 # Handles requests from Slack API server
 @flask_app.route("/slack/events", methods=["POST"])
 def slack_events():
-    return handler.handle(request)
+  return handler.handle(request)
 
 # Starts Slack OAuth (=app installation) flow
 @flask_app.route("/slack/install", methods=["GET"])
 def install():
-    return handler.handle(request)
+  return handler.handle(request)
 
 # Handles the redirection from Slack's OAuth flow
 @flask_app.route("/slack/oauth_redirect", methods=["GET"])
 def oauth_redirect():
-    return handler.handle(request)
+  return handler.handle(request)
 
 if __name__ == "__main__":
-    app.start(port = int(os.environ.get("PORT", 3000)))
-    flask_app.run(debug=True)
+    flask_app.run(debug=True, port = int(os.environ.get("PORT", 3001)))
