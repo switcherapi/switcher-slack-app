@@ -26,14 +26,18 @@ switcher_url = os.environ.get("SWITCHER_URL")
 
 def success(args: SuccessArgs) -> BoltResponse:
   assert args.request is not None
-  t = args.installation.bot_token
   ch = args.installation.incoming_webhook_channel
   chid = args.installation.incoming_webhook_channel_id
+  t_id = args.installation.team_id
+  e_id = args.installation.enterprise_id
+
+  if e_id is None: e_id = ""
+  if t_id is None: t_id = ""
 
   return BoltResponse(
     status = 308,
     headers = {
-      "Location": f"{switcher_url}/?t={t}&ch={ch}&chid={chid}",
+      "Location": f"{switcher_url}/slack/oauth_redirect?e_id={e_id}&t_id={t_id}&ch={ch}&chid={chid}",
     },
     body = ""
   )
@@ -44,7 +48,7 @@ def failure(args: FailureArgs) -> BoltResponse:
   return BoltResponse(
     status = 308,
     headers = {
-      "Location": f"{switcher_url}/documentation",
+      "Location": f"{switcher_url}/slack/error",
     },
     body = ""
   )
@@ -60,8 +64,8 @@ app = App(
     redirect_uri = None,
     install_path = "/slack/install",
     redirect_uri_path = "/slack/oauth_redirect",
-    state_store = FileOAuthStateStore(expiration_seconds=600, base_dir="./data"),
-    callback_options = CallbackOptions(success=success, failure=failure)
+    state_store = FileOAuthStateStore(expiration_seconds = 600, base_dir = "./data"),
+    callback_options = CallbackOptions(success = success, failure = failure)
   )
 )
 
@@ -123,7 +127,7 @@ def slack_events():
 
 # Starts Slack OAuth (=app installation) flow
 @flask_app.route("/slack/install", methods=["GET"])
-def install():
+def slack_install():
   return handler.handle(request)
 
 # Handles the redirection from Slack's OAuth flow

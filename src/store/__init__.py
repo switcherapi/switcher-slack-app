@@ -43,8 +43,8 @@ class SwitcherAppInstallationStore(InstallationStore, AsyncInstallationStore):
         except Exception as e:
             message = \
                 "Failed to save installation data for enterprise:" \
-                f"{enterprise_id}, team: {team_id}: {e}"
-            
+                f"{e_id}, team: {t_id}: {e}"
+                
             self.logger.warning(message)
 
     async def async_find_bot(

@@ -52,7 +52,7 @@ class SwitcherService:
             payload = {
                 "iss": self.__issuer,
                 "sub": resource,
-                "nbf": datetime.datetime.utcnow()
+                "exp": datetime.datetime.utcnow() + datetime.timedelta(seconds = 30)
             }
         )
 

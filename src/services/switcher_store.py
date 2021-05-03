@@ -21,7 +21,7 @@ class SwitcherInstallationStoreService(SwitcherService):
         installation_payload: dict,
         bot_payload: dict
     ) -> Response:
-        return self.do_post(
+        response = self.do_post(
             path = "/slack/v1/installation",
             body = {
                 "enterprise_id": enterprise_id,
@@ -31,6 +31,11 @@ class SwitcherInstallationStoreService(SwitcherService):
                 "bot_payload": bot_payload
             }
         )
+
+        if response.status_code != 201:
+            raise Exception(response.data)
+
+        return response
 
     def find_bot(
         self, 
