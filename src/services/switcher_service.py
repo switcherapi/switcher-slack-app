@@ -8,14 +8,11 @@ from typing import Optional
 
 class SwitcherService:
     """Default Switcher Service implementation"""
-    
-    __algorithm: str = "HS256"
-    __issuer: str = "Switcher Slack App"
-    __secret: str = None
-    _api_url: str = None
 
     def __init__(self, api_url: str):
         self.__secret = os.environ.get("SWITCHER_JWT_SECRET")
+        self.__algorithm: str = "HS256"
+        self.__issuer: str = "Switcher Slack App"
         self._api_url = api_url
 
     def do_post(self, path: str, body: Optional[dict]) -> Response:

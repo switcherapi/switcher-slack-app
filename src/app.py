@@ -2,7 +2,6 @@ import os
 
 from slack_bolt import App
 from slack_bolt.oauth.oauth_settings import OAuthSettings
-from slack_sdk.oauth.installation_store import FileInstallationStore
 from slack_sdk.oauth.state_store import FileOAuthStateStore
 
 from slack_bolt.oauth.callback_options import CallbackOptions, SuccessArgs, FailureArgs
@@ -10,7 +9,6 @@ from slack_bolt.response import BoltResponse
 
 from dotenv import load_dotenv
 
-from services.switcher_store import SwitcherInstallationStoreService
 from store import SwitcherAppInstallationStore
 from controller.home import onChangeRequesOpened, onHomeOpened
 from controller.change_request import (
@@ -53,7 +51,7 @@ def failure(args: FailureArgs) -> BoltResponse:
 
 app = App(
   signing_secret = os.environ.get("SLACK_SIGNING_SECRET"),
-  installation_store = SwitcherAppInstallationStore(base_dir="./data"),
+  installation_store = SwitcherAppInstallationStore(),
   oauth_settings = OAuthSettings(
     client_id = os.environ.get("SLACK_CLIENT_ID"),
     client_secret = os.environ.get("SLACK_CLIENT_SECRET"),

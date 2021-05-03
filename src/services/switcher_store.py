@@ -76,14 +76,12 @@ class SwitcherInstallationStoreService(SwitcherService):
     def delete_bot(
         self, 
         enterprise_id: Optional[str], 
-        team_id: Optional[str],
-        user_id: Optional[str] = None
+        team_id: Optional[str]
     ) -> Response:
         return self.do_delete(
             path = "/slack/v1/deletebot",
             params = {
                 "enterprise_id": enterprise_id,
-                "team_id": team_id,
-                "user_id": user_id
+                "team_id": team_id
             }
         )
