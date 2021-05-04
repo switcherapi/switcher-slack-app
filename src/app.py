@@ -9,7 +9,7 @@ from slack_bolt.response import BoltResponse
 
 from dotenv import load_dotenv
 
-from store import SwitcherAppInstallationStore
+from store.switcher_store import SwitcherAppInstallationStore
 from controller.home import onChangeRequesOpened, onHomeOpened
 from controller.change_request import (
   onEnvironmentSelected,

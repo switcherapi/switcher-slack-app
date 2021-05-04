@@ -17,5 +17,8 @@ coverage.xml
 # PyBuilder
 target/
 
+# PyTest Cache
+.pytest_cache
+
 # Bolt
 data/

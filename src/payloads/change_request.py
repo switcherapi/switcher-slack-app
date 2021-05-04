@@ -1,5 +1,5 @@
 import copy
-from utils import (
+from utils.slack_payload_util import (
   addField,
   addSummary,
   addHeaderValue,

@@ -1,4 +1,4 @@
-from utils import (
+from utils.slack_payload_util import (
   populateSelection, 
   prepareBody, 
   getStateValue,
