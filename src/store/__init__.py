@@ -68,6 +68,7 @@ class SwitcherAppInstallationStore(InstallationStore, AsyncInstallationStore):
         is_enterprise_install: Optional[bool] = False,
     ) -> Optional[Bot]:
         try:
+            enterprise_id, team_id = self._inputSanitize(enterprise_id, team_id)
             response = self._store_service.find_bot(
                 enterprise_id = enterprise_id,
                 team_id = team_id
@@ -107,6 +108,7 @@ class SwitcherAppInstallationStore(InstallationStore, AsyncInstallationStore):
         is_enterprise_install: Optional[bool] = False,
     ) -> Optional[Installation]:
         try:
+            enterprise_id, team_id = self._inputSanitize(enterprise_id, team_id)
             response = self._store_service.find_installation(
                 enterprise_id = enterprise_id,
                 team_id = team_id
@@ -133,6 +135,7 @@ class SwitcherAppInstallationStore(InstallationStore, AsyncInstallationStore):
         enterprise_id: Optional[str], 
         team_id: Optional[str]
     ) -> None:
+        enterprise_id, team_id = self._inputSanitize(enterprise_id, team_id)
         self._store_service.delete_installation(
             enterprise_id = enterprise_id,
             team_id = team_id
@@ -168,3 +171,16 @@ class SwitcherAppInstallationStore(InstallationStore, AsyncInstallationStore):
                 f"{enterprise_id}, team: {team_id}: {e}"
             
             self.logger.warning(message)
+
+    @staticmethod
+    def _inputSanitize(
+        enterprise_id: Optional[str],
+        team_id: Optional[str]
+    ):
+        if enterprise_id is None:
+            enterprise_id = ""
+
+        if team_id is None:
+            team_id = ""
+
+        return enterprise_id, team_id
