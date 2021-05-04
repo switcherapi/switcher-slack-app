@@ -133,7 +133,7 @@ class SwitcherAppInstallationStore(InstallationStore, AsyncInstallationStore):
         enterprise_id: Optional[str], 
         team_id: Optional[str]
     ) -> None:
-        self._store_service.delete_bot(
+        self._store_service.delete_installation(
             enterprise_id = enterprise_id,
             team_id = team_id
         )
