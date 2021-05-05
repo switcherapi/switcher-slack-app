@@ -32,6 +32,7 @@ class SwitcherInstallationStoreService(SwitcherService):
             }
         )
 
+        print(response.status_code)
         if response.status_code != 201:
             raise Exception(response.data)
 

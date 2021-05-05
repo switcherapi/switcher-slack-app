@@ -13,12 +13,10 @@ htmlcov/
 nosetests.xml
 coverage.xml
 *,cover
+cover
 
 # PyBuilder
 target/
-
-# PyTest Cache
-.pytest_cache
 
 # Bolt
 data/
