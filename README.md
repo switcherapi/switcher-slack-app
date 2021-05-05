@@ -2,7 +2,7 @@
 **Switcher API App** is a Slack App that can be integrated with your Slack workspace in order to control feature change requests.
 The API is responsible to handle all requests made through the linked Slack workspace.<br>
 
-![Slack App - Change Request](https://raw.githubusercontent.com/petruki/switcher-slack-app/master/docs/change_request_view.jpg)
+![Slack App - Change Request](https://raw.githubusercontent.com/switcherapi/switcherapi-assets/master/samples/switcher_slack_modal.jpg)
 
 # Installing
 
