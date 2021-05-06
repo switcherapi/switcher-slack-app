@@ -121,17 +121,17 @@ flask_app = Flask(__name__)
 handler = SlackRequestHandler(app)
 
 # Handles requests from Slack API server
-@flask_app.route("/slack/events", methods=["POST"])
+@flask_app.route("/slack/events", methods = ["POST"])
 def slack_events():
   return handler.handle(request)
 
 # Starts Slack OAuth (=app installation) flow
-@flask_app.route("/slack/install", methods=["GET"])
+@flask_app.route("/slack/install", methods = ["GET"])
 def slack_install():
   return handler.handle(request)
 
 # Handles the redirection from Slack's OAuth flow
-@flask_app.route("/slack/oauth_redirect", methods=["GET"])
+@flask_app.route("/slack/oauth_redirect", methods = ["GET"])
 def oauth_redirect():
   return handler.handle(request)
 

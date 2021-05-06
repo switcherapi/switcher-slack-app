@@ -153,7 +153,6 @@ APP_HOME = {
 						"type": "plain_text",
 						"text": "Request Change"
 					},
-					"value": "test",
 					"action_id": "request_change"
 				}
 			]
