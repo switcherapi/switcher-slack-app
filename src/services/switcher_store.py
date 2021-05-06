@@ -31,8 +31,7 @@ class SwitcherInstallationStoreService(SwitcherService):
                 "bot_payload": bot_payload
             }
         )
-
-        print(response.status_code)
+        
         if response.status_code != 201:
             raise Exception(response.data)
 

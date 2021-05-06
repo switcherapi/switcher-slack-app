@@ -61,5 +61,5 @@ nosetests
 
 - (After) Check if all tests are passing and it covers all possibilities 
 ```
-nosetests --with-coverage --cover-erase --cover-package=src --cover-html
+nosetests --with-coverage --cover-erase --cover-package ./src --cover-html
 ```

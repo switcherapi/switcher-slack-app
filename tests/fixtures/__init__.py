@@ -1,8 +1,8 @@
 INSTALLATION_FIX1 = {
     "app_id": "app_id",
-    "enterprise_id": None,
-    "enterprise_name": None,
-    "enterprise_url": None,
+    "enterprise_id": "",
+    "enterprise_name": "",
+    "enterprise_url": "",
     "team_id": "team_id",
     "team_name": "switcher",
     "bot_token": "bot_token",
