@@ -33,12 +33,15 @@ SWITCHER_JWT_SECRET=""
 ```
 
 > 2. **Running the API**
+
 Start the API by running: py .\src\app.py
 
 > 3. **Start ngrok**
+
 Expose the API using ngrok, for example: ngrok http 5000
 
 > 4. **Subscribe to events**
+
 Copy the provided ngrok HTTPS URL and add '/slack/events' to it.
 Once you have the URL ready to go, open the Slack App, update the Request URL on 'Event Subscription' and also on the 'Interactive & Shortcuts' tab.
 Save all changes.
