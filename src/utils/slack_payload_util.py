@@ -12,6 +12,7 @@ def populateSelection(body, item, values):
                     },
                     "value": value["value"]
                 })
+            return block
 
 def addSummary(block, label, value):
     """Add custom header (label) body (value) to block"""
@@ -67,7 +68,7 @@ def getStateValue(view, option):
         if elementValue is not None:
             if elementValue.get("selected_option", None) is not None:
                 return elementValue["selected_option"]["value"]
-            return elementValue["value"]
+            return elementValue.get("value", None)
 
 def getSelectedAction(body):
     """Get selected value from an action event"""

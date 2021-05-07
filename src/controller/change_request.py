@@ -100,7 +100,7 @@ def onSubmit(ack, body, client, view):
     "status": getStateValue(view, "selection_status"),
     "observations": getStateValue(view, "selection_observation"),
   }
-
+  
   try:
     # Request preview
     client.views_publish(
@@ -117,8 +117,8 @@ def onSubmit(ack, body, client, view):
     )
   except Exception as e:
     client.chat_postMessage(
-      channel = user, 
-      text = "There was an error with your submission"
+      channel = user["id"], 
+      text = f"There was an error with your submission"
     )
 
 def onRequestApproved(ack, body, client, logger):
