@@ -1,5 +1,4 @@
 import os
-import requests
 import unittest
 
 from src.app import flask_app
@@ -13,10 +12,7 @@ from slack_sdk.oauth.state_utils import OAuthStateUtils
 from slack_sdk.oauth.state_store import FileOAuthStateStore
 
 from tests.fixtures.installation import INSTALLATION_FIX1
-from tests.utils.mock_request import mock_requests_factory
-
-def mock_created(*args, **kwargs):
-    return mock_requests_factory("{}", 201)
+from tests.utils.mock_request import mock_event_handler
 
 class SwitcherStoreTest(unittest.TestCase):
 
@@ -24,6 +20,7 @@ class SwitcherStoreTest(unittest.TestCase):
         self.flask_app = flask_app.test_client()
         self.callback_url = os.environ.get("SWITCHER_URL")
 
+    @mock_event_handler
     def test_save_installation_success(self):
         with (
             # Bypass browser and state validations
@@ -32,9 +29,6 @@ class SwitcherStoreTest(unittest.TestCase):
 
             # Inject Installation result
             patch.object(OAuthFlow, 'run_installation', return_value = Installation(**INSTALLATION_FIX1)),
-
-            # Inject Store API mocked response
-            patch.object(requests, 'post', return_value = mock_created)
         ):
             path = "/slack/oauth_redirect"
 
