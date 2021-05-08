@@ -1,5 +1,5 @@
 MODAL_REQUEST = {
-	"callback_id": "change_request_view",
+	"callback_id": "change_request_review",
 	"type": "modal",
 	"title": {
 		"type": "plain_text",
@@ -112,18 +112,6 @@ MODAL_REQUEST = {
 					}
 				],
 				"action_id": "selection_status"
-			}
-		},
-		{
-			"type": "input",
-			"element": {
-				"type": "plain_text_input",
-				"multiline": bool("true"),
-				"action_id": "selection_observation"
-			},
-			"label": {
-				"type": "plain_text",
-				"text": "Observations"
 			}
 		}
 	]

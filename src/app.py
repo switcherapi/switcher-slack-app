@@ -15,7 +15,7 @@ from controller.change_request import (
   onEnvironmentSelected,
   onGroupSelected,
   onSwitcherSelected,
-  onStatusSelected,
+  onChangeRequestReview,
   onSubmit,
   onRequestApproved,
   onRequestDenied
@@ -103,10 +103,15 @@ def selection_switcher(ack, body, client, logger):
 @app.action("selection_status")
 def selection_status(ack, body, client, logger):
   print("selection_status")
-  onStatusSelected(ack, body, client, logger)
+  ack()
+
+# Submit Change Request for review
+@app.view("change_request_review")
+def handle_change_request_review(ack, body, client, view):
+  onChangeRequestReview(ack, body, client, view)
 
 # Submit Change Request for verification and approval
-@app.view("change_request_view")
+@app.action("change_request_submit")
 def handle_submission(ack, body, client, view):
   onSubmit(ack, body, client, view)
 
@@ -129,7 +134,6 @@ handler = SlackRequestHandler(app)
 # Handles requests from Slack API server
 @flask_app.route("/slack/events", methods = ["POST"])
 def slack_events():
-  # print(request.get_data())
   return handler.handle(request)
 
 # Starts Slack OAuth (=app installation) flow

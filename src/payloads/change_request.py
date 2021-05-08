@@ -1,29 +1,67 @@
 import copy
+import json
+
 from utils.slack_payload_util import (
   addField,
   addSummary,
+  insertSummary,
   addHeaderValue,
 )
 
-REQUEST_SUMMARY = {
+REQUEST_REVIEW = {
 	"type": "home",
 	"blocks": [
 		{
 			"type": "header",
 			"text": {
 				"type": "plain_text",
-				"text": "Change Request Submitted"
+				"text": "Change Request Review"
 			}
 		},
 		{
 			"type": "section",
 			"text": {
 				"type": "plain_text",
-				"text": "The following request has been opened for approval."
+				"text": "Please, review your request and submit it for approval."
 			}
 		},
 		{
 			"type": "divider"
+		},
+		{
+			"type": "input",
+			"element": {
+				"type": "plain_text_input",
+				"multiline": bool(True),
+				"action_id": "selection_observation"
+			},
+			"label": {
+				"type": "plain_text",
+				"text": "Observations"
+			}
+		},
+		{
+			"type": "actions",
+			"elements": [
+				{
+					"type": "button",
+					"text": {
+						"type": "plain_text",
+						"text": "Submit"
+					},
+					"style": "primary",
+					"action_id": "change_request_submit"
+				},
+				{
+					"type": "button",
+					"text": {
+						"type": "plain_text",
+						"text": "Cancel"
+					},
+					"style": "danger",
+					"action_id": "change_request_abort"
+				}
+			]
 		}
 	]
 }
@@ -92,11 +130,16 @@ def getRequestMessage(ticketId, context):
 	addField(message[2]["fields"], "Observations", context["observations"])
 	return message
 
-def createSummary(context):
-	summary = copy.deepcopy(REQUEST_SUMMARY)
-	addSummary(summary["blocks"], "Environment", context["environment"])
-	addSummary(summary["blocks"], "Group", context["group"])
-	addSummary(summary["blocks"], "Switcher", context["switcher"])
-	addSummary(summary["blocks"], "Status", "Enable" if bool(context["status"]) else "Disable")
-	addHeaderValue(summary["blocks"], "Observations", context["observations"])
-	return summary
+def createRequestReview(context):
+	view = copy.deepcopy(REQUEST_REVIEW)
+	insertSummary(view["blocks"], 3, "Environment", context["environment"])
+	insertSummary(view["blocks"], 4, "Group", context["group"])
+	insertSummary(view["blocks"], 5, "Switcher", context["switcher"])
+	insertSummary(view["blocks"], 6, "Status", "Enable" if bool(context["status"]) else "Disable")
+	return view
+
+def readRequestMetadata(view):
+	metadata = view.get("private_metadata", None)
+	if metadata is not None:
+		return json.loads(metadata)
+	return {}

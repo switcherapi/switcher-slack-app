@@ -24,6 +24,16 @@ def addSummary(block, label, value):
 			}
 		})
 
+def insertSummary(block, index, label, value):
+    """Add label and value to block"""
+    block.insert(index, {
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": f"```{label}```\n> {value}"
+			}
+		})
+
 def addField(fields, label, value):
     fields.append({
             "type": "mrkdwn",

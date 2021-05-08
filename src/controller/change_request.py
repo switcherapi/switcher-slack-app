@@ -1,3 +1,6 @@
+import json
+
+from payloads.home import APP_HOME
 from utils.slack_payload_util import (
   populateSelection, 
   prepareBody, 
@@ -5,9 +8,10 @@ from utils.slack_payload_util import (
   getSelectedAction
 )
 from payloads.change_request import (
-  createSummary,
+  createRequestReview,
   createBlockMessage,
-  getRequestMessage
+  getRequestMessage,
+  readRequestMetadata
 )
 
 from payloads import change_request
@@ -81,10 +85,7 @@ def onSwitcherSelected(ack, body, client, logger):
   except Exception as e:
     logger.error(f"Error selecting switcher: {e}")
 
-def onStatusSelected(ack, body, client, logger):
-  ack()
-
-def onSubmit(ack, body, client, view):
+def onChangeRequestReview(ack, body, client, view):
   user = body["user"]
   team_id = body["team"]["id"]
   team_domain = body["team"]["domain"]
@@ -97,16 +98,42 @@ def onSubmit(ack, body, client, view):
     "environment_alias": "Production" if environment == "default" else environment,
     "group": getStateValue(view, "selection_group"),
     "switcher": getStateValue(view, "selection_switcher"),
-    "status": getStateValue(view, "selection_status"),
-    "observations": getStateValue(view, "selection_observation"),
+    "status": getStateValue(view, "selection_status")
   }
+
+  view = createRequestReview(context)
+  view["private_metadata"] = json.dumps(context)
   
   try:
-    # Request preview
+    # Request review
+    client.views_publish(
+      user_id = user["id"],
+      view = view
+    )
+  except Exception as e:
+    client.chat_postMessage(
+      channel = user["id"], 
+      text = f"There was an error with your request"
+    )
+
+def onSubmit(ack, body, client, view):
+  user = body["user"]
+  team_id = body["team"]["id"]
+  team_domain = body["team"]["domain"]
+
+  ack()
+
+  context = {
+    **readRequestMetadata(body["view"]),
+    "observations": getStateValue(body["view"], "selection_observation"),
+  }
+
+  try:
+    # Return to initial state
     client.views_publish(
       response_action = "push",
       user_id = user["id"],
-      view = createSummary(context)
+      view = APP_HOME
     )
 
     # Redirect approval

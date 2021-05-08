@@ -1,10 +1,26 @@
-# About  
-**Switcher API App** is a Slack App that can be integrated with your Slack workspace in order to control feature change requests.
-The API is responsible to handle all requests made through the linked Slack workspace.<br>
+![Switcher Slack App](https://raw.githubusercontent.com/switcherapi/switcherapi-assets/master/samples/slack/logo.png)
 
-![Slack App - Change Request](https://raw.githubusercontent.com/switcherapi/switcherapi-assets/master/samples/switcher_slack_modal.jpg)
+# About
+**Switcher Slack App** is a Slack App that can be used to control Switchers from your team or organization workspace.</br>
+Features included in this app are described below with examples:
 
-# Installing
+> **Change Request**
+
+Open change requests selecting the Switcher or Group of Switchers to be changed.
+
+![Slack App - Change Request](https://raw.githubusercontent.com/switcherapi/switcherapi-assets/master/samples/slack/change_request_modal.png)
+
+Review your request and add some remarks to justify the change.
+
+![Slack App - Change Request](https://raw.githubusercontent.com/switcherapi/switcherapi-assets/master/samples/slack/change_request_review.png)
+
+A summary message containing all details about the change will be sent to a specific group that was choosen during the installation of the app.
+
+![Slack App - Change Request](https://raw.githubusercontent.com/switcherapi/switcherapi-assets/master/samples/slack/change_request_approval.png)
+
+* * *
+
+# Running locally
 
 ### Requirements  
 - Python 3
@@ -14,8 +30,6 @@ The API is responsible to handle all requests made through the linked Slack work
 1. Select the Add app on your workspace and search for Switcher API
 2. Follow the instructions to give the app the necessary privileges
 3. Confirm the channel ID that will handle the approvals
-
-# Installing: Running locally
 
 ### Setup the environment
 
@@ -57,12 +71,14 @@ Here are some important rules:
 
 Below some basics steps that you probably are familiar with when contributing to open source projects, but just to make sure.
 
-- (Before) Check if all tests are passing:
+> (Before) Check if all tests are passing:
+
 ```
 nosetests
 ```
 
-- (After) Check if all tests are passing and it covers all possibilities 
+> (After) Check if all tests are passing and it covers all possibilities 
+
 ```
 nosetests --with-coverage --cover-erase --cover-package ./src --cover-html
 ```
