@@ -1,9 +1,9 @@
 import copy
 
-from utils.slack_payload_util import populateSelection
+from utils.slack_payload_util import populate_selection
 from payloads.home import MODAL_REQUEST, APP_HOME
 
-def onHomeOpened(client, event, logger):
+def on_home_opened(client, event, logger):
   try:
     client.views_publish(
       user_id = event["user"],
@@ -12,10 +12,10 @@ def onHomeOpened(client, event, logger):
   except Exception as e:
     logger.error(f"Error publishing home tab: {e}")
 
-def onChangeRequesOpened(ack, body, client, logger):
+def on_change_request_opened(ack, body, client, logger):
   change_request = copy.deepcopy(MODAL_REQUEST)
 
-  populateSelection(change_request, "Environment", [
+  populate_selection(change_request, "Environment", [
     { "name": "Production", "value": "default" },
     { "name": "QA", "value": "QA" }
   ])

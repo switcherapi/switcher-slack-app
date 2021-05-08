@@ -2,10 +2,10 @@ import copy
 import json
 
 from utils.slack_payload_util import (
-  addField,
-  addSummary,
-  insertSummary,
-  addHeaderValue,
+  add_field,
+  add_summary,
+  insert_summary,
+  add_header_value,
 )
 
 REQUEST_REVIEW = {
@@ -66,7 +66,7 @@ REQUEST_REVIEW = {
 	]
 }
 
-def createBlockMessage(text):
+def create_block_message(text):
 	return [
 		{
 			"type": "section",
@@ -80,7 +80,7 @@ def createBlockMessage(text):
 		}
 	]
 
-def getRequestMessage(ticketId, context):
+def get_request_message(ticketId, context):
 	message = [
 		{
 			"type": "section",
@@ -123,22 +123,22 @@ def getRequestMessage(ticketId, context):
 		}
 	]
 
-	addField(message[2]["fields"], "Environment", context["environment"])
-	addField(message[2]["fields"], "Group", context["group"])
-	addField(message[2]["fields"], "Switcher", context["switcher"])
-	addField(message[2]["fields"], "Status", "Enable" if bool(context["status"]) else "Disable")
-	addField(message[2]["fields"], "Observations", context["observations"])
+	add_field(message[2]["fields"], "Environment", context["environment"])
+	add_field(message[2]["fields"], "Group", context["group"])
+	add_field(message[2]["fields"], "Switcher", context["switcher"])
+	add_field(message[2]["fields"], "Status", "Enable" if bool(context["status"]) else "Disable")
+	add_field(message[2]["fields"], "Observations", context["observations"])
 	return message
 
-def createRequestReview(context):
+def create_request_review(context):
 	view = copy.deepcopy(REQUEST_REVIEW)
-	insertSummary(view["blocks"], 3, "Environment", context["environment"])
-	insertSummary(view["blocks"], 4, "Group", context["group"])
-	insertSummary(view["blocks"], 5, "Switcher", context["switcher"])
-	insertSummary(view["blocks"], 6, "Status", "Enable" if bool(context["status"]) else "Disable")
+	insert_summary(view["blocks"], 3, "Environment", context["environment"])
+	insert_summary(view["blocks"], 4, "Group", context["group"])
+	insert_summary(view["blocks"], 5, "Switcher", context["switcher"])
+	insert_summary(view["blocks"], 6, "Status", "Enable" if bool(context["status"]) else "Disable")
 	return view
 
-def readRequestMetadata(view):
+def read_request_metadata(view):
 	metadata = view.get("private_metadata", None)
 	if metadata is not None:
 		return json.loads(metadata)

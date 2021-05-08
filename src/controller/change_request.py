@@ -2,24 +2,24 @@ import json
 
 from payloads.home import APP_HOME
 from utils.slack_payload_util import (
-  populateSelection, 
-  prepareBody, 
-  getStateValue,
-  getSelectedAction
+  populate_selection, 
+  prepare_body, 
+  get_state_salue,
+  get_selected_action
 )
 from payloads.change_request import (
-  createRequestReview,
-  createBlockMessage,
-  getRequestMessage,
-  readRequestMetadata
+  create_request_review,
+  create_block_message,
+  get_request_message,
+  read_request_metadata
 )
 
 from payloads import change_request
 
-def onEnvironmentSelected(ack, body, client, logger):
-  envSelected = getSelectedAction(body)
+def on_environment_selected(ack, body, client, logger):
+  env_selected = get_selected_action(body)
   
-  populateSelection(body["view"], "Group", [
+  populate_selection(body["view"], "Group", [
     { "name": "Release 1", "value": "Release 1" },
     { "name": "Release 2", "value": "Release 2" }
   ])
@@ -27,7 +27,7 @@ def onEnvironmentSelected(ack, body, client, logger):
   viewHash = body["view"]["hash"]
   viewId = body["view"]["id"]
 
-  prepareBody(body)
+  prepare_body(body)
 
   try:
     ack()
@@ -39,10 +39,10 @@ def onEnvironmentSelected(ack, body, client, logger):
   except Exception as e:
     logger.error(f"Error selecting environment: {e}")
 
-def onGroupSelected(ack, body, client, view, logger):
-  groupSelected = getSelectedAction(body)
+def on_group_selected(ack, body, client, view, logger):
+  group_selected = get_selected_action(body)
 
-  populateSelection(body["view"], "Switcher", [
+  populate_selection(body["view"], "Switcher", [
     { "name": "MY_FEATURE1", "value": "MY_FEATURE1" },
     { "name": "MY_FEATURE2", "value": "MY_FEATURE2" }
   ])
@@ -50,7 +50,7 @@ def onGroupSelected(ack, body, client, view, logger):
   viewHash = body["view"]["hash"]
   viewId = body["view"]["id"]
 
-  prepareBody(body)
+  prepare_body(body)
 
   try:
     ack()
@@ -62,10 +62,10 @@ def onGroupSelected(ack, body, client, view, logger):
   except Exception as e:
     logger.error(f"Error selecting group: {e}")
 
-def onSwitcherSelected(ack, body, client, logger):
-  switcherSelected = getSelectedAction(body)
+def on_switcher_selected(ack, body, client, logger):
+  switcher_selected = get_selected_action(body)
 
-  populateSelection(body["view"], "Status", [
+  populate_selection(body["view"], "Status", [
     { "name": "Enable", "value": "true" },
     { "name": "Disable", "value": "false" }
   ])
@@ -73,7 +73,7 @@ def onSwitcherSelected(ack, body, client, logger):
   viewHash = body["view"]["hash"]
   viewId = body["view"]["id"]
 
-  prepareBody(body)
+  prepare_body(body)
 
   try:
     ack()
@@ -85,23 +85,23 @@ def onSwitcherSelected(ack, body, client, logger):
   except Exception as e:
     logger.error(f"Error selecting switcher: {e}")
 
-def onChangeRequestReview(ack, body, client, view):
+def on_change_request_review(ack, body, client, view):
   user = body["user"]
   team_id = body["team"]["id"]
   team_domain = body["team"]["domain"]
 
   ack()
 
-  environment = getStateValue(view, "selection_environment")
+  environment = get_state_salue(view, "selection_environment")
   context = {
     "environment": environment,
     "environment_alias": "Production" if environment == "default" else environment,
-    "group": getStateValue(view, "selection_group"),
-    "switcher": getStateValue(view, "selection_switcher"),
-    "status": getStateValue(view, "selection_status")
+    "group": get_state_salue(view, "selection_group"),
+    "switcher": get_state_salue(view, "selection_switcher"),
+    "status": get_state_salue(view, "selection_status")
   }
 
-  view = createRequestReview(context)
+  view = create_request_review(context)
   view["private_metadata"] = json.dumps(context)
   
   try:
@@ -116,7 +116,7 @@ def onChangeRequestReview(ack, body, client, view):
       text = f"There was an error with your request"
     )
 
-def onSubmit(ack, body, client, view):
+def on_submit(ack, body, client, view):
   user = body["user"]
   team_id = body["team"]["id"]
   team_domain = body["team"]["domain"]
@@ -124,8 +124,8 @@ def onSubmit(ack, body, client, view):
   ack()
 
   context = {
-    **readRequestMetadata(body["view"]),
-    "observations": getStateValue(body["view"], "selection_observation"),
+    **read_request_metadata(body["view"]),
+    "observations": get_state_salue(body["view"], "selection_observation"),
   }
 
   try:
@@ -140,7 +140,7 @@ def onSubmit(ack, body, client, view):
     client.chat_postMessage(
       channel = "C01SH298R6C",
       text = "The following request has been opened for approval.",
-      blocks = getRequestMessage("ticket_123", context)
+      blocks = get_request_message("ticket_123", context)
     )
   except Exception as e:
     client.chat_postMessage(
@@ -148,7 +148,7 @@ def onSubmit(ack, body, client, view):
       text = f"There was an error with your submission"
     )
 
-def onRequestApproved(ack, body, client, logger):
+def on_request_approved(ack, body, client, logger):
   message_ts = body["message"]["ts"]
   team_id = body["team"]["id"]
   team_domain = body["team"]["domain"]
@@ -156,7 +156,7 @@ def onRequestApproved(ack, body, client, logger):
 
   ack()
 
-  messageBlocks = createBlockMessage(":large_green_square: *Change request approved*")
+  messageBlocks = create_block_message(":large_green_square: *Change request approved*")
   messageBlocks.append(body["message"]["blocks"][2])
 
   client.chat_update(
@@ -166,7 +166,7 @@ def onRequestApproved(ack, body, client, logger):
     blocks = messageBlocks
   )
 
-def onRequestDenied(ack, body, client, logger):
+def on_request_denied(ack, body, client, logger):
   message_ts = body["message"]["ts"]
   team_id = body["team"]["id"]
   team_domain = body["team"]["domain"]
@@ -174,7 +174,7 @@ def onRequestDenied(ack, body, client, logger):
 
   ack()
 
-  messageBlocks = createBlockMessage(":large_red_square: *Change request denied*")
+  messageBlocks = create_block_message(":large_red_square: *Change request denied*")
   messageBlocks.append(body["message"]["blocks"][2])
 
   client.chat_update(

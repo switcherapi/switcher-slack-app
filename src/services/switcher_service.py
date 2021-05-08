@@ -16,8 +16,8 @@ class SwitcherService:
         self._api_url = api_url
 
     def do_post(self, path: str, body: Optional[dict]) -> Response:
-        return self.__response_handler(requests.post(
-                **self.__request_builder(
+        return self.__response_handler__(requests.post(
+                **self.__request_builder__(
                     url = self._api_url + path,
                     resource = path
                 ),
@@ -26,8 +26,8 @@ class SwitcherService:
         )
 
     def do_get(self, path: str, params: Optional[dict]) -> Response:
-        return self.__response_handler(requests.get(
-                **self.__request_builder(
+        return self.__response_handler__(requests.get(
+                **self.__request_builder__(
                     url = self._api_url + path,
                     resource = path
                 ),
@@ -36,8 +36,8 @@ class SwitcherService:
         )
 
     def do_delete(self, path: str, params: Optional[dict]) -> Response:
-        return self.__response_handler(requests.delete(
-                **self.__request_builder(
+        return self.__response_handler__(requests.delete(
+                **self.__request_builder__(
                     url = self._api_url + path,
                     resource = path
                 ),
@@ -45,7 +45,7 @@ class SwitcherService:
             )
         )
 
-    def __generate_token(self, resource: str) -> str:
+    def __generate_token__(self, resource: str) -> str:
         return jwt.encode(
             key = self.__secret,
             algorithm = self.__algorithm,
@@ -56,15 +56,15 @@ class SwitcherService:
             }
         )
 
-    def __request_builder(self, url: str, resource: str) -> dict:
+    def __request_builder__(self, url: str, resource: str) -> dict:
         return {
             "url": url,
             "headers": { 
-                "Authorization": f"Bearer {self.__generate_token(resource)}"
+                "Authorization": f"Bearer {self.__generate_token__(resource)}"
             }
         }
 
-    def __response_handler(self, response: Response) -> Response:
+    def __response_handler__(self, response: Response) -> Response:
         return Response(
             response = response.content,
             status = response.status_code,
