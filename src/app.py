@@ -72,37 +72,31 @@ app = App(
 # Show the app landing page 
 @app.event("app_home_opened")
 def app_home_opened(client, event, logger):
-  print("app_home_opened")
   on_home_opened(client, event, logger)
 
 # Open Change Request modal
 @app.action("request_change")
 def open_change_request(ack, body, client, logger):
-  print("request_change")
   on_change_request_opened(ack, body, client, logger)
 
 # Update Change Request modal with available domain groups
 @app.action("selection_environment")
 def selection_environment(ack, body, client, logger):
-  print("selection_environment")
   on_environment_selected(ack, body, client, logger)
   
 # Update Change Request modal with available group switchers
 @app.action("selection_group")
 def selection_group(ack, body, client, view, logger):
-  print("selection_group")
   on_group_selected(ack, body, client, view, logger)
 
 # Update Change Request modal with status options
 @app.action("selection_switcher")
 def selection_switcher(ack, body, client, logger):
-  print("selection_switcher")
   on_switcher_selected(ack, body, client, logger)
 
 # Confirm status selection
 @app.action("selection_status")
 def selection_status(ack, body, client, logger):
-  print("selection_status")
   ack()
 
 # Submit Change Request for review
