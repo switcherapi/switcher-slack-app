@@ -3,9 +3,7 @@ import json
 
 from utils.slack_payload_util import (
   add_field,
-  add_summary,
-  insert_summary,
-  add_header_value,
+  insert_summary
 )
 
 REQUEST_REVIEW = {
@@ -139,7 +137,4 @@ def create_request_review(context):
 	return view
 
 def read_request_metadata(view):
-	metadata = view.get("private_metadata", None)
-	if metadata is not None:
-		return json.loads(metadata)
-	return {}
+	return json.loads(view.get("private_metadata", {}))
