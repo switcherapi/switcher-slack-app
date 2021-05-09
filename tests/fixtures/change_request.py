@@ -1,3 +1,6 @@
+import random
+import string
+
 from slack_sdk.web import SlackResponse
 
 OPEN_APP_HOME_FIX1 = {
@@ -43,7 +46,7 @@ def build_action_value(action_id: str, text: str, value = None):
    return {
       "type": "static_select",
       "action_id": action_id,
-      "block_id": "w4M1",
+      "block_id": "block_id",
       "selected_option": {
          "text": {
             "type": "plain_text",
@@ -57,32 +60,47 @@ def build_action_value(action_id: str, text: str, value = None):
       }
    }
 
-def build_state_value(action_id: str, text: str, value: str):
+def build_static_select_state_value(action_id: str, text: str, value: str):
+   letters = string.ascii_letters
+   id = "".join(random.choice(letters) for i in range(4))
    return {
-      "values": {
-         "w4M1": {
-            "selection_group": {
-               "type": "static_select",
-               action_id: {
-                  "text": {
-                     "type": "plain_text",
-                     "text": text
-                  },
-                  "value": value
-               }
+      id: {
+         action_id: {
+            "type": "static_select",
+            "selected_option": {
+               "text": {
+                  "type": "plain_text",
+                  "text": text
+               },
+               "value": value
             }
          }
       }
    }
 
+def build_text_state_value(action_id: str, value: str):
+   letters = string.ascii_letters
+   id = "".join(random.choice(letters) for i in range(4))
+   return {
+      id: {
+         action_id: {
+            "type": "plain_text_input",
+            "value": value
+         }
+      }
+   }
 
 def build_request_view(
-   actions_fixture: dict,
+   req_type: str = "block_actions",
+   callback_id: str = "change_request_view",
+   private_metadata: str = "",
+   actions_fixture: dict = {},
    state_fixture: dict = {}
 ):
    """ Create a change request input based on the action fixture """
+
    return {
-      "type": "block_actions",
+      "type": req_type,
       "user": {
          "id": "user_id",
          "username": "username",
@@ -103,9 +121,11 @@ def build_request_view(
          "team_id": "team_id",
          "type": "modal",
          "blocks": [],
-         "private_metadata": "",
-         "callback_id": "change_request_view",
-         "state": state_fixture,
+         "private_metadata": private_metadata,
+         "callback_id": callback_id,
+         "state": {
+            "values": state_fixture
+         },
          "hash": "hash",
          "title": {
             "type": "plain_text",
@@ -121,6 +141,53 @@ def build_request_view(
       "actions": [actions_fixture]
    }
 
+def build_request_message_view(
+   actions_fixture: dict = {}
+):
+   """ Create a message containing a given action """
+
+   return {
+      "type": "block_actions",
+      "user":{
+         "id": "user_id",
+         "username": "username",
+         "name": "name",
+         "team_id": "team_id"
+      },
+      "api_app_id": "api_app_id",
+      "token": "token",
+      "container":{
+         "type": "message",
+         "message_ts": "1620521211.000100",
+         "channel_id": "channel_id",
+         "is_ephemeral": bool(False)
+      },
+      "trigger_id": "2030513129639.982093585204.18340488daa4ba766af27a7d0a73be96",
+      "team":{
+         "id": "team_id",
+         "domain": "domain"
+      },
+      "enterprise": "",
+      "is_enterprise_install": bool(False),
+      "channel": {
+         "id": "channel_id",
+         "name": "privategroup"
+      },
+      "message":{
+         "bot_id": "bot_id",
+         "type": "message",
+         "text": "The following request has been opened for approval.",
+         "user": "user",
+         "ts": "1620521211.000100",
+         "team": "team_id",
+         "blocks":[]
+      },
+      "state":{
+         "values": {}
+      },
+      "response_url": "response_url",
+      "actions": [actions_fixture]
+   }
 
 def get_slack_events_response(
     req_args: dict,

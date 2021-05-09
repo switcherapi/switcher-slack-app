@@ -38,8 +38,7 @@ def success(args: SuccessArgs) -> BoltResponse:
     status = 308,
     headers = {
       "Location": f"{switcher_url}/slack/oauth_redirect?e_id={e_id}&t_id={t_id}&ch={ch}&chid={chid}",
-    },
-    body = ""
+    }
   )
 
 def failure(args: FailureArgs) -> BoltResponse:
@@ -49,8 +48,7 @@ def failure(args: FailureArgs) -> BoltResponse:
     status = 308,
     headers = {
       "Location": f"{switcher_url}/slack/error",
-    },
-    body = ""
+    }
   )
 
 app = App(
@@ -102,6 +100,7 @@ def selection_status(ack, body, client, logger):
 # Submit Change Request for review
 @app.view("change_request_review")
 def handle_change_request_review(ack, body, client, view):
+  print('change_request_review')
   on_change_request_review(ack, body, client, view)
 
 # Submit Change Request for verification and approval
@@ -128,6 +127,7 @@ handler = SlackRequestHandler(app)
 # Handles requests from Slack API server
 @flask_app.route("/slack/events", methods = ["POST"])
 def slack_events():
+  print(request.get_data())
   return handler.handle(request)
 
 # Starts Slack OAuth (=app installation) flow
