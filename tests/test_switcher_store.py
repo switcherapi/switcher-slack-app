@@ -1,10 +1,9 @@
 import os
-import unittest
+import pytest
 
 from src.app import flask_app
 
 from unittest.mock import patch
-from nose.tools import assert_true
 
 from slack_bolt.oauth import OAuthFlow
 from slack_sdk.oauth.installation_store.models.installation import Installation
@@ -14,50 +13,49 @@ from slack_sdk.oauth.state_store import FileOAuthStateStore
 from tests.fixtures.installation import INSTALLATION_FIX1
 from tests.utils.mock_request import mock_event_handler
 
-class SwitcherStoreTest(unittest.TestCase):
+callback_url = os.environ.get("SWITCHER_URL")
 
-    def setUp(self):
-        self.flask_app = flask_app.test_client()
-        self.callback_url = os.environ.get("SWITCHER_URL")
+@pytest.fixture
+def client():
+    flask_app.config['TESTING'] = True
+    with flask_app.test_client() as client:
+        yield client
 
-    @mock_event_handler
-    def test_save_installation_success(self):
-        with (
-            # Bypass browser and state validations
-            patch.object(OAuthStateUtils, 'is_valid_browser', return_value = True), 
-            patch.object(FileOAuthStateStore, 'consume', return_value = True),
+@mock_event_handler
+def test_save_installation_success(client):
+    with (
+        # Bypass browser and state validations
+        patch.object(OAuthStateUtils, 'is_valid_browser', return_value = True), 
+        patch.object(FileOAuthStateStore, 'consume', return_value = True),
 
-            # Inject Installation result
-            patch.object(OAuthFlow, 'run_installation', return_value = Installation(**INSTALLATION_FIX1)),
-        ):
-            path = "/slack/oauth_redirect"
+        # Inject Installation result
+        patch.object(OAuthFlow, 'run_installation', return_value = Installation(**INSTALLATION_FIX1)),
+    ):
+        path = "/slack/oauth_redirect"
 
-            # When
-            response = self.flask_app.get(f"{path}?code=123")
+        # When
+        response = client.get(f"{path}?code=123")
 
-            # Then
-            e_id = INSTALLATION_FIX1["enterprise_id"]
-            t_id = INSTALLATION_FIX1["team_id"]
-            ch = INSTALLATION_FIX1["incoming_webhook_channel"]
-            ch_id = INSTALLATION_FIX1["incoming_webhook_channel_id"]
+        # Then
+        e_id = INSTALLATION_FIX1["enterprise_id"]
+        t_id = INSTALLATION_FIX1["team_id"]
+        ch = INSTALLATION_FIX1["incoming_webhook_channel"]
+        ch_id = INSTALLATION_FIX1["incoming_webhook_channel_id"]
 
-            self.assertEqual(308, response.status_code)
-            self.assertEqual(
-                f"{self.callback_url}{path}?e_id={e_id}&t_id={t_id}&ch={ch}&chid={ch_id}",
-                response.headers["Location"]
-            )
+        assert response.status_code == 308
+        assert f"{callback_url}{path}?e_id={e_id}&t_id={t_id}&ch={ch}&chid={ch_id}" == response.headers["Location"]
 
-    def test_save_installation_invalid_store(self):
-        with (
-            # Bypass browser validation
-            patch.object(OAuthStateUtils, 'is_valid_browser', return_value = True), 
+def test_save_installation_invalid_store(client):
+    with (
+        # Bypass browser validation
+        patch.object(OAuthStateUtils, 'is_valid_browser', return_value = True), 
 
-            # Force invalid state
-            patch.object(FileOAuthStateStore, 'consume', return_value = False),
-        ):
-            # Test
-            response = self.flask_app.get("/slack/oauth_redirect?code=123")
+        # Force invalid state
+        patch.object(FileOAuthStateStore, 'consume', return_value = False),
+    ):
+        # Test
+        response = client.get("/slack/oauth_redirect?code=123")
 
-            # Then
-            self.assertEqual(308, response.status_code)
-            self.assertEqual(f"{self.callback_url}/slack/error", response.headers["Location"])
+        # Then
+        assert response.status_code == 308
+        assert f"{callback_url}/slack/error" == response.headers["Location"]

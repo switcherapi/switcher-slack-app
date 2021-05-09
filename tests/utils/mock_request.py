@@ -32,19 +32,19 @@ def mock_source_api(*args, **kwargs):
 def mock_event_handler(fn):
     """Bypass content verification and find installation"""
     @wraps(fn)
-    def wrapper(self, *args, **kwargs):
+    def wrapper(client, *args, **kwargs):
         with (
             patch.object(SignatureVerifier, "is_valid", return_value = True),
             patch.object(requests, "get", side_effect = mock_source_api),
             patch.object(requests, 'post', side_effect = mock_source_api)
         ):
-            return fn(self)
+            return fn(client)
     return wrapper
 
 def mock_base_client(data: dict):
     def mock_decorator(fn):
         @wraps(fn)
-        def wrapper(self, *args, **kwargs):
+        def wrapper(client, *args, **kwargs):
             with (
                 patch.object(BaseClient, '_urllib_api_call', 
                     return_value = get_slack_events_response(
@@ -53,6 +53,6 @@ def mock_base_client(data: dict):
                     )
                 )
             ):
-                fn(self, *args, **kwargs)
+                fn(client, *args, **kwargs)
         return wrapper
     return mock_decorator
