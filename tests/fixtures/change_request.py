@@ -42,7 +42,11 @@ ACTION_OPEN_MODAL_CHANGE_REQUEST_FIX1 = {
    "action_ts": "1620361208.200121"
 }
 
-def build_action_value(action_id: str, text: str, value = None):
+def build_static_select_action_value(
+   action_id: str, 
+   text: str, 
+   value = None
+):
    return {
       "type": "static_select",
       "action_id": action_id,
@@ -58,6 +62,25 @@ def build_action_value(action_id: str, text: str, value = None):
          "type": "plain_text",
          "text": "Select an item"
       }
+   }
+
+def build_buttom_action_value(
+   action_id: str, 
+   text: str, 
+   value = None
+):
+   return {
+      "action_id": action_id,
+      "block_id": "block_id",
+      "text":{
+         "type": "plain_text",
+         "text": text,
+         "emoji": bool(True)
+      },
+      "value": value,
+      "style": "primary",
+      "type": "button",
+      "action_ts": "1620521880.813225"
    }
 
 def build_static_select_state_value(action_id: str, text: str, value: str):
@@ -180,7 +203,7 @@ def build_request_message_view(
          "user": "user",
          "ts": "1620521211.000100",
          "team": "team_id",
-         "blocks":[]
+         "blocks": [{},{},{},{},{}]
       },
       "state":{
          "values": {}

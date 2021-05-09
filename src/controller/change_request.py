@@ -152,34 +152,34 @@ def on_request_approved(ack, body, client, logger):
   message_ts = body["message"]["ts"]
   team_id = body["team"]["id"]
   team_domain = body["team"]["domain"]
-  ticketId = body["actions"][0]["value"]
+  ticket_id = body["actions"][0]["value"]
 
   ack()
 
-  messageBlocks = create_block_message(":large_green_square: *Change request approved*")
-  messageBlocks.append(body["message"]["blocks"][2])
+  message_blocks = create_block_message(":large_green_square: *Change request approved*")
+  message_blocks.append(body["message"]["blocks"][2])
 
   client.chat_update(
     channel = "C01SH298R6C",
     text = "Change request approved",
     ts = message_ts,
-    blocks = messageBlocks
+    blocks = message_blocks
   )
 
 def on_request_denied(ack, body, client, logger):
   message_ts = body["message"]["ts"]
   team_id = body["team"]["id"]
   team_domain = body["team"]["domain"]
-  ticketId = body["actions"][0]["value"]
+  ticket_id = body["actions"][0]["value"]
 
   ack()
 
-  messageBlocks = create_block_message(":large_red_square: *Change request denied*")
-  messageBlocks.append(body["message"]["blocks"][2])
+  message_blocks = create_block_message(":large_red_square: *Change request denied*")
+  message_blocks.append(body["message"]["blocks"][2])
 
   client.chat_update(
     channel = "C01SH298R6C",
     text = "Change request denied",
     ts = message_ts,
-    blocks = messageBlocks
+    blocks = message_blocks
   )

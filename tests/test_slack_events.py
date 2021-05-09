@@ -13,7 +13,8 @@ from tests.fixtures.change_request import (
     OPEN_APP_HOME_FIX1,
     build_request_view,
     build_request_message_view,
-    build_action_value,
+    build_static_select_action_value,
+    build_buttom_action_value,
     build_text_state_value,
     build_static_select_state_value
 )
@@ -35,7 +36,7 @@ class SlackEventTest(unittest.TestCase):
     def test_open_change_request_modal(self):
         response = self.flask_app.post(
             f"/slack/events", json = build_request_view(
-                actions_fixture = build_action_value(
+                actions_fixture = build_static_select_action_value(
                     action_id = "request_change",
                     text = "Request Change"
                 )
@@ -48,7 +49,7 @@ class SlackEventTest(unittest.TestCase):
     def test_select_evenvironment(self):
         response = self.flask_app.post(
             f"/slack/events", json = build_request_view(
-                actions_fixture = build_action_value(
+                actions_fixture = build_static_select_action_value(
                     action_id = "selection_environment",
                     text = "Production",
                     value = "default"
@@ -62,7 +63,7 @@ class SlackEventTest(unittest.TestCase):
     def test_select_group(self):
         response = self.flask_app.post(
             f"/slack/events", json = build_request_view(
-                actions_fixture = build_action_value(
+                actions_fixture = build_static_select_action_value(
                     action_id = "selection_group",
                     text = "Release 1",
                     value = "Release 1"
@@ -76,7 +77,7 @@ class SlackEventTest(unittest.TestCase):
     def test_select_switcher(self):
         response = self.flask_app.post(
             f"/slack/events", json = build_request_view(
-                actions_fixture = build_action_value(
+                actions_fixture = build_static_select_action_value(
                     action_id = "selection_switcher",
                     text = "MY_FEATURE",
                     value = "MY_FEATURE"
@@ -90,7 +91,7 @@ class SlackEventTest(unittest.TestCase):
     def test_select_status(self):
         response = self.flask_app.post(
             f"/slack/events", json = build_request_view(
-                actions_fixture = build_action_value(
+                actions_fixture = build_static_select_action_value(
                     action_id = "selection_status",
                     text = "Activate",
                     value = "true"
@@ -144,9 +145,9 @@ class SlackEventTest(unittest.TestCase):
         })
 
         response = self.flask_app.post(
-            f"/slack/events", json = build_request_message_view(
+            f"/slack/events", json = build_request_view(
                 private_metadata = private_metadata,
-                actions_fixture = build_action_value(
+                actions_fixture = build_static_select_action_value(
                     action_id = "change_request_submit",
                     text = "Submit"
                 ),
@@ -158,13 +159,12 @@ class SlackEventTest(unittest.TestCase):
         )
         self.assertEqual(200, response.status_code)
 
-
     @mock_event_handler
     @mock_base_client(MODAL_REQUEST)
     def test_approve_request(self):
         response = self.flask_app.post(
             f"/slack/events", json = build_request_message_view(
-                actions_fixture = build_action_value(
+                actions_fixture = build_buttom_action_value(
                     action_id = "request_approved",
                     text = "Approve",
                     value = "ticket_123"
@@ -178,7 +178,7 @@ class SlackEventTest(unittest.TestCase):
     def test_deny_request(self):
         response = self.flask_app.post(
             f"/slack/events", json = build_request_message_view(
-                actions_fixture = build_action_value(
+                actions_fixture = build_buttom_action_value(
                     action_id = "request_denied",
                     text = "Deny",
                     value = "ticket_123"

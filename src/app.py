@@ -127,7 +127,6 @@ handler = SlackRequestHandler(app)
 # Handles requests from Slack API server
 @flask_app.route("/slack/events", methods = ["POST"])
 def slack_events():
-  print(request.get_data())
   return handler.handle(request)
 
 # Starts Slack OAuth (=app installation) flow
