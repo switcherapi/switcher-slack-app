@@ -43,7 +43,7 @@ def test_open_change_request_modal(client):
 
 @mock_event_handler
 @mock_base_client(MODAL_REQUEST)
-def test_select_evenvironment(client):
+def test_select_evironment(client):
     response = client.post(
         f"/slack/events", json = build_request_view(
             actions_fixture = build_static_select_action_value(
