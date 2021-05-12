@@ -2,8 +2,26 @@ language: python
 python:
   - "3.9"
 
-install:
-  - pip install -r requirements.txt
+branches:
+  only:
+  - master
 
-script:
-  - python -m pytest -v
+jobs:
+  include:
+    - stage: compile and test
+      install:
+        - pip install -r requirements.txt
+      script:
+        - python -m pytest -v
+    - stage: deploy
+      if: type NOT IN (pull_request)
+      script:
+        - echo "Deploying to Production"
+      deploy:
+        provider: heroku
+        app: switcher-slack-app
+        api_key: ${HEROKU_KEY}
+
+stages:
+  - compile and test
+  - deploy
