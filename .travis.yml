@@ -17,7 +17,7 @@ jobs:
       install:
         - pip install -r requirements.txt
       script:
-        - python -m pytest -v --cov=./src --cov-report xml
+        - pytest -v --cov=./ --cov-report xml
         - sonar-scanner
     - stage: deploy
       if: type NOT IN (pull_request)
