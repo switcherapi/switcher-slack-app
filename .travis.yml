@@ -8,7 +8,7 @@ branches:
 
 addons:
   sonarcloud:
-    organization: "petruki"
+    organization: "switcherapi"
     token: ${SONAR_TOKEN}
 
 jobs:
