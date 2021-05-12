@@ -6,13 +6,19 @@ branches:
   only:
   - master
 
+addons:
+  sonarcloud:
+    organization: "petruki"
+    token: ${SONAR_TOKEN}
+
 jobs:
   include:
     - stage: compile and test
       install:
         - pip install -r requirements.txt
       script:
-        - python -m pytest -v
+        - python -m pytest -v --cov=./src --cov-report xml
+        - sonar-scanner
     - stage: deploy
       if: type NOT IN (pull_request)
       script:
