@@ -1,5 +1,4 @@
 import json
-import logging
 
 from payloads.home import APP_HOME
 from utils.slack_payload_util import (
@@ -16,8 +15,6 @@ from payloads.change_request import (
 )
 
 from payloads import change_request
-
-logging.basicConfig(level = logging.DEBUG)
 
 def on_environment_selected(ack, body, client, logger):
   env_selected = get_selected_action(body)
