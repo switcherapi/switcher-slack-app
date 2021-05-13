@@ -78,7 +78,7 @@ def create_block_message(text):
 		}
 	]
 
-def get_request_message(ticketId, context):
+def get_request_message(ticket_id, context):
 	message = [
 		{
 			"type": "section",
@@ -104,7 +104,7 @@ def get_request_message(ticketId, context):
 						"text": "Approve"
 					},
 					"style": "primary",
-					"value": ticketId,
+					"value": ticket_id,
 					"action_id": "request_approved"
 				},
 				{
@@ -114,7 +114,7 @@ def get_request_message(ticketId, context):
 						"text": "Deny"
 					},
 					"style": "danger",
-					"value": ticketId,
+					"value": ticket_id,
 					"action_id": "request_denied"
 				}
 			]

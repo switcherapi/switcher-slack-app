@@ -18,22 +18,23 @@ from payloads import change_request
 
 def on_environment_selected(ack, body, client, logger):
   env_selected = get_selected_action(body)
+  logger.debug(f"Selected environment: {env_selected}")
   
   populate_selection(body["view"], "Group", [
     { "name": "Release 1", "value": "Release 1" },
     { "name": "Release 2", "value": "Release 2" }
   ])
 
-  viewHash = body["view"]["hash"]
-  viewId = body["view"]["id"]
+  view_hash = body["view"]["hash"]
+  view_id = body["view"]["id"]
 
   prepare_body(body)
 
   try:
     ack()
     client.views_update(
-          view_id = viewId,
-          hash = viewHash,
+          view_id = view_id,
+          hash = view_hash,
           view = body["view"]
       )
   except Exception as e:
@@ -41,22 +42,23 @@ def on_environment_selected(ack, body, client, logger):
 
 def on_group_selected(ack, body, client, view, logger):
   group_selected = get_selected_action(body)
+  logger.debug(f"Selected group: {group_selected}")
 
   populate_selection(body["view"], "Switcher", [
     { "name": "MY_FEATURE1", "value": "MY_FEATURE1" },
     { "name": "MY_FEATURE2", "value": "MY_FEATURE2" }
   ])
 
-  viewHash = body["view"]["hash"]
-  viewId = body["view"]["id"]
+  view_hash = body["view"]["hash"]
+  view_id = body["view"]["id"]
 
   prepare_body(body)
 
   try:
     ack()
     client.views_update(
-          view_id = viewId,
-          hash = viewHash,
+          view_id = view_id,
+          hash = view_hash,
           view = body["view"]
       )
   except Exception as e:
@@ -64,31 +66,35 @@ def on_group_selected(ack, body, client, view, logger):
 
 def on_switcher_selected(ack, body, client, logger):
   switcher_selected = get_selected_action(body)
+  logger.debug(f"Selected switcher: {switcher_selected}")
 
   populate_selection(body["view"], "Status", [
     { "name": "Enable", "value": "true" },
     { "name": "Disable", "value": "false" }
   ])
 
-  viewHash = body["view"]["hash"]
-  viewId = body["view"]["id"]
+  view_hash = body["view"]["hash"]
+  view_id = body["view"]["id"]
 
   prepare_body(body)
 
   try:
     ack()
     client.views_update(
-          view_id = viewId,
-          hash = viewHash,
+          view_id = view_id,
+          hash = view_hash,
           view = body["view"]
       )
   except Exception as e:
     logger.error(f"Error selecting switcher: {e}")
 
-def on_change_request_review(ack, body, client, view):
+def on_change_request_review(ack, body, client, view, logger):
   user = body["user"]
   team_id = body["team"]["id"]
   team_domain = body["team"]["domain"]
+
+  logger.debug(f"Team Id: {team_id}")
+  logger.debug(f"Team Domain: {team_domain}")
 
   ack()
 
@@ -113,13 +119,16 @@ def on_change_request_review(ack, body, client, view):
   except Exception as e:
     client.chat_postMessage(
       channel = user["id"], 
-      text = f"There was an error with your request"
+      text = f"There was an error with your request {e}"
     )
 
-def on_submit(ack, body, client, view):
+def on_submit(ack, body, client, view, logger):
   user = body["user"]
   team_id = body["team"]["id"]
   team_domain = body["team"]["domain"]
+
+  logger.debug(f"Team ID: {team_id}")
+  logger.debug(f"Team Domain: {team_domain}")
 
   ack()
 
@@ -145,7 +154,7 @@ def on_submit(ack, body, client, view):
   except Exception as e:
     client.chat_postMessage(
       channel = user["id"], 
-      text = f"There was an error with your submission"
+      text = f"There was an error with your submission {e}"
     )
 
 def on_request_approved(ack, body, client, logger):
@@ -153,6 +162,10 @@ def on_request_approved(ack, body, client, logger):
   team_id = body["team"]["id"]
   team_domain = body["team"]["domain"]
   ticket_id = body["actions"][0]["value"]
+
+  logger.debug(f"Team ID: {team_id}")
+  logger.debug(f"Team Domain: {team_domain}")
+  logger.debug(f"Ticked ID: {ticket_id}")
 
   ack()
 
@@ -171,6 +184,10 @@ def on_request_denied(ack, body, client, logger):
   team_id = body["team"]["id"]
   team_domain = body["team"]["domain"]
   ticket_id = body["actions"][0]["value"]
+
+  logger.debug(f"Team ID: {team_id}")
+  logger.debug(f"Team Domain: {team_domain}")
+  logger.debug(f"Ticked ID: {ticket_id}")
 
   ack()
 
