@@ -99,14 +99,13 @@ def selection_status(ack, body, client, logger):
 
 # Submit Change Request for review
 @app.view("change_request_review")
-def handle_change_request_review(ack, body, client, view):
-  print('change_request_review')
-  on_change_request_review(ack, body, client, view)
+def handle_change_request_review(ack, body, client, view, logger):
+  on_change_request_review(ack, body, client, view, logger)
 
 # Submit Change Request for verification and approval
 @app.action("change_request_submit")
-def handle_submission(ack, body, client, view):
-  on_submit(ack, body, client, view)
+def handle_submission(ack, body, client, view, logger):
+  on_submit(ack, body, client, view, logger)
 
 # Request approved
 @app.action("request_approved")

@@ -85,9 +85,9 @@ def build_buttom_action_value(
 
 def build_static_select_state_value(action_id: str, text: str, value: str):
    letters = string.ascii_letters
-   id = "".join(random.choice(letters) for i in range(4))
+   block_id = "".join(random.choice(letters) for _ in range(4))
    return {
-      id: {
+      block_id: {
          action_id: {
             "type": "static_select",
             "selected_option": {
@@ -103,9 +103,9 @@ def build_static_select_state_value(action_id: str, text: str, value: str):
 
 def build_text_state_value(action_id: str, value: str):
    letters = string.ascii_letters
-   id = "".join(random.choice(letters) for i in range(4))
+   block_id = "".join(random.choice(letters) for _ in range(4))
    return {
-      id: {
+      block_id: {
          action_id: {
             "type": "plain_text_input",
             "value": value

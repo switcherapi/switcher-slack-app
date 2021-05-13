@@ -64,7 +64,7 @@ class SwitcherService:
             }
         }
 
-    def __response_handler__(self, response: Response) -> Response:
+    def __response_handler__(self, response) -> Response:
         return Response(
             response = response.content,
             status = response.status_code,

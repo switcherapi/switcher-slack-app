@@ -24,7 +24,7 @@ def mock_requests_factory(response_stub: str, status_code: int = 200):
 
 def mock_source_api(*args, **kwargs):
     if kwargs["url"].endswith("slack/v1/installation"):
-        return mock_requests_factory({}, 201)
+        return mock_requests_factory("", 201)
 
     if kwargs["url"].endswith("slack/v1/findinstallation"):
         return mock_requests_factory(json.dumps(INSTALLATION_FIX1), 200)
