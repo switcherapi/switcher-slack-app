@@ -48,13 +48,13 @@ def prepare_body(body):
 def get_state_salue(view, option):
     """Get selected values stored at the state element"""
 
-    elementValue = ""
+    element_value = ""
     for element in view["state"]["values"]:
-        elementValue = view["state"]["values"][element].get(option, None)
-        if elementValue is not None:
-            if elementValue.get("selected_option", None) is not None:
-                return elementValue["selected_option"]["value"]
-            return elementValue.get("value", None)
+        element_value = view["state"]["values"][element].get(option, None)
+        if element_value is not None:
+            if element_value.get("selected_option", None) is not None:
+                return element_value["selected_option"]["value"]
+            return element_value.get("value", None)
 
 def get_selected_action(body):
     """Get selected value from an action event"""
