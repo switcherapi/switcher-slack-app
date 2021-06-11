@@ -15,13 +15,19 @@ def on_home_opened(client, event, logger):
 def on_change_request_opened(ack, body, client, logger):
   change_request = copy.deepcopy(MODAL_REQUEST)
 
+  team_id = body["team"]["id"]
+  team_domain = body["team"]["domain"]
+  logger.warning(f"Team ID: {team_id}")
+  logger.warning(f"Team Domain: {team_domain}")
+
+  ack()
+
   populate_selection(change_request, "Environment", [
     { "name": "Production", "value": "default" },
     { "name": "QA", "value": "QA" }
   ])
 
   try:
-    ack()
     client.views_open(
       trigger_id = body["trigger_id"],
       view = change_request
