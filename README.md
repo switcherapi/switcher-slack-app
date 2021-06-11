@@ -56,7 +56,9 @@ SWITCHER_JWT_SECRET=""
 
 > 2. **Running the API**
 
-Start the API by running: py .\src\app.py
+1. Create a new Virtual Env
+2. Install dependencies: pip install -r requirements.txt
+3. Start the API by running: py .\src\app.py
 
 > 3. **Start ngrok**
 

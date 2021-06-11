@@ -39,11 +39,9 @@ def test_save_installation_success(client):
         # Then
         e_id = INSTALLATION_FIX1["enterprise_id"]
         t_id = INSTALLATION_FIX1["team_id"]
-        ch = INSTALLATION_FIX1["incoming_webhook_channel"]
-        ch_id = INSTALLATION_FIX1["incoming_webhook_channel_id"]
 
         assert response.status_code == 308
-        assert f"{callback_url}{path}?e_id={e_id}&t_id={t_id}&ch={ch}&chid={ch_id}" == response.headers["Location"]
+        assert f"{callback_url}/slack/authorization?e_id={e_id}&t_id={t_id}" == response.headers["Location"]
 
 def test_save_installation_invalid_store(client):
     with (
@@ -58,4 +56,4 @@ def test_save_installation_invalid_store(client):
 
         # Then
         assert response.status_code == 308
-        assert f"{callback_url}/slack/error" == response.headers["Location"]
+        assert f"{callback_url}/slack/authorization?error=1&reason=invalid_state" == response.headers["Location"]

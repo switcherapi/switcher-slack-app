@@ -1,4 +1,5 @@
 import os
+import logging
 
 from slack_bolt import App
 from slack_bolt.oauth.oauth_settings import OAuthSettings
@@ -22,12 +23,11 @@ from controller.change_request import (
 )
 
 load_dotenv()
+logging.basicConfig(level = logging.WARNING)
 switcher_url = os.environ.get("SWITCHER_URL")
 
 def success(args: SuccessArgs) -> BoltResponse:
   assert args.request is not None
-  ch = args.installation.incoming_webhook_channel
-  chid = args.installation.incoming_webhook_channel_id
   t_id = args.installation.team_id
   e_id = args.installation.enterprise_id
 
@@ -37,17 +37,18 @@ def success(args: SuccessArgs) -> BoltResponse:
   return BoltResponse(
     status = 308,
     headers = {
-      "Location": f"{switcher_url}/slack/oauth_redirect?e_id={e_id}&t_id={t_id}&ch={ch}&chid={chid}",
+      "Location": f"{switcher_url}/slack/authorization?e_id={e_id}&t_id={t_id}",
     }
   )
 
 def failure(args: FailureArgs) -> BoltResponse:
   assert args.request is not None
   assert args.reason is not None
+
   return BoltResponse(
     status = 308,
     headers = {
-      "Location": f"{switcher_url}/slack/error",
+      "Location": f"{switcher_url}/slack/authorization?error=1&reason={args.reason}",
     }
   )
 
