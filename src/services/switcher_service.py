@@ -1,72 +1,72 @@
 import os
-import datetime
-import jwt
-import requests
-
-from flask import Response
 from typing import Optional
 
-class SwitcherService:
-    """Default Switcher Service implementation"""
+from .switcher_client import SwitcherClient
 
-    def __init__(self, api_url: str):
-        self.__secret = os.environ.get("SWITCHER_JWT_SECRET")
-        self.__algorithm: str = "HS256"
-        self.__issuer: str = "Switcher Slack App"
-        self._api_url = api_url
+class SwitcherService(SwitcherClient):
+    """Service responsible for handling all API requests execution against the linked Domain"""
 
-    def do_post(self, path: str, body: Optional[dict]) -> Response:
-        return self.__response_handler__(requests.post(
-                **self.__request_builder__(
-                    url = self._api_url + path,
-                    resource = path
-                ),
-                json = body
-            )
+    def __init__(self, *, api_url: Optional[str] = None):
+        SwitcherClient.__init__(
+            self, 
+            api_url or os.environ.get("SWITCHER_API_URL")
         )
 
-    def do_get(self, path: str, params: Optional[dict]) -> Response:
-        return self.__response_handler__(requests.get(
-                **self.__request_builder__(
-                    url = self._api_url + path,
-                    resource = path
-                ),
-                params = params
-            )
-        )
+    def get_environments(self, team_id: str) -> [str]:
+        response: dict = self.do_graphql(f'''
+            query {{
+                configuration(slack_team_id: "{team_id}") {{
+                    environments
+                }}
+            }}
+        ''')
 
-    def do_delete(self, path: str, params: Optional[dict]) -> Response:
-        return self.__response_handler__(requests.delete(
-                **self.__request_builder__(
-                    url = self._api_url + path,
-                    resource = path
-                ),
-                params = params
-            )
-        )
+        configuration = response.get("configuration", None)
+        if configuration is not None:
+            environments = configuration.get("environments", None)
+            if environments is not None:
+                return environments
+        return []
 
-    def __generate_token__(self, resource: str) -> str:
-        return jwt.encode(
-            key = self.__secret,
-            algorithm = self.__algorithm,
-            payload = {
-                "iss": self.__issuer,
-                "sub": resource,
-                "exp": datetime.datetime.utcnow() + datetime.timedelta(seconds = 30)
-            }
-        )
+    def get_groups(self, team_id: str, environment: str) -> [dict]:
+        response: dict = self.do_graphql(f'''
+            query {{
+                configuration(
+                    slack_team_id: "{team_id}", 
+                    environment: "{environment}") 
+                {{
+                    group {{
+                        name
+                        activated
+                    }}
+                }}
+            }}
+        ''')
 
-    def __request_builder__(self, url: str, resource: str) -> dict:
-        return {
-            "url": url,
-            "headers": { 
-                "Authorization": f"Bearer {self.__generate_token__(resource)}"
-            }
-        }
+        configuration = response.get("configuration", None)
+        if configuration is not None:
+            groups = configuration.get("group", None)
+            if groups is not None:
+                return groups
 
-    def __response_handler__(self, response) -> Response:
-        return Response(
-            response = response.content,
-            status = response.status_code,
-            mimetype = "application/json"
-        )
+    def get_switchers(self, team_id: str, environment: str, group: str) -> [dict]:
+        response: dict = self.do_graphql(f'''
+            query {{
+                configuration(
+                    slack_team_id: "{team_id}", 
+                    environment: "{environment}",
+                    group: "{group}") 
+                {{
+                    config {{
+                        key
+                        activated
+                    }}
+                }}
+            }}
+        ''')
+
+        configuration = response.get("configuration", None)
+        if configuration is not None:
+            configs = configuration.get("config", None)
+            if configs is not None:
+                return configs

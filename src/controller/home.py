@@ -16,9 +16,7 @@ def on_change_request_opened(ack, body, client, logger):
   change_request = copy.deepcopy(MODAL_REQUEST)
 
   team_id = body["team"]["id"]
-  team_domain = body["team"]["domain"]
   logger.warning(f"Team ID: {team_id}")
-  logger.warning(f"Team Domain: {team_domain}")
 
   ack()
 

@@ -1,14 +1,14 @@
 import os
 import logging
 
+from dotenv import load_dotenv
+
 from slack_bolt import App
 from slack_bolt.oauth.oauth_settings import OAuthSettings
 from slack_sdk.oauth.state_store import FileOAuthStateStore
 
 from slack_bolt.oauth.callback_options import CallbackOptions, SuccessArgs, FailureArgs
 from slack_bolt.response import BoltResponse
-
-from dotenv import load_dotenv
 
 from store.switcher_store import SwitcherAppInstallationStore
 from controller.home import on_change_request_opened, on_home_opened
@@ -23,8 +23,8 @@ from controller.change_request import (
 )
 
 load_dotenv()
-# logging.basicConfig(level = logging.WARNING)
 switcher_url = os.environ.get("SWITCHER_URL")
+# logging.basicConfig(level = logging.WARNING)
 
 def success(args: SuccessArgs) -> BoltResponse:
   assert args.request is not None
