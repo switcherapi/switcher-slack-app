@@ -50,7 +50,7 @@ SLACK_CLIENT_ID=""
 SLACK_CLIENT_SECRET=""
 
 SWITCHER_URL="https://switcherapi.github.io/switcher-management"
-SWITCHER_STORE_URL="http://localhost:3000"
+SWITCHER_API_URL="http://localhost:3000"
 SWITCHER_JWT_SECRET=""
 ```
 
@@ -95,23 +95,23 @@ pytest --cov=src
 ----------- coverage: platform win32, python 3.9.1-final-0 -----------
 Name                               Stmts   Miss  Cover
 ------------------------------------------------------
-src\__init__.py                        0      0   100%
-src\app.py                            72      2    97%
+src\app.py                            70      2    97%
 src\controller\__init__.py             0      0   100%
-src\controller\change_request.py      80     10    88%
-src\controller\home.py                16      4    75%
+src\controller\change_request.py     105     10    90%
+src\controller\home.py                18      4    78%
 src\payloads\__init__.py               0      0   100%
 src\payloads\change_request.py        23      0   100%
 src\payloads\home.py                   2      0   100%
 src\services\__init__.py               0      0   100%
-src\services\switcher_service.py      24      1    96%
+src\services\switcher_client.py       32      1    97%
+src\services\switcher_service.py      28      1    96%
 src\services\switcher_store.py        18      5    72%
 src\store\__init__.py                  0      0   100%
 src\store\switcher_store.py           73     27    63%
 src\utils\__init__.py                  0      0   100%
 src\utils\slack_payload_util.py       33      0   100%
 ------------------------------------------------------
-TOTAL                                341     49    86%
+TOTAL                                402     50    88%
 ```
 
 

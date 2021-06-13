@@ -3,6 +3,8 @@ import requests
 
 from functools import wraps
 
+from gql import Client
+
 from unittest.mock import Mock
 from unittest import mock
 from unittest.mock import patch
@@ -54,5 +56,17 @@ def mock_base_client(data: dict):
                 )
             ):
                 fn(client, *args, **kwargs)
+        return wrapper
+    return mock_decorator
+
+def mock_gql_client(fixture: dict):
+    def mock_decorator(fn):
+        @wraps(fn)
+        def wrapper(*args, **kwargs):
+            with (
+                patch.object(Client, '__init__', return_value = None),
+                patch.object(Client, 'execute', return_value = fixture)
+            ):
+                fn(*args, **kwargs)
         return wrapper
     return mock_decorator

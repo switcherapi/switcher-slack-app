@@ -2,15 +2,15 @@ import os
 
 from flask import Response
 from typing import Optional
-from .switcher_service import SwitcherService
+from .switcher_client import SwitcherClient
 
-class SwitcherInstallationStoreService(SwitcherService):
+class SwitcherInstallationStoreService(SwitcherClient):
     """Service responsible to handle the app installation and authentication"""
 
     def __init__(self, *, api_url: Optional[str] = None):
-        SwitcherService.__init__(
+        SwitcherClient.__init__(
             self, 
-            api_url or os.environ.get("SWITCHER_STORE_URL")
+            api_url or os.environ.get("SWITCHER_API_URL")
         )
 
     def save_installation(

@@ -18,20 +18,25 @@ from payloads import change_request
 
 def on_environment_selected(ack, body, client, logger):
   env_selected = get_selected_action(body)
-  logger.debug(f"Selected environment: {env_selected}")
+  team_id = body["team"]["id"]
+
+  logger.warning(f"Selected environment: {env_selected}")
+  logger.warning(f"Team ID: {team_id}")
+
+  ack()
   
-  populate_selection(body["view"], "Group", [
-    { "name": "Release 1", "value": "Release 1" },
-    { "name": "Release 2", "value": "Release 2" }
-  ])
-
-  view_hash = body["view"]["hash"]
-  view_id = body["view"]["id"]
-
-  prepare_body(body)
-
   try:
-    ack()
+    # Mocked
+    populate_selection(body["view"], "Group", [
+      { "name": "Release 1", "value": "Release 1" },
+      { "name": "Release 2", "value": "Release 2" }
+    ])
+
+    view_hash = body["view"]["hash"]
+    view_id = body["view"]["id"]
+
+    prepare_body(body)
+
     client.views_update(
           view_id = view_id,
           hash = view_hash,
@@ -41,21 +46,27 @@ def on_environment_selected(ack, body, client, logger):
     logger.error(f"Error selecting environment: {e}")
 
 def on_group_selected(ack, body, client, view, logger):
+  env_selected = get_state_salue(body["view"], "selection_environment")
   group_selected = get_selected_action(body)
-  logger.debug(f"Selected group: {group_selected}")
+  team_id = body["team"]["id"]
+  
+  logger.warning(f"Selected environment: {env_selected}")
+  logger.warning(f"Selected group: {group_selected}")
+  logger.warning(f"Team ID: {team_id}")
 
-  populate_selection(body["view"], "Switcher", [
-    { "name": "MY_FEATURE1", "value": "MY_FEATURE1" },
-    { "name": "MY_FEATURE2", "value": "MY_FEATURE2" }
-  ])
-
-  view_hash = body["view"]["hash"]
-  view_id = body["view"]["id"]
-
-  prepare_body(body)
+  ack()
 
   try:
-    ack()
+    # Mocked
+    populate_selection(body["view"], "Switcher", [
+      { "name": "MY_FEATURE1", "value": "MY_FEATURE1" },
+      { "name": "MY_FEATURE2", "value": "MY_FEATURE2" }
+    ])
+
+    view_hash = body["view"]["hash"]
+    view_id = body["view"]["id"]
+
+    prepare_body(body)
     client.views_update(
           view_id = view_id,
           hash = view_hash,
@@ -65,21 +76,30 @@ def on_group_selected(ack, body, client, view, logger):
     logger.error(f"Error selecting group: {e}")
 
 def on_switcher_selected(ack, body, client, logger):
+  env_selected = get_state_salue(body["view"], "selection_environment")
+  group_selected = get_state_salue(body["view"], "selection_group")
   switcher_selected = get_selected_action(body)
-  logger.debug(f"Selected switcher: {switcher_selected}")
+  team_id = body["team"]["id"]
 
-  populate_selection(body["view"], "Status", [
-    { "name": "Enable", "value": "true" },
-    { "name": "Disable", "value": "false" }
-  ])
+  logger.warning(f"Selected environment: {env_selected}")
+  logger.warning(f"Selected group: {group_selected}")
+  logger.warning(f"Selected switcher: {switcher_selected}")
+  logger.warning(f"Team ID: {team_id}")
 
-  view_hash = body["view"]["hash"]
-  view_id = body["view"]["id"]
-
-  prepare_body(body)
+  ack()
 
   try:
-    ack()
+    # Mocked
+    populate_selection(body["view"], "Status", [
+      { "name": "Enable", "value": "true" },
+      { "name": "Disable", "value": "false" }
+    ])
+
+    view_hash = body["view"]["hash"]
+    view_id = body["view"]["id"]
+
+    prepare_body(body)
+
     client.views_update(
           view_id = view_id,
           hash = view_hash,
@@ -93,8 +113,8 @@ def on_change_request_review(ack, body, client, view, logger):
   team_id = body["team"]["id"]
   team_domain = body["team"]["domain"]
 
-  logger.debug(f"Team Id: {team_id}")
-  logger.debug(f"Team Domain: {team_domain}")
+  logger.warning(f"Team Id: {team_id}")
+  logger.warning(f"Team Domain: {team_domain}")
 
   ack()
 
@@ -127,8 +147,8 @@ def on_submit(ack, body, client, view, logger):
   team_id = body["team"]["id"]
   team_domain = body["team"]["domain"]
 
-  logger.debug(f"Team ID: {team_id}")
-  logger.debug(f"Team Domain: {team_domain}")
+  logger.warning(f"Team ID: {team_id}")
+  logger.warning(f"Team Domain: {team_domain}")
 
   ack()
 
@@ -163,9 +183,9 @@ def on_request_approved(ack, body, client, logger):
   team_domain = body["team"]["domain"]
   ticket_id = body["actions"][0]["value"]
 
-  logger.debug(f"Team ID: {team_id}")
-  logger.debug(f"Team Domain: {team_domain}")
-  logger.debug(f"Ticked ID: {ticket_id}")
+  logger.warning(f"Team ID: {team_id}")
+  logger.warning(f"Team Domain: {team_domain}")
+  logger.warning(f"Ticked ID: {ticket_id}")
 
   ack()
 
@@ -185,9 +205,9 @@ def on_request_denied(ack, body, client, logger):
   team_domain = body["team"]["domain"]
   ticket_id = body["actions"][0]["value"]
 
-  logger.debug(f"Team ID: {team_id}")
-  logger.debug(f"Team Domain: {team_domain}")
-  logger.debug(f"Ticked ID: {ticket_id}")
+  logger.warning(f"Team ID: {team_id}")
+  logger.warning(f"Team Domain: {team_domain}")
+  logger.warning(f"Ticked ID: {ticket_id}")
 
   ack()
 
