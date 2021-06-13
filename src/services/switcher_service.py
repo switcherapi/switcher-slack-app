@@ -1,6 +1,7 @@
 import os
-from typing import Optional
+import json
 
+from typing import Optional
 from .switcher_client import SwitcherClient
 
 class SwitcherService(SwitcherClient):
@@ -70,3 +71,37 @@ class SwitcherService(SwitcherClient):
             configs = configuration.get("config", None)
             if configs is not None:
                 return configs
+
+    def validate_ticket(self, team_id: str, context: dict):
+        """Validates if Ticket content is valid"""
+        
+        response = self.do_post(
+            path = "/slack/v1/ticket/validate",
+            body = {
+                "team_id": team_id,
+                "ticket_content": {
+                    "environment": context["environment"],
+                    "group": context["group"],
+                    "switcher": context["switcher"],
+                    "status": context["status"],
+                }
+            }
+        )
+
+        if response.status_code != 200:
+            data = json.loads(response.data.decode('UTF-8'))
+            raise Exception(data.get("error", "Try it again later"))
+
+    def create_ticket(self, team_id: str, context: dict) -> dict:
+        """Create Ticket and return its ID and Channel to be published"""
+
+        return {
+            "ticket_id": "ticket123",
+            "channel_id": "C01SH298R6C"
+        }
+
+    def approve_request(self, team_id: str, ticket_id: str):
+        pass
+
+    def deny_request(self, team_id: str, ticket_id: str):
+        pass

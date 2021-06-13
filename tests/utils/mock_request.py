@@ -70,3 +70,13 @@ def mock_gql_client(fixture: dict):
                 fn(*args, **kwargs)
         return wrapper
     return mock_decorator
+
+def mock_switcher_client_post(method: str, fixture: dict, status: int = 200):
+    def mock_decorator(fn):
+        @wraps(fn)
+        def wrapper(*args, **kwargs):
+            with (patch.object(requests, method, 
+                return_value = mock_requests_factory(json.dumps(fixture), status))):
+                fn(*args, **kwargs)
+        return wrapper
+    return mock_decorator

@@ -2,10 +2,17 @@ import os
 import json
 import pytest
 
+from unittest.mock import patch
+
 from src.app import flask_app
+from src.services.switcher_service import SwitcherService
 from src.payloads.home import MODAL_REQUEST
 
-from tests.utils.mock_request import mock_event_handler, mock_base_client
+from tests.utils.mock_request import (
+    mock_event_handler, 
+    mock_base_client, 
+    mock_gql_client
+)
 from tests.fixtures.change_request import (
     OPEN_APP_HOME_FIX1,
     build_request_view,
@@ -28,6 +35,7 @@ def test_open_app_home(client):
     response = client.post(f"/slack/events", json = OPEN_APP_HOME_FIX1)
     assert response.status_code == 200
 
+@mock_gql_client({ 'configuration': { 'environments': ['default'] }})
 @mock_event_handler
 @mock_base_client(MODAL_REQUEST)
 def test_open_change_request_modal(client):
@@ -41,6 +49,11 @@ def test_open_change_request_modal(client):
     )
     assert response.status_code == 200
 
+@mock_gql_client({
+    'configuration': {
+        'group': [{'name': 'Release 1', 'activated': True}]
+    }
+})
 @mock_event_handler
 @mock_base_client(MODAL_REQUEST)
 def test_select_evironment(client):
@@ -55,6 +68,11 @@ def test_select_evironment(client):
     )
     assert response.status_code == 200
 
+@mock_gql_client({
+    'configuration': {
+        'config': [{'key': 'FEATURE01', 'activated': False}]
+    }
+})
 @mock_event_handler
 @mock_base_client(MODAL_REQUEST)
 def test_select_group(client):
@@ -132,6 +150,34 @@ def test_submit_for_review(client):
 
 @mock_event_handler
 @mock_base_client(MODAL_REQUEST)
+def test_submit_for_review_group(client):
+    response = client.post(
+        f"/slack/events", json = build_request_view(
+            req_type = "view_submission",
+            callback_id = "change_request_review",
+            state_fixture = {
+                **build_static_select_state_value(
+                    action_id = "selection_environment",
+                    text = "Production",
+                    value = "default"
+                ),
+                **build_static_select_state_value(
+                    action_id = "selection_group",
+                    text = "Release 1",
+                    value = "Release 1"
+                ),
+                **build_static_select_state_value(
+                    action_id = "selection_status",
+                    text = "Activate",
+                    value = "true"
+                )
+            }
+        )
+    )
+    assert response.status_code == 200
+
+@mock_event_handler
+@mock_base_client(MODAL_REQUEST)
 def test_submit_request(client):
     private_metadata = json.dumps({
         "environment": "default",
@@ -151,6 +197,44 @@ def test_submit_request(client):
             state_fixture = build_text_state_value(
                 action_id = "selection_observation",
                 value = "My observation here"
+            )
+        )
+    )
+    assert response.status_code == 200
+
+@mock_event_handler
+@mock_base_client(MODAL_REQUEST)
+def test_submit_request_group(client):
+    private_metadata = json.dumps({
+        "environment": "default",
+        "environment_alias": "Production",
+        "group": "Release 1",
+        "status": bool(True)
+    })
+
+    response = client.post(
+        f"/slack/events", json = build_request_view(
+            private_metadata = private_metadata,
+            actions_fixture = build_static_select_action_value(
+                action_id = "change_request_submit",
+                text = "Submit"
+            ),
+            state_fixture = build_text_state_value(
+                action_id = "selection_observation",
+                value = "My observation here"
+            )
+        )
+    )
+    assert response.status_code == 200
+
+@mock_event_handler
+@mock_base_client(MODAL_REQUEST)
+def test_abort_request(client):
+    response = client.post(
+        f"/slack/events", json = build_request_view(
+            actions_fixture = build_static_select_action_value(
+                action_id = "change_request_abort",
+                text = "Cancel"
             )
         )
     )

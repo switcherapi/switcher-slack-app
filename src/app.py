@@ -18,6 +18,7 @@ from controller.change_request import (
   on_switcher_selected,
   on_change_request_review,
   on_submit,
+  on_change_request_abort,
   on_request_approved,
   on_request_denied
 )
@@ -107,6 +108,11 @@ def handle_change_request_review(ack, body, client, view, logger):
 @app.action("change_request_submit")
 def handle_submission(ack, body, client, view, logger):
   on_submit(ack, body, client, view, logger)
+
+# Abort Change Request
+@app.action("change_request_abort")
+def handle_change_request_abort(ack, body, client, view, logger):
+  on_change_request_abort(ack, body, client, view, logger)
 
 # Request approved
 @app.action("request_approved")
