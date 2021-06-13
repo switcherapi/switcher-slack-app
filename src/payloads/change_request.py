@@ -123,17 +123,25 @@ def get_request_message(ticket_id, context):
 
 	add_field(message[2]["fields"], "Environment", context["environment"])
 	add_field(message[2]["fields"], "Group", context["group"])
-	add_field(message[2]["fields"], "Switcher", context["switcher"])
+	if context["switcher"] is not None:
+		add_field(message[2]["fields"], "Switcher", context["switcher"])
+
 	add_field(message[2]["fields"], "Status", "Enable" if bool(context["status"]) else "Disable")
-	add_field(message[2]["fields"], "Observations", context["observations"])
+	add_field(message[2]["fields"], "Observations", context.get("observations", ""))
 	return message
 
 def create_request_review(context):
 	view = copy.deepcopy(REQUEST_REVIEW)
 	insert_summary(view["blocks"], 3, "Environment", context["environment"])
 	insert_summary(view["blocks"], 4, "Group", context["group"])
-	insert_summary(view["blocks"], 5, "Switcher", context["switcher"])
-	insert_summary(view["blocks"], 6, "Status", "Enable" if bool(context["status"]) else "Disable")
+
+	status = "Enable" if bool(context["status"]) else "Disable"
+	if context["switcher"] is not None:
+		insert_summary(view["blocks"], 5, "Switcher", context["switcher"])
+		insert_summary(view["blocks"], 6, "Status", status)
+	else:
+		insert_summary(view["blocks"], 5, "Status", status)
+
 	return view
 
 def read_request_metadata(view):

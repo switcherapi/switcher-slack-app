@@ -95,23 +95,24 @@ pytest --cov=src
 ----------- coverage: platform win32, python 3.9.1-final-0 -----------
 Name                               Stmts   Miss  Cover
 ------------------------------------------------------
-src\app.py                            70      2    97%
+src\app.py                            73      2    97%
 src\controller\__init__.py             0      0   100%
-src\controller\change_request.py     105     10    90%
-src\controller\home.py                18      4    78%
+src\controller\change_request.py     102     13    87%
+src\controller\home.py                22      4    82%
 src\payloads\__init__.py               0      0   100%
-src\payloads\change_request.py        23      0   100%
+src\payloads\change_request.py        27      0   100%
 src\payloads\home.py                   2      0   100%
 src\services\__init__.py               0      0   100%
 src\services\switcher_client.py       32      1    97%
-src\services\switcher_service.py      28      1    96%
+src\services\switcher_service.py      40      1    98%
 src\services\switcher_store.py        18      5    72%
 src\store\__init__.py                  0      0   100%
 src\store\switcher_store.py           73     27    63%
 src\utils\__init__.py                  0      0   100%
 src\utils\slack_payload_util.py       33      0   100%
+src\utils\switcher_util.py            21      0   100%
 ------------------------------------------------------
-TOTAL                                402     50    88%
+TOTAL                                443     53    88%
 ```
 
 
