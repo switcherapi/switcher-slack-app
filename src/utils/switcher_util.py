@@ -1,3 +1,5 @@
+from errors import SwitcherContextError
+
 def get_environment_keyval(values: [str]) -> [dict]:
     key_val: [dict] = []
     for val in values:
@@ -25,7 +27,6 @@ def validate_context_request(context: dict):
 
     if context.get("status", None) is None:
         missing.append("Status")
-
-    error = " - ".join([str(elem) for elem in missing])
+        
     if len(missing):
-        raise Exception(f"Missing [{error}]")
+        raise SwitcherContextError(missing)
