@@ -91,7 +91,7 @@ class SwitcherService(SwitcherClient):
 
         if response.status_code != 200:
             data = json.loads(response.data.decode('UTF-8'))
-            raise SwitcherValidationError(data.get("error", "Try it again later"))
+            raise SwitcherValidationError(data.get("error"))
 
     def create_ticket(self, team_id: str, context: dict) -> dict:
         """Create Ticket and return its ID and Channel to be published"""
@@ -112,7 +112,7 @@ class SwitcherService(SwitcherClient):
 
         data = json.loads(response.data.decode('UTF-8'))
         if response.status_code != 201:
-            raise SwitcherValidationError(data.get("error", "Try it again later"))
+            raise SwitcherValidationError(data.get("error"))
 
         return {
             "ticket_id": data.get("ticket")["_id"],
@@ -145,6 +145,6 @@ class SwitcherService(SwitcherClient):
 
         data = json.loads(response.data.decode('UTF-8'))
         if response.status_code != 200:
-            raise SwitcherValidationError(data.get("error", "Try it again later"))
+            raise SwitcherValidationError(data.get("error"))
 
         return data.get("message")

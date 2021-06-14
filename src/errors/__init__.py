@@ -13,6 +13,7 @@ class SwitcherValidationError(SwitcherSlackAppError):
     """Error raised when ticket has issues and cannot be opened"""
 
     def __init__(self, message: str):
+        message = "Try it again later" if message is None else message
         super(SwitcherValidationError, self).__init__(message)
 
 class SwitcherSlackInstallationError(SwitcherSlackAppError):
