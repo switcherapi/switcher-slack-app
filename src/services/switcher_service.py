@@ -2,6 +2,7 @@ import os
 import json
 
 from typing import Optional
+from errors import SwitcherValidationError
 from .switcher_client import SwitcherClient
 
 class SwitcherService(SwitcherClient):
@@ -90,7 +91,7 @@ class SwitcherService(SwitcherClient):
 
         if response.status_code != 200:
             data = json.loads(response.data.decode('UTF-8'))
-            raise Exception(data.get("error", "Try it again later"))
+            raise SwitcherValidationError(data.get("error", "Try it again later"))
 
     def create_ticket(self, team_id: str, context: dict) -> dict:
         """Create Ticket and return its ID and Channel to be published"""
@@ -101,7 +102,9 @@ class SwitcherService(SwitcherClient):
         }
 
     def approve_request(self, team_id: str, ticket_id: str):
+        """Dispatch change request approval"""
         pass
 
     def deny_request(self, team_id: str, ticket_id: str):
+        """Dispatch change request denied"""
         pass
