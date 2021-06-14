@@ -13,7 +13,7 @@ from slack_sdk.oauth.state_store import FileOAuthStateStore
 from tests.fixtures.installation import INSTALLATION_FIX1
 from tests.utils.mock_request import (
     mock_event_handler, 
-    mock_switcher_client_post
+    mock_switcher_client
 )
 
 callback_url = os.environ.get("SWITCHER_URL")
@@ -46,7 +46,7 @@ def test_save_installation_success(client):
         assert response.status_code == 308
         assert f"{callback_url}/slack/authorization?e_id={e_id}&t_id={t_id}" == response.headers["Location"]
 
-@mock_switcher_client_post("post", {}, 400)
+@mock_switcher_client("post", {}, 400)
 def test_save_installation_fail(client):
     with (
         # Bypass browser and state validations

@@ -91,20 +91,60 @@ class SwitcherService(SwitcherClient):
 
         if response.status_code != 200:
             data = json.loads(response.data.decode('UTF-8'))
-            raise SwitcherValidationError(data.get("error", "Try it again later"))
+            raise SwitcherValidationError(data.get("error"))
 
     def create_ticket(self, team_id: str, context: dict) -> dict:
         """Create Ticket and return its ID and Channel to be published"""
 
+        response = self.do_post(
+            path = "/slack/v1/ticket/create",
+            body = {
+                "team_id": team_id,
+                "ticket_content": {
+                    "environment": context["environment"],
+                    "group": context["group"],
+                    "switcher": context["switcher"],
+                    "status": context["status"],
+                    "observations": context["observations"],
+                }
+            }
+        )
+
+        data = json.loads(response.data.decode('UTF-8'))
+        if response.status_code != 201:
+            raise SwitcherValidationError(data.get("error"))
+
         return {
-            "ticket_id": "ticket123",
-            "channel_id": "C01SH298R6C"
+            "ticket_id": data.get("ticket")["_id"],
+            "channel_id": data.get("channel_id")
         }
 
     def approve_request(self, team_id: str, ticket_id: str):
         """Dispatch change request approval"""
-        pass
+        self.__process_request__(team_id, ticket_id, True)
 
     def deny_request(self, team_id: str, ticket_id: str):
         """Dispatch change request denied"""
-        pass
+        self.__process_request__(team_id, ticket_id, False)
+
+    def __process_request__(self, 
+        team_id: str, 
+        ticket_id: str, 
+        approved: bool
+    ) -> str:
+        """Dispatch change request approval action"""
+
+        response = self.do_post(
+            path = "/slack/v1/ticket/process",
+            body = {
+                "team_id": team_id,
+                "ticket_id": ticket_id,
+                "approved": approved
+            }
+        )
+
+        data = json.loads(response.data.decode('UTF-8'))
+        if response.status_code != 200:
+            raise SwitcherValidationError(data.get("error"))
+
+        return data.get("message")
