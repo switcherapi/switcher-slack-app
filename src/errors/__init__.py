@@ -14,3 +14,9 @@ class SwitcherValidationError(SwitcherSlackAppError):
 
     def __init__(self, message: str):
         super(SwitcherValidationError, self).__init__(message)
+
+class SwitcherSlackInstallationError(SwitcherSlackAppError):
+    """Error raised when slack installation fails"""
+
+    def __init__(self, message: str):
+        super(SwitcherSlackInstallationError, self).__init__(message)
