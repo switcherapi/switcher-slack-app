@@ -1,7 +1,9 @@
 import copy
 
-from utils.slack_payload_util import populate_selection
+from services.switcher_service import SwitcherService
 from payloads.home import MODAL_REQUEST, APP_HOME
+from utils.slack_payload_util import populate_selection
+from utils.switcher_util import get_environment_keyval
 
 def on_home_opened(client, event, logger):
   try:
@@ -20,12 +22,15 @@ def on_change_request_opened(ack, body, client, logger):
 
   ack()
 
-  populate_selection(change_request, "Environment", [
-    { "name": "Production", "value": "default" },
-    { "name": "QA", "value": "QA" }
-  ])
-
   try:
+    switcher_service = SwitcherService()
+    envs = switcher_service.get_environments(team_id)
+    populate_selection(
+      body = change_request,
+      item = "Environment",
+      values = get_environment_keyval(envs)
+    )
+
     client.views_open(
       trigger_id = body["trigger_id"],
       view = change_request

@@ -79,7 +79,7 @@ class SwitcherClient:
             mimetype = "application/json"
         )
 
-    def __gql_client__(self, resource: str):
+    def __gql_client__(self, resource: str) -> Client:
         return Client(
             fetch_schema_from_transport = True,
             transport = RequestsHTTPTransport(
