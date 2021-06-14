@@ -116,7 +116,7 @@ def on_change_request_review(ack, body, client, view, logger):
   try:
     validate_context_request(context)
     SwitcherService().validate_ticket(team_id, context)
-
+    
     # Request review
     client.views_publish(
       user_id = user["id"],

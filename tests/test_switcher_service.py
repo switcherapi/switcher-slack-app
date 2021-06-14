@@ -1,8 +1,9 @@
 import pytest
 
 from src.services.switcher_service import SwitcherService
+from src.errors import SwitcherValidationError
 
-from tests.utils.mock_request import mock_gql_client, mock_switcher_client_post
+from tests.utils.mock_request import mock_gql_client, mock_switcher_client
 
 @pytest.fixture
 def switcher_service():
@@ -49,7 +50,7 @@ def test_get_switchers(switcher_service):
     assert 'FEATURE01' == switchers[0]['key']
     assert False == switchers[0]['activated']
 
-@mock_switcher_client_post('post', { 'message': 'Ticket verified' })
+@mock_switcher_client('post', { 'message': 'Ticket verified' })
 def test_validate_ticket(switcher_service):
     switcher_service.validate_ticket(
         team_id = "TEAM_ID", 
@@ -60,7 +61,7 @@ def test_validate_ticket(switcher_service):
             "status": "False",
         })
 
-@mock_switcher_client_post('post', {'error': 'Switcher not found'}, 404)
+@mock_switcher_client('post', {'error': 'Switcher not found'}, 404)
 def test_validate_ticket_invalid(switcher_service):
     with pytest.raises(Exception) as e_info:
         switcher_service.validate_ticket(
@@ -73,3 +74,61 @@ def test_validate_ticket_invalid(switcher_service):
             })
 
     assert e_info.value.args[0] == "Switcher not found"
+
+@mock_switcher_client('post', {
+        'channel_id': 'CHANNEL_ID',
+        'channel': 'APPROVAL',
+        'ticket': { '_id': 'ticket_123' }
+    }, status = 201
+)
+def test_create_ticket(switcher_service):
+    switcher_service.create_ticket(
+        team_id = "TEAM_ID", 
+        context = {
+            "environment": "default",
+            "group": "Group",
+            "switcher": "FEATURE",
+            "status": "False",
+            "observations": "Deactivate FEATURE"
+        }
+    )
+
+@mock_switcher_client('post', {'error': 'Some error message'}, 400)
+def test_create_ticket_fail(switcher_service):
+    with pytest.raises(Exception) as e_info:
+        switcher_service.create_ticket(
+            team_id = "TEAM_ID", 
+            context = {
+                "environment": "default",
+                "group": "Group",
+                "switcher": "FEATURE",
+                "status": "False",
+                "observations": "Deactivate FEATURE"
+            }
+        )
+
+    assert e_info.value.args[0] == "Some error message"
+
+@mock_switcher_client('post', {'message': 'Ticker ticket123 processed'})
+def test_approve_request(switcher_service):
+    switcher_service.approve_request(
+        team_id = "TEAM_ID", 
+        ticket_id = "ticket123"
+    )
+
+@mock_switcher_client('post', {'message': 'Ticker ticket123 processed'})
+def test_deny_request(switcher_service):
+    switcher_service.deny_request(
+        team_id = "TEAM_ID", 
+        ticket_id = "ticket123"
+    )
+
+@mock_switcher_client('post', {}, 400)
+def test_process_ticket_invalid(switcher_service):
+    with pytest.raises(Exception) as e_info:
+        switcher_service.deny_request(
+            team_id = "TEAM_ID", 
+            ticket_id = "ticket123"
+        )
+
+    assert e_info.value.args[0] == "Try it again later"

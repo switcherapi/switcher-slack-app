@@ -71,7 +71,7 @@ def mock_gql_client(fixture: dict):
         return wrapper
     return mock_decorator
 
-def mock_switcher_client_post(method: str, fixture: dict, status: int = 200):
+def mock_switcher_client(method: str, fixture: dict, status: int = 200):
     def mock_decorator(fn):
         @wraps(fn)
         def wrapper(*args, **kwargs):
