@@ -121,6 +121,11 @@ APP_HOME = {
 	"type": "home",
 	"blocks": [
 		{
+			"type": "image",
+			"image_url": "https://raw.githubusercontent.com/switcherapi/switcherapi-assets/master/samples/slack/logo.png",
+			"alt_text": "Switcher Slack App"
+		},
+		{
 			"type": "context",
 			"elements": [
 				{
@@ -139,9 +144,9 @@ APP_HOME = {
 					"type": "button",
 					"text": {
 						"type": "plain_text",
-						"text": "Request Change"
+						"text": "Open Change Request"
 					},
-					"action_id": "request_change"
+					"action_id": "change_request"
 				}
 			]
 		}
