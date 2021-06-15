@@ -75,7 +75,7 @@ def app_home_opened(client, event, logger):
   on_home_opened(client, event, logger)
 
 # Open Change Request modal
-@app.action("request_change")
+@app.action("change_request")
 def open_change_request(ack, body, client, logger):
   on_change_request_opened(ack, body, client, logger)
 

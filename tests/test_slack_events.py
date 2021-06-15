@@ -43,7 +43,7 @@ def test_open_change_request_modal(client):
     response = client.post(
         f"/slack/events", json = build_request_view(
             actions_fixture = build_static_select_action_value(
-                action_id = "request_change",
+                action_id = "change_request",
                 text = "Request Change"
             )
         )

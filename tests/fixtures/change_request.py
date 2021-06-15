@@ -31,7 +31,7 @@ OPEN_APP_HOME_FIX1 = {
 }
 
 ACTION_OPEN_MODAL_CHANGE_REQUEST_FIX1 = {
-   "action_id": "request_change",
+   "action_id": "change_request",
    "block_id": "lGG",
    "text": {
       "type": "plain_text",
