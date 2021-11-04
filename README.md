@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/switcherapi/switcher-slack-app.svg?branch=master)](https://travis-ci.com/switcherapi/switcher-slack-app)
+[![Build Status](https://app.travis-ci.com/switcherapi/switcher-slack-app.svg?branch=master)](https://app.travis-ci.com/switcherapi/switcher-slack-app)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=switcherapi_switcher-slack-app&metric=alert_status)](https://sonarcloud.io/dashboard?id=switcherapi_switcher-slack-app)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=switcherapi_switcher-slack-app&metric=coverage)](https://sonarcloud.io/dashboard?id=switcherapi_switcher-slack-app)
 [![Known Vulnerabilities](https://snyk.io/test/github/switcherapi/switcher-slack-app/badge.svg)](https://snyk.io/test/github/switcherapi/switcher-slack-app)
