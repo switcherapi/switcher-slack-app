@@ -9,7 +9,7 @@
 ![Switcher Slack App](https://raw.githubusercontent.com/switcherapi/switcherapi-assets/master/samples/slack/logo.png)
 
 # About
-**Switcher Slack App** is a Slack App that can be used to control Switchers from your team or organization workspace.</br>
+**Switcher Slack App** is a Slack App that can be used to control Switchers from your Slack workspace.</br>
 Features included in this app are described below with examples:
 
 > **Change Request**

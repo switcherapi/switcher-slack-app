@@ -126,7 +126,7 @@ def get_request_message(ticket_id, context):
 	if context["switcher"] is not None:
 		add_field(message[2]["fields"], "Switcher", context["switcher"])
 
-	add_field(message[2]["fields"], "Status", "Enable" if bool(context["status"]) else "Disable")
+	add_field(message[2]["fields"], "Status", "Enable" if context["status"] == "true" else "Disable")
 	add_field(message[2]["fields"], "Observations", context.get("observations", ""))
 	return message
 
@@ -135,13 +135,13 @@ def create_request_review(context):
 	insert_summary(view["blocks"], 3, "Environment", context["environment"])
 	insert_summary(view["blocks"], 4, "Group", context["group"])
 
-	status = "Enable" if bool(context["status"]) else "Disable"
+	status = "Enable" if context["status"] == "true" else "Disable"
 	if context["switcher"] is not None:
 		insert_summary(view["blocks"], 5, "Switcher", context["switcher"])
 		insert_summary(view["blocks"], 6, "Status", status)
 	else:
 		insert_summary(view["blocks"], 5, "Status", status)
-
+	
 	return view
 
 def read_request_metadata(view):
