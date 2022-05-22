@@ -6,6 +6,8 @@ from utils.slack_payload_util import populate_selection
 from utils.switcher_util import get_environment_keyval
 
 def on_home_opened(client, event, logger):
+  """ Displays the home view """
+
   try:
     client.views_publish(
       user_id = event["user"],
@@ -15,6 +17,8 @@ def on_home_opened(client, event, logger):
     logger.error(f"Error publishing home tab: {e}")
 
 def on_change_request_opened(ack, body, client, logger):
+  """ Displays the change request modal """
+  
   change_request = copy.deepcopy(MODAL_REQUEST)
 
   team_id = body["team"]["id"]

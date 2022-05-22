@@ -6,7 +6,7 @@ from utils.switcher_util import get_keyval, validate_context_request
 from utils.slack_payload_util import (
   populate_selection, 
   prepare_body, 
-  get_state_salue,
+  get_state_value,
   get_selected_action
 )
 from payloads.home import APP_HOME
@@ -18,6 +18,8 @@ from payloads.change_request import (
 )
 
 def on_environment_selected(ack, body, client, logger):
+  """ Load groups when environment is selected """
+
   env_selected = get_selected_action(body)
   team_id = body["team"]["id"]
 
@@ -44,8 +46,10 @@ def on_environment_selected(ack, body, client, logger):
   except Exception as e:
     logger.error(f"Error selecting environment: {e}")
 
-def on_group_selected(ack, body, client, view, logger):
-  env_selected = get_state_salue(body["view"], "selection_environment")
+def on_group_selected(ack, body, client, logger):
+  """ Load switchers when group is selected """
+
+  env_selected = get_state_value(body["view"], "selection_environment")
   group_selected = get_selected_action(body)
   team_id = body["team"]["id"]
 
@@ -78,36 +82,36 @@ def on_group_selected(ack, body, client, view, logger):
   except Exception as e:
     logger.error(f"Error selecting group: {e}")
 
-def on_switcher_selected(ack, body, client, logger):
+def on_switcher_selected(ack, body, client):
+  """ Updates view's metadata with switcher selection """
+
   ack()
+  view_hash = body["view"]["hash"]
+  view_id = body["view"]["id"]
 
-  try:
-    view_hash = body["view"]["hash"]
-    view_id = body["view"]["id"]
+  prepare_body(body)
 
-    prepare_body(body)
-
-    client.views_update(
-          view_id = view_id,
-          hash = view_hash,
-          view = body["view"]
-      )
-  except Exception as e:
-    logger.error(f"Error selecting switcher: {e}")
+  client.views_update(
+      view_id = view_id,
+      hash = view_hash,
+      view = body["view"]
+  )
 
 def on_change_request_review(ack, body, client, view, logger):
+  """ Populate context with selections, validate via Switcher API then publish view for review """
+
   user = body["user"]
   team_id = body["team"]["id"]
 
   ack()
 
-  environment = get_state_salue(view, "selection_environment")
+  environment = get_state_value(view, "selection_environment")
   context = {
     "environment": environment,
     "environment_alias": "Production" if environment == "default" else environment,
-    "group": get_state_salue(view, "selection_group"),
-    "switcher": get_state_salue(view, "selection_switcher"),
-    "status": get_state_salue(view, "selection_status")
+    "group": get_state_value(view, "selection_group"),
+    "switcher": get_state_value(view, "selection_switcher"),
+    "status": get_state_value(view, "selection_status")
   }
 
   view = create_request_review(context)
@@ -123,18 +127,21 @@ def on_change_request_review(ack, body, client, view, logger):
       view = view
     )
   except Exception as e:
+    logger.error(f"Error request review: {e}")
     client.chat_postMessage(
       channel = user["id"], 
       text = f"There was an error with your request: {e}"
     )
 
-def on_submit(ack, body, client, view, logger):
+def on_submit(ack, body, client, logger):
+  """ Create ticket, return to home view then publish approval message """
+
   user = body["user"]
   team_id = body["team"]["id"]
 
   ack()
 
-  observation = get_state_salue(body["view"], "selection_observation")
+  observation = get_state_value(body["view"], "selection_observation")
   context = {
     **read_request_metadata(body["view"]),
     "observations": "" if observation is None else observation,
@@ -157,18 +164,22 @@ def on_submit(ack, body, client, view, logger):
       blocks = get_request_message(ticket.get("ticket_id"), context)
     )
   except SlackApiError as e:
+    logger.error(f"API has errors on submitting: {e}")
     message = e.response["error"]
     client.chat_postMessage(
       channel = user["id"], 
       text = f"There was an error with your submission: {message}"
     )
   except Exception as e:
+    logger.error(f"Error on submitting: {e}")
     client.chat_postMessage(
       channel = user["id"], 
       text = f"There was an error with your request: {e}"
     )
   
-def on_change_request_abort(ack, body, client, view, logger):
+def on_change_request_abort(ack, body, client):
+  """ Return to home view """
+
   ack()
   client.views_publish(
     response_action = "push",
@@ -177,6 +188,8 @@ def on_change_request_abort(ack, body, client, view, logger):
   )
 
 def on_request_approved(ack, body, client, logger):
+  """ Approve ticket through Switcher API and update chat message """
+
   message_ts = body["message"]["ts"]
   team_id = body["team"]["id"]
   ticket_id = body["actions"][0]["value"]
@@ -196,6 +209,7 @@ def on_request_approved(ack, body, client, logger):
       blocks = message_blocks
     )
   except Exception as e:
+    logger.error(f"Error on aborting: {e}")
     client.chat_update(
       channel = channel_id,
       text = e.args[0],
@@ -204,6 +218,8 @@ def on_request_approved(ack, body, client, logger):
     )
 
 def on_request_denied(ack, body, client, logger):
+  """ Deny ticket through Switcher API and update chat message """
+
   message_ts = body["message"]["ts"]
   team_id = body["team"]["id"]
   ticket_id = body["actions"][0]["value"]
@@ -223,6 +239,7 @@ def on_request_denied(ack, body, client, logger):
       blocks = message_blocks
     )
   except Exception as e:
+    logger.error(f"Error on denying: {e}")
     client.chat_update(
       channel = channel_id,
       text = e.args[0],

@@ -10,7 +10,7 @@ from gql import gql, Client
 from gql.transport.requests import RequestsHTTPTransport
 
 class SwitcherClient:
-    """Switcher Client wraps HTTP request against the Swicther API"""
+    """ Switcher Client wraps HTTP request against the Swicther API """
 
     def __init__(self, api_url: str):
         self.__secret = os.environ.get("SWITCHER_JWT_SECRET")

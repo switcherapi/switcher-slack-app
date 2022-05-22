@@ -1,5 +1,5 @@
 def populate_selection(body, item, values):
-    """Includes values to selection block"""
+    """ Includes values to selection block """
 
     for block in body["blocks"]:
         text = block.get("text", {})
@@ -16,7 +16,7 @@ def populate_selection(body, item, values):
             return block
 
 def insert_summary(block, index, label, value):
-    """Add label and value to block"""
+    """ Add label and value to block """
 
     block.insert(index, {
 			"type": "section",
@@ -33,7 +33,7 @@ def add_field(fields, label, value):
         })
 
 def prepare_body(body):
-    """Prepare view to be forwarded"""
+    """ Prepare view to be forwarded """
 
     body["view"].pop("id")
     body["view"].pop("team_id")
@@ -45,8 +45,8 @@ def prepare_body(body):
     body["view"].pop("app_installed_team_id")
     body["view"].pop("bot_id")
 
-def get_state_salue(view, option):
-    """Get selected values stored at the state element"""
+def get_state_value(view, option):
+    """ Get selected values stored at the state element """
 
     element_value = ""
     for element in view["state"]["values"]:
@@ -57,7 +57,7 @@ def get_state_salue(view, option):
             return element_value.get("value", None)
 
 def get_selected_action(body):
-    """Get selected value from an action event"""
+    """ Get selected value from an action event """
     
     if body["actions"] is not None and len(body["actions"]) > 0:
         return body["actions"][0]["selected_option"]["value"]

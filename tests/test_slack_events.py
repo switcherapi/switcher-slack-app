@@ -24,6 +24,13 @@ from tests.fixtures.change_request import (
     build_static_select_state_value
 )
 
+RELEASE_1 = "Release 1"
+PRODUCTION = "Production"
+DEFAULT_ENV = "default"
+MY_FEATURE = "MY_FEATURE"
+MY_FEATURE1 = "MY_FEATURE1"
+OBSERVATION = "My observation here"
+
 @pytest.fixture
 def client():
     flask_app.config['TESTING'] = True
@@ -62,8 +69,8 @@ def test_select_evironment(client):
         f"/slack/events", json = build_request_view(
             actions_fixture = build_static_select_action_value(
                 action_id = "selection_environment",
-                text = "Production",
-                value = "default"
+                text = PRODUCTION,
+                value = DEFAULT_ENV
             )
         )
     )
@@ -81,8 +88,8 @@ def test_select_group(client):
         f"/slack/events", json = build_request_view(
             actions_fixture = build_static_select_action_value(
                 action_id = "selection_group",
-                text = "Release 1",
-                value = "Release 1"
+                text = RELEASE_1,
+                value = RELEASE_1
             )
         )
     )
@@ -95,8 +102,8 @@ def test_select_switcher(client):
         f"/slack/events", json = build_request_view(
             actions_fixture = build_static_select_action_value(
                 action_id = "selection_switcher",
-                text = "MY_FEATURE",
-                value = "MY_FEATURE"
+                text = MY_FEATURE,
+                value = MY_FEATURE
             )
         )
     )
@@ -127,18 +134,18 @@ def test_submit_for_review(client):
             state_fixture = {
                 **build_static_select_state_value(
                     action_id = "selection_environment",
-                    text = "Production",
-                    value = "default"
+                    text = PRODUCTION,
+                    value = DEFAULT_ENV
                 ),
                 **build_static_select_state_value(
                     action_id = "selection_group",
-                    text = "Release 1",
-                    value = "Release 1"
+                    text = RELEASE_1,
+                    value = RELEASE_1
                 ),
                 **build_static_select_state_value(
                     action_id = "selection_switcher",
-                    text = "MY_FEATURE",
-                    value = "MY_FEATURE"
+                    text = MY_FEATURE,
+                    value = MY_FEATURE
                 ),
                 **build_static_select_state_value(
                     action_id = "selection_status",
@@ -161,13 +168,13 @@ def test_submit_for_review_group(client):
             state_fixture = {
                 **build_static_select_state_value(
                     action_id = "selection_environment",
-                    text = "Production",
-                    value = "default"
+                    text = PRODUCTION,
+                    value = DEFAULT_ENV
                 ),
                 **build_static_select_state_value(
                     action_id = "selection_group",
-                    text = "Release 1",
-                    value = "Release 1"
+                    text = RELEASE_1,
+                    value = RELEASE_1
                 ),
                 **build_static_select_state_value(
                     action_id = "selection_status",
@@ -189,10 +196,10 @@ def test_submit_for_review_group(client):
 )
 def test_submit_request(client):
     private_metadata = json.dumps({
-        "environment": "default",
-        "environment_alias": "Production",
-        "group": "Release 1",
-        "switcher": "MY_FEATURE1",
+        "environment": DEFAULT_ENV,
+        "environment_alias": PRODUCTION,
+        "group": RELEASE_1,
+        "switcher": MY_FEATURE1,
         "status": bool(True)
     })
 
@@ -205,7 +212,7 @@ def test_submit_request(client):
             ),
             state_fixture = build_text_state_value(
                 action_id = "selection_observation",
-                value = "My observation here"
+                value = OBSERVATION
             )
         )
     )
@@ -221,9 +228,9 @@ def test_submit_request(client):
 )
 def test_submit_request_group(client):
     private_metadata = json.dumps({
-        "environment": "default",
-        "environment_alias": "Production",
-        "group": "Release 1",
+        "environment": DEFAULT_ENV,
+        "environment_alias": PRODUCTION,
+        "group": RELEASE_1,
         "switcher": None,
         "status": bool(True)
     })
@@ -237,7 +244,7 @@ def test_submit_request_group(client):
             ),
             state_fixture = build_text_state_value(
                 action_id = "selection_observation",
-                value = "My observation here"
+                value = OBSERVATION
             )
         )
     )
@@ -248,10 +255,10 @@ def test_submit_request_group(client):
 @mock_switcher_client('post', {}, status = 400)
 def test_submit_request_fail(client):
     private_metadata = json.dumps({
-        "environment": "default",
-        "environment_alias": "Production",
-        "group": "Release 1",
-        "switcher": "MY_FEATURE1",
+        "environment": DEFAULT_ENV,
+        "environment_alias": PRODUCTION,
+        "group": RELEASE_1,
+        "switcher": MY_FEATURE1,
         "status": bool(True)
     })
 
@@ -264,7 +271,7 @@ def test_submit_request_fail(client):
             ),
             state_fixture = build_text_state_value(
                 action_id = "selection_observation",
-                value = "My observation here"
+                value = OBSERVATION
             )
         )
     )

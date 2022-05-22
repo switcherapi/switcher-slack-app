@@ -36,7 +36,7 @@ MODAL_REQUEST = {
 				"type": "static_select",
 				"placeholder": {
 					"type": "plain_text",
-					"text": "Select an item"
+					"text": "-"
 				},
 				"options": [],
 				"action_id": "selection_environment"
@@ -52,7 +52,7 @@ MODAL_REQUEST = {
 				"type": "static_select",
 				"placeholder": {
 					"type": "plain_text",
-					"text": "Select an item"
+					"text": "-"
 				},
 				"options": [
 					{
@@ -76,7 +76,7 @@ MODAL_REQUEST = {
 				"type": "static_select",
 				"placeholder": {
 					"type": "plain_text",
-					"text": "Select an item"
+					"text": "-"
 				},
 				"options": [
 					{
@@ -100,7 +100,7 @@ MODAL_REQUEST = {
 				"type": "static_select",
 				"placeholder": {
 					"type": "plain_text",
-					"text": "Select an item"
+					"text": "-"
 				},
 				"options": [
 					{

@@ -60,7 +60,7 @@ def build_static_select_action_value(
       },
       "placeholder": {
          "type": "plain_text",
-         "text": "Select an item"
+         "text": "-"
       }
    }
 
