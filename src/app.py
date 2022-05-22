@@ -87,12 +87,12 @@ def selection_environment(ack, body, client, logger):
 # Update Change Request modal with available group switchers
 @app.action("selection_group")
 def selection_group(ack, body, client, view, logger):
-  on_group_selected(ack, body, client, view, logger)
+  on_group_selected(ack, body, client, logger)
 
 # Update Change Request modal with status options
 @app.action("selection_switcher")
 def selection_switcher(ack, body, client, logger):
-  on_switcher_selected(ack, body, client, logger)
+  on_switcher_selected(ack, body, client)
 
 # Confirm status selection
 @app.action("selection_status")
@@ -107,12 +107,12 @@ def handle_change_request_review(ack, body, client, view, logger):
 # Submit Change Request for verification and approval
 @app.action("change_request_submit")
 def handle_submission(ack, body, client, view, logger):
-  on_submit(ack, body, client, view, logger)
+  on_submit(ack, body, client, logger)
 
 # Abort Change Request
 @app.action("change_request_abort")
 def handle_change_request_abort(ack, body, client, view, logger):
-  on_change_request_abort(ack, body, client, view, logger)
+  on_change_request_abort(ack, body, client)
 
 # Request approved
 @app.action("request_approved")

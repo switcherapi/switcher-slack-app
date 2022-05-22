@@ -6,7 +6,7 @@ from errors import SwitcherValidationError
 from .switcher_client import SwitcherClient
 
 class SwitcherService(SwitcherClient):
-    """Service responsible for handling all API requests execution against the linked Domain"""
+    """ Service responsible for handling all API requests execution against the linked Domain """
 
     def __init__(self, *, api_url: Optional[str] = None):
         SwitcherClient.__init__(
@@ -74,7 +74,7 @@ class SwitcherService(SwitcherClient):
                 return configs
 
     def validate_ticket(self, team_id: str, context: dict):
-        """Validates if Ticket content is valid"""
+        """ Validates if Ticket content is valid """
         
         response = self.do_post(
             path = "/slack/v1/ticket/validate",
@@ -94,7 +94,7 @@ class SwitcherService(SwitcherClient):
             raise SwitcherValidationError(data.get("error"))
 
     def create_ticket(self, team_id: str, context: dict) -> dict:
-        """Create Ticket and return its ID and Channel to be published"""
+        """ Create Ticket and return its ID and Channel to be published """
 
         response = self.do_post(
             path = "/slack/v1/ticket/create",
@@ -120,11 +120,11 @@ class SwitcherService(SwitcherClient):
         }
 
     def approve_request(self, team_id: str, ticket_id: str):
-        """Dispatch change request approval"""
+        """ Dispatch change request approval """
         self.__process_request__(team_id, ticket_id, True)
 
     def deny_request(self, team_id: str, ticket_id: str):
-        """Dispatch change request denied"""
+        """ Dispatch change request denied """
         self.__process_request__(team_id, ticket_id, False)
 
     def __process_request__(self, 
@@ -132,7 +132,7 @@ class SwitcherService(SwitcherClient):
         ticket_id: str, 
         approved: bool
     ) -> str:
-        """Dispatch change request approval action"""
+        """ Dispatch change request approval action """
 
         response = self.do_post(
             path = "/slack/v1/ticket/process",

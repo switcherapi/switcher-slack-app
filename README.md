@@ -97,7 +97,7 @@ Name                               Stmts   Miss  Cover
 ------------------------------------------------------
 src\app.py                            73      2    97%
 src\controller\__init__.py             0      0   100%
-src\controller\change_request.py     102     11    89%
+src\controller\change_request.py     104     11    89%
 src\controller\home.py                22      4    82%
 src\errors\__init__.py                13      0   100%
 src\payloads\__init__.py               0      0   100%
@@ -113,7 +113,7 @@ src\utils\__init__.py                  0      0   100%
 src\utils\slack_payload_util.py       33      0   100%
 src\utils\switcher_util.py            21      0   100%
 ------------------------------------------------------
-TOTAL                                468     49    90%
+TOTAL                                470     49    90%
 ```
 
 

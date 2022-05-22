@@ -14,10 +14,12 @@ def test_get_environment_keyval():
   assert expected == get_environment_keyval(["default", "QA"])
 
 def test_get_keyval():
+  RELEASE1 = "Release 1"
+  
   expected = [
-    { "name": "Release 1", "value": "Release 1" }
+    { "name": RELEASE1, "value": RELEASE1 }
   ]
-  assert expected == get_keyval("name", [{"name": "Release 1", "activated": True}])
+  assert expected == get_keyval("name", [{"name": RELEASE1, "activated": True}])
 
 def test_validate_context_request():
   with pytest.raises(Exception) as e_info:

@@ -6,7 +6,7 @@ from .switcher_client import SwitcherClient
 from errors import SwitcherSlackInstallationError
 
 class SwitcherInstallationStoreService(SwitcherClient):
-    """Service responsible to handle the app installation and authentication"""
+    """ Service responsible to handle the app installation and authentication """
 
     def __init__(self, *, api_url: Optional[str] = None):
         SwitcherClient.__init__(
