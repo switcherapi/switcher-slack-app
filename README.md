@@ -30,56 +30,47 @@ A summary message containing all details about the change will be sent to a spec
 
 # Running locally
 
-### Requirements  
+## Requirements  
 - Python 3
 - VirtualEnv
 - Ngrok
 
-1. Select the Add app on your workspace and search for Switcher API
-2. Follow the instructions to give the app the necessary privileges
-3. Confirm the channel ID that will handle the approvals
+## Create Slack App
 
-### Setup the environment
+The steps below will guide you through the process of creating a Slack App.<br>
+Assuming that you have signed up for a Slack account and are logged in to a Workspace.
 
-> 1. **Setup**
-Create a *.env* file containing the following:
+### Slack: Creating the App
 
-```
-SLACK_SIGNING_SECRET=""
-SLACK_CLIENT_ID=""
-SLACK_CLIENT_SECRET=""
+1. Open https://api.slack.com/
+2. Click on 'Your Apps'
+3. Hit 'Create an App' and then select 'From an app manifest'
+4. Select the Workspace to install the app
+5. Open 'switcher-slack-app.yaml' and replace the EDNPOINTS with the app URL e.g. https://switcher-slack-app.ngrok.io
+6. Copy all the content and paste to the manifest YAML space, then hit next
+7. Review the summary provided, then click on 'Create'
 
-SWITCHER_URL="https://switcherapi.github.io/switcher-management"
-SWITCHER_API_URL="http://localhost:3000"
-SWITCHER_JWT_SECRET=""
-```
+(*) Do not install the app via 'Install to Workspace' button
 
-> 2. **Running the API**
-
+### App: Configure & Deploy
 1. Create a new Virtual Env
 2. Install dependencies: pip install -r requirements.txt
-3. Start the API by running: py .\src\app.py
+3. Copy the values Client ID, Secret and Signing Secret.
+4. Create a .env file based on .env.template and paste the copied values.
+5. Make sure that the SWITCHER_JWT_SECRET matches the Switcher API env value for SWITCHER_SLACK_JWT_SECRET
+6. Make sure that Switcher Management has SWITCHERSLACKAPP_URL set to the app URL
+7. Start the API by running: py .\src\app.py
 
-> 3. **Start ngrok**
-
-Expose the API using ngrok, for example: ngrok http 5000
-
-> 4. **Subscribe to events**
-
-Copy the provided ngrok HTTPS URL and add '/slack/events' to it.
-Once you have the URL ready to go, open the Slack App, update the Request URL on 'Event Subscription' and also on the 'Interactive & Shortcuts' tab.
-Save all changes.
-
-### Contributing
+## Contributing
 
 You are more than welcome to contribute to the project. 
-Here are some important rules:
+Here are some important guidelines:
 
-1. Suggestions: Open a discussion topic and describe clearly what you have in mind.
+1. Suggestions: Open a discussion topic or issue and describe clearly what you have in mind.
 2. Fix: Open an issue if you found a bug.
 3. Solution: Open a PR in case we agreed upon your change suggestion discussed before.
 
-Below some basics steps that you probably are familiar with when contributing to open source projects, but just to make sure.
+Below some basics steps that you probably are familiar with when contributing to open source projects.
 
 > (Before) Check if all tests are passing:
 
@@ -87,7 +78,7 @@ Below some basics steps that you probably are familiar with when contributing to
 pytest
 ```
 
-> (After) Check if all tests are passing and it covers all possibilities 
+> (After) Check if all tests are passing and covers the change being made:
 
 ```
 pytest --cov=src

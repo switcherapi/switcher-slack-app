@@ -1,0 +1,39 @@
+_metadata:
+  major_version: 1
+  minor_version: 1
+display_information:
+  name: Switcher API
+  long_description: Switcher Slack App integrates your main communication tool to
+    Switcher API, which enables your team to manage all features and approval workflow.
+    Create a private channel to centralize approval requests and then add Switcher API to
+    the channel so authorized users can either approve or refuse tickets.
+  description: Slack App to interact with Switcher API
+  background_color: "#000000"
+settings:
+  socket_mode_enabled: false
+  interactivity:
+    is_enabled: true
+    request_url: https://[SWITCHER_SLACK_APP_ENDPOINT]/slack/events
+  event_subscriptions:
+    request_url: https://[SWITCHER_SLACK_APP_ENDPOINT]/slack/events
+    user_events:
+      - app_home_opened
+      - message.im
+features:
+  app_home:
+    home_tab_enabled: true
+    messages_tab_enabled: true
+    messages_tab_read_only_enabled: true
+  bot_user:
+    display_name: Switcher API
+    always_online: true
+oauth_config:
+  scopes:
+    bot:
+      - commands
+      - chat:write
+      - incoming-webhook
+    user:
+      - im:history
+  redirect_urls:
+    - https://[SWITCHER_SLACK_APP_ENDPOINT]/slack/oauth_redirect
