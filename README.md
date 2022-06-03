@@ -7,7 +7,7 @@ Control & Communicate Switcher changes
 
 <div align="center">
 
-[![Build Status](https://app.travis-ci.com/switcherapi/switcher-slack-app.svg?branch=master)](https://app.travis-ci.com/switcherapi/switcher-slack-app)
+[![Master CI](https://github.com/switcherapi/switcher-slack-app/actions/workflows/master.yml/badge.svg?branch=master)](https://github.com/switcherapi/switcher-slack-app/actions/workflows/master.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=switcherapi_switcher-slack-app&metric=alert_status)](https://sonarcloud.io/dashboard?id=switcherapi_switcher-slack-app)
 [![Known Vulnerabilities](https://snyk.io/test/github/switcherapi/switcher-slack-app/badge.svg)](https://snyk.io/test/github/switcherapi/switcher-slack-app)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
