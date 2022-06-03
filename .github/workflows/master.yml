@@ -1,0 +1,50 @@
+name: Master CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build-test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
+    concurrency: ci-${{ github.ref }}
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+          fetch-depth: 0
+
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.9.12"
+
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+    
+    - name: Test
+      run: pytest -v --cov=./ --cov-report xml
+
+    - name: SonarCloud Scan
+      uses: sonarsource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  deploy:
+    name: Deploy
+    needs: [ build-test ]
+    runs-on: ubuntu-latest
+    if: success() && github.ref == 'refs/heads/master'
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY_1}}
+          heroku_app_name: "switcher-slack-app"
+          heroku_email: ${{secrets.HEROKU_EMAIL_1}}
