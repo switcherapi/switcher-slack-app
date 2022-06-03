@@ -29,6 +29,10 @@ jobs:
     - name: Test
       run: pytest -v --cov=./ --cov-report xml
 
+    - name: Fix code coverage path
+      working-directory: ./
+      run: sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' coverage.xml
+
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@master
       env:
