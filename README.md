@@ -1,9 +1,21 @@
+***
+
+<div align="center">
+<b>Switcher Slack App</b><br>
+Control & Communicate Switcher changes
+</div>
+
+<div align="center">
+
 [![Build Status](https://app.travis-ci.com/switcherapi/switcher-slack-app.svg?branch=master)](https://app.travis-ci.com/switcherapi/switcher-slack-app)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=switcherapi_switcher-slack-app&metric=alert_status)](https://sonarcloud.io/dashboard?id=switcherapi_switcher-slack-app)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=switcherapi_switcher-slack-app&metric=coverage)](https://sonarcloud.io/dashboard?id=switcherapi_switcher-slack-app)
 [![Known Vulnerabilities](https://snyk.io/test/github/switcherapi/switcher-slack-app/badge.svg)](https://snyk.io/test/github/switcherapi/switcher-slack-app)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Slack: Switcher-HQ](https://img.shields.io/badge/slack-@switcher/hq-blue.svg?logo=slack)](https://switcher-hq.slack.com/)
+
+</div>
+
+***
 
 
 ![Switcher Slack App](https://raw.githubusercontent.com/switcherapi/switcherapi-assets/master/samples/slack/logo.png)
