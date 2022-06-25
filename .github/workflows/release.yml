@@ -8,7 +8,6 @@ jobs:
   build-test:
     name: Build & Test
     runs-on: ubuntu-latest
-    concurrency: ci-${{ github.ref }}
 
     steps:
     - uses: actions/checkout@v3
@@ -26,7 +25,7 @@ jobs:
   
   docker:
     name: Publish Docker Image
-    needs: [ build-lint ]
+    needs: [ build-test ]
     runs-on: ubuntu-latest
 
     steps:
