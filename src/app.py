@@ -130,6 +130,13 @@ from slack_bolt.adapter.flask import SlackRequestHandler
 flask_app = Flask(__name__)
 handler = SlackRequestHandler(app)
 
+# Health check
+@flask_app.route("/check", methods = ["GET"])
+def health_check():
+  return {
+    "status": "UP"
+  }
+
 # Handles requests from Slack API server
 @flask_app.route("/slack/events", methods = ["POST"])
 def slack_events():
