@@ -1,4 +1,4 @@
-FROM python:3.9.12-slim-buster
+FROM python:3.10.4-slim-bullseye
 
 COPY ./requirements.txt /app/requirements.txt
 
