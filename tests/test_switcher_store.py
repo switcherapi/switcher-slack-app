@@ -25,6 +25,12 @@ def client():
         yield client
 
 @mock_event_handler
+def test_health(client):
+    response = client.get("/check")
+    assert response.status_code == 200
+    assert response.get_json() == {'status': 'UP'}
+
+@mock_event_handler
 def test_save_installation_success(client):
     with (
         # Bypass browser and state validations
