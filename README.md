@@ -11,6 +11,7 @@ Control & Communicate Switcher changes
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=switcherapi_switcher-slack-app&metric=alert_status)](https://sonarcloud.io/dashboard?id=switcherapi_switcher-slack-app)
 [![Known Vulnerabilities](https://snyk.io/test/github/switcherapi/switcher-slack-app/badge.svg)](https://snyk.io/test/github/switcherapi/switcher-slack-app)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Docker Hub](https://img.shields.io/docker/pulls/trackerforce/switcher-slack-app.svg)](https://hub.docker.com/r/trackerforce/switcher-slack-app)
 [![Slack: Switcher-HQ](https://img.shields.io/badge/slack-@switcher/hq-blue.svg?logo=slack)](https://switcher-hq.slack.com/)
 
 </div>
@@ -94,29 +95,6 @@ pytest
 
 ```
 pytest --cov=src
-
----------- coverage: platform linux, python 3.10.4-final-0 -----------
-Name                               Stmts   Miss  Cover
-------------------------------------------------------
-src/app.py                            76      2    97%
-src/controller/__init__.py             0      0   100%
-src/controller/change_request.py     104     11    89%
-src/controller/home.py                22      4    82%
-src/errors/__init__.py                13      0   100%
-src/payloads/__init__.py               0      0   100%
-src/payloads/change_request.py        27      0   100%
-src/payloads/home.py                   2      0   100%
-src/services/__init__.py               0      0   100%
-src/services/switcher_client.py       32      1    97%
-src/services/switcher_service.py      51      1    98%
-src/services/switcher_store.py        19      3    84%
-src/store/__init__.py                  0      0   100%
-src/store/switcher_store.py           73     27    63%
-src/utils/__init__.py                  0      0   100%
-src/utils/slack_payload_util.py       33      0   100%
-src/utils/switcher_util.py            21      0   100%
-------------------------------------------------------
-TOTAL                                473     49    90%
 ```
 
 
