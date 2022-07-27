@@ -2,8 +2,6 @@ import os
 import json
 import pytest
 
-from unittest.mock import patch
-
 from src.app import flask_app
 from src.services.switcher_service import SwitcherService
 from src.payloads.home import MODAL_REQUEST
@@ -16,20 +14,23 @@ from tests.utils.mock_request import (
 )
 from tests.fixtures.change_request import (
     OPEN_APP_HOME_FIX1,
+    GROUP_STATE_SELECTION,
+    SWITCHER_STATE_SELECTION,
     build_request_view,
     build_request_message_view,
     build_static_select_action_value,
     build_buttom_action_value,
     build_text_state_value,
-    build_static_select_state_value
-)
+    build_static_select_state_value,
 
-RELEASE_1 = "Release 1"
-PRODUCTION = "Production"
-DEFAULT_ENV = "default"
-MY_FEATURE = "MY_FEATURE"
-MY_FEATURE1 = "MY_FEATURE1"
-OBSERVATION = "My observation here"
+    # Constants 
+    RELEASE_1,
+    PRODUCTION,
+    DEFAULT_ENV,
+    MY_FEATURE,
+    MY_FEATURE1,
+    OBSERVATION
+)
 
 @pytest.fixture
 def client():
@@ -125,63 +126,52 @@ def test_select_status(client):
 
 @mock_event_handler
 @mock_base_client(MODAL_REQUEST)
-@mock_switcher_client('post', { 'message': 'Ticket verified' })
+@mock_switcher_client('post', { 'message': 'Ticket validated', 'result': 'VALIDATED' })
 def test_submit_for_review(client):
     response = client.post(
         f"/slack/events", json = build_request_view(
             req_type = "view_submission",
             callback_id = "change_request_review",
-            state_fixture = {
-                **build_static_select_state_value(
-                    action_id = "selection_environment",
-                    text = PRODUCTION,
-                    value = DEFAULT_ENV
-                ),
-                **build_static_select_state_value(
-                    action_id = "selection_group",
-                    text = RELEASE_1,
-                    value = RELEASE_1
-                ),
-                **build_static_select_state_value(
-                    action_id = "selection_switcher",
-                    text = MY_FEATURE,
-                    value = MY_FEATURE
-                ),
-                **build_static_select_state_value(
-                    action_id = "selection_status",
-                    text = "Activate",
-                    value = "true"
-                )
-            }
+            state_fixture = SWITCHER_STATE_SELECTION
         )
     )
     assert response.status_code == 200
 
 @mock_event_handler
 @mock_base_client(MODAL_REQUEST)
-@mock_switcher_client('post', { 'message': 'Ticket verified' })
+@mock_switcher_client('post', { 'message': 'Ticket validated', 'result': 'VALIDATED' })
 def test_submit_for_review_group(client):
     response = client.post(
         f"/slack/events", json = build_request_view(
             req_type = "view_submission",
             callback_id = "change_request_review",
-            state_fixture = {
-                **build_static_select_state_value(
-                    action_id = "selection_environment",
-                    text = PRODUCTION,
-                    value = DEFAULT_ENV
-                ),
-                **build_static_select_state_value(
-                    action_id = "selection_group",
-                    text = RELEASE_1,
-                    value = RELEASE_1
-                ),
-                **build_static_select_state_value(
-                    action_id = "selection_status",
-                    text = "Activate",
-                    value = "true"
-                )
-            }
+            state_fixture = GROUP_STATE_SELECTION
+        )
+    )
+    assert response.status_code == 200
+
+@mock_event_handler
+@mock_base_client(MODAL_REQUEST)
+@mock_switcher_client('post', { 'message': 'Ticket validated', 'result': 'IGNORED_ENVIRONMENT' })
+def test_submit_without_approval_ignored(client):
+    response = client.post(
+        f"/slack/events", json = build_request_view(
+            req_type = "view_submission",
+            callback_id = "change_request_review",
+            state_fixture = GROUP_STATE_SELECTION
+        )
+    )
+    assert response.status_code == 200
+
+@mock_event_handler
+@mock_base_client(MODAL_REQUEST)
+@mock_switcher_client('post', { 'message': 'Ticket validated', 'result': 'FROZEN_ENVIRONMENT' })
+def test_submit_without_approval_frozen(client):
+    response = client.post(
+        f"/slack/events", json = build_request_view(
+            req_type = "view_submission",
+            callback_id = "change_request_review",
+            state_fixture = GROUP_STATE_SELECTION
         )
     )
     assert response.status_code == 200

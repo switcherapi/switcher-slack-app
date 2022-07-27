@@ -73,7 +73,7 @@ class SwitcherService(SwitcherClient):
             if configs is not None:
                 return configs
 
-    def validate_ticket(self, team_id: str, context: dict):
+    def validate_ticket(self, team_id: str, context: dict) -> str:
         """ Validates if Ticket content is valid """
         
         response = self.do_post(
@@ -92,6 +92,9 @@ class SwitcherService(SwitcherClient):
         if response.status_code != 200:
             data = json.loads(response.data.decode('UTF-8'))
             raise SwitcherValidationError(data.get("error"))
+        
+        data = json.loads(response.data.decode('UTF-8'))
+        return data.get("result")
 
     def create_ticket(self, team_id: str, context: dict) -> dict:
         """ Create Ticket and return its ID and Channel to be published """
