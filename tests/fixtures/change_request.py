@@ -3,45 +3,6 @@ import string
 
 from slack_sdk.web import SlackResponse
 
-OPEN_APP_HOME_FIX1 = {
-   "token": "token",
-   "team_id": "team_id",
-   "api_app_id": "api_app_id",
-   "event": {
-      "type": "app_home_opened",
-      "user": "user",
-      "channel": "channel",
-      "tab": "home",
-      "view": {},
-      "event_ts": "1620322783.186629"
-   },
-   "type": "event_callback",
-   "event_id": "event_id",
-   "event_time": 1620322783,
-   "authorizations": [
-      {
-         "enterprise_id": "None",
-         "team_id": "team_id",
-         "user_id": "user_id",
-         "is_bot": bool(True),
-         "is_enterprise_install": bool(False)
-      }
-   ],
-   "is_ext_shared_channel": bool(False)
-}
-
-ACTION_OPEN_MODAL_CHANGE_REQUEST_FIX1 = {
-   "action_id": "change_request",
-   "block_id": "lGG",
-   "text": {
-      "type": "plain_text",
-      "text": "Request Change"
-   },
-   "value": "test",
-   "type": "button",
-   "action_ts": "1620361208.200121"
-}
-
 def build_static_select_action_value(
    action_id: str, 
    text: str, 
@@ -214,7 +175,6 @@ def build_request_message_view(
 
 def get_slack_events_response(
     req_args: dict,
-    data: dict,
     status_code: int = 200
 ) -> SlackResponse:
     return SlackResponse(
@@ -228,7 +188,7 @@ def get_slack_events_response(
         },
         data = {
             "ok": bool(True),
-            "view": data
+            "view": req_args
         },
         headers = {
             "content-type": "application/json; charset=utf-8",
@@ -238,3 +198,92 @@ def get_slack_events_response(
         },
         status_code = status_code,
     )
+
+# Constants
+
+RELEASE_1 = "Release 1"
+PRODUCTION = "Production"
+DEFAULT_ENV = "default"
+MY_FEATURE = "MY_FEATURE"
+MY_FEATURE1 = "MY_FEATURE1"
+OBSERVATION = "My observation here"
+
+OPEN_APP_HOME_FIX1 = {
+   "token": "token",
+   "team_id": "team_id",
+   "api_app_id": "api_app_id",
+   "event": {
+      "type": "app_home_opened",
+      "user": "user",
+      "channel": "channel",
+      "tab": "home",
+      "view": {},
+      "event_ts": "1620322783.186629"
+   },
+   "type": "event_callback",
+   "event_id": "event_id",
+   "event_time": 1620322783,
+   "authorizations": [
+      {
+         "enterprise_id": "None",
+         "team_id": "team_id",
+         "user_id": "user_id",
+         "is_bot": bool(True),
+         "is_enterprise_install": bool(False)
+      }
+   ],
+   "is_ext_shared_channel": bool(False)
+}
+
+ACTION_OPEN_MODAL_CHANGE_REQUEST_FIX1 = {
+   "action_id": "change_request",
+   "block_id": "lGG",
+   "text": {
+      "type": "plain_text",
+      "text": "Request Change"
+   },
+   "value": "test",
+   "type": "button",
+   "action_ts": "1620361208.200121"
+}
+
+GROUP_STATE_SELECTION = {
+   **build_static_select_state_value(
+      action_id = "selection_environment",
+      text = PRODUCTION,
+      value = DEFAULT_ENV
+   ),
+   **build_static_select_state_value(
+      action_id = "selection_group",
+      text = RELEASE_1,
+      value = RELEASE_1
+   ),
+   **build_static_select_state_value(
+      action_id = "selection_status",
+      text = "Activate",
+      value = "true"
+   )
+}
+
+SWITCHER_STATE_SELECTION = {
+   **build_static_select_state_value(
+      action_id = "selection_environment",
+      text = PRODUCTION,
+      value = DEFAULT_ENV
+   ),
+   **build_static_select_state_value(
+      action_id = "selection_group",
+      text = RELEASE_1,
+      value = RELEASE_1
+   ),
+   **build_static_select_state_value(
+      action_id = "selection_switcher",
+      text = MY_FEATURE,
+      value = MY_FEATURE
+   ),
+   **build_static_select_state_value(
+      action_id = "selection_status",
+      text = "Activate",
+      value = "true"
+   )
+}

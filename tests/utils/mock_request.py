@@ -48,11 +48,8 @@ def mock_base_client(data: dict):
         @wraps(fn)
         def wrapper(client, *args, **kwargs):
             with (
-                patch.object(BaseClient, '_urllib_api_call', 
-                    return_value = get_slack_events_response(
-                        req_args = data,
-                        data = data
-                    )
+                patch.object(BaseClient, 'api_call', 
+                    return_value = get_slack_events_response(data)
                 )
             ):
                 fn(client, *args, **kwargs)

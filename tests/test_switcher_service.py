@@ -50,9 +50,9 @@ def test_get_switchers(switcher_service):
     assert 'FEATURE01' == switchers[0]['key']
     assert False == switchers[0]['activated']
 
-@mock_switcher_client('post', { 'message': 'Ticket verified' })
+@mock_switcher_client('post', { 'message': 'Ticket validated', 'result': 'VALIDATED' })
 def test_validate_ticket(switcher_service):
-    switcher_service.validate_ticket(
+    response = switcher_service.validate_ticket(
         team_id = "TEAM_ID", 
         context = {
             "environment": "default",
@@ -60,6 +60,8 @@ def test_validate_ticket(switcher_service):
             "switcher": "FEATURE",
             "status": "False",
         })
+
+    assert response == 'VALIDATED'
 
 @mock_switcher_client('post', {'error': 'Switcher not found'}, 404)
 def test_validate_ticket_invalid(switcher_service):

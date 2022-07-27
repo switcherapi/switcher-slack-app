@@ -119,13 +119,25 @@ def on_change_request_review(ack, body, client, view, logger):
   
   try:
     validate_context_request(context)
-    SwitcherService().validate_ticket(team_id, context)
-    
-    # Request review
-    client.views_publish(
-      user_id = user["id"],
-      view = view
-    )
+    result = SwitcherService().validate_ticket(team_id, context)
+    user_message = None
+
+    if result == 'VALIDATED':
+      client.views_publish(
+        user_id = user["id"],
+        view = view
+      )
+    elif result == 'IGNORED_ENVIRONMENT':
+      user_message = ":large_green_square: *Request does not require approval*: Updated with success!"
+    elif result == 'FROZEN_ENVIRONMENT':
+      user_message = ":large_red_square: *Request cannot be made*: Environment is frozen."
+
+    if user_message is not None:
+      client.chat_postMessage(
+        channel = user["id"],
+        text = "Change Request Review",
+        blocks = create_block_message(user_message) 
+      )
   except Exception as e:
     logger.error(f"Error request review: {e}")
     client.chat_postMessage(
