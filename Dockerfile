@@ -1,5 +1,5 @@
 # ---------- Base ----------
-FROM python:3.10.4-slim-bullseye AS base
+FROM python:slim AS base
 
 # Upgrade all packages to latest
 RUN echo 'deb http://deb.debian.org/debian bullseye-backports main' >> /etc/apt/sources.list
