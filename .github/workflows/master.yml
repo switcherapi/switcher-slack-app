@@ -59,6 +59,9 @@ jobs:
     runs-on: ubuntu-latest
     if: success() && github.ref == 'refs/heads/master'
 
+    outputs:
+        digest: ${{ steps.docker_build.outputs.digest }}
+
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -73,8 +76,41 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push
+        id: docker_build
         uses: docker/build-push-action@v3
         with:
           push: true
           platforms: linux/amd64,linux/arm64
           tags: trackerforce/switcher-slack-app:latest
+
+  update-kustomize:
+    name: Deploy
+    needs: [ docker ]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: 'master'
+
+      - name: Checkout Kustomize
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.ARGOCD_PAT }}
+          repository: switcherapi/switcher-deployment
+          ref: master
+
+      - name: Set Image
+        uses: stefanprodan/kube-tools@v1
+        with:
+          kubectl: 1.24.0
+          kustomize: 4.5.4
+          command: |
+            cd switcher-slack-app/base
+            kustomize edit set image trackerforce/switcher-slack-app:latest=trackerforce/switcher-slack-app@${{ needs.docker.outputs.digest }}
+            git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+            git config --global user.name "${{ github.actor }}"
+            git add .
+            git commit -m "[argocd] switcher-slack-app: ${{ needs.docker.outputs.digest }}"
+            git push
