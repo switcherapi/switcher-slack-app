@@ -18,7 +18,6 @@ Control & Communicate Switcher changes
 
 ***
 
-
 ![Switcher Slack App](https://raw.githubusercontent.com/switcherapi/switcherapi-assets/master/samples/slack/logo.png)
 
 # About
@@ -44,7 +43,7 @@ A summary message containing all details about the change will be sent to a spec
 # Running locally
 
 ## Requirements  
-- Python 3
+- Python 3.10
 - VirtualEnv
 - Ngrok
 
@@ -88,6 +87,7 @@ Below some basics steps that you probably are familiar with when contributing to
 > (Before) Check if all tests are passing:
 
 ```
+pip install -r tests/requirements.txt
 pytest
 ```
 
@@ -97,11 +97,10 @@ pytest
 pytest --cov=src
 ```
 
-
 * * *
 
 ## Donations
 Donations for coffee, cookies or pizza are extremely welcomed.</br>
 Please, find the sponsor button at the top for more options.
 
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9FKW64V67RKXW&source=url)
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?business=A5R6K3JAD8SW4&no_recurring=0&item_name=Thank+you+for+supporting+the+Open+Source+Community&currency_code=CAD)

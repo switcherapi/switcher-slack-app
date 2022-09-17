@@ -25,6 +25,8 @@ from controller.change_request import (
 
 load_dotenv()
 switcher_url = os.environ.get("SWITCHER_URL")
+switcher_api_url = os.environ.get("SWITCHER_API_URL")
+version = "1.0.2"
 # logging.basicConfig(level = logging.WARNING)
 
 def success(args: SuccessArgs) -> BoltResponse:
@@ -134,7 +136,10 @@ handler = SlackRequestHandler(app)
 @flask_app.route("/check", methods = ["GET"])
 def health_check():
   return {
-    "status": "UP"
+    "status": "UP",
+    "version": version,
+    "switcher_cloud": switcher_url,
+    "switcher_api": switcher_api_url
   }
 
 # Handles requests from Slack API server
