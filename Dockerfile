@@ -1,9 +1,11 @@
 # ---------- Base ----------
-FROM python:slim AS base
+FROM python:3.9.15-slim-bullseye AS base
 
 # Upgrade all packages to latest
 RUN echo 'deb http://deb.debian.org/debian bullseye-backports main' >> /etc/apt/sources.list
-RUN apt-get update && apt-get -y --no-install-recommends upgrade && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+    apt-get -y --no-install-recommends upgrade && \
+    rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt /app/requirements.txt
 
