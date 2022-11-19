@@ -26,7 +26,7 @@ from controller.change_request import (
 load_dotenv()
 switcher_url = os.environ.get("SWITCHER_URL")
 switcher_api_url = os.environ.get("SWITCHER_API_URL")
-version = "1.0.2"
+version = "1.0.3"
 # logging.basicConfig(level = logging.WARNING)
 
 def success(args: SuccessArgs) -> BoltResponse:
