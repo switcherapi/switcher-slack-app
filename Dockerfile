@@ -1,5 +1,5 @@
 # ---------- Base ----------
-FROM python:3.9.15-slim-bullseye AS base
+FROM python:3.9.16-slim-bullseye AS base
 
 # Upgrade all packages to latest
 RUN echo 'deb http://deb.debian.org/debian bullseye-backports main' >> /etc/apt/sources.list
