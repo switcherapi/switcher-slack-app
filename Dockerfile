@@ -1,11 +1,5 @@
 # ---------- Base ----------
-FROM python:3.9.16-slim-bullseye AS base
-
-# Upgrade all packages to latest
-RUN echo 'deb http://deb.debian.org/debian bullseye-backports main' >> /etc/apt/sources.list
-RUN apt-get update && \
-    apt-get -y --no-install-recommends upgrade && \
-    rm -rf /var/lib/apt/lists/*
+FROM python:3.10.11-alpine AS base
 
 COPY requirements.txt /app/requirements.txt
 
