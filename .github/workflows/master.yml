@@ -94,6 +94,7 @@ jobs:
           kustomize: 4.5.4
           command: |
             cd switcher-slack-app/base
+            echo RELEASE_TIME=`date` > environment-properties.env
             kustomize edit set image trackerforce/switcher-slack-app:latest=trackerforce/switcher-slack-app@${{ needs.docker.outputs.digest }}
             git config --global user.email "${{ github.actor }}@users.noreply.github.com"
             git config --global user.name "${{ github.actor }}"
