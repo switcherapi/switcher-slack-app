@@ -3,6 +3,8 @@ import string
 
 from slack_sdk.web import SlackResponse
 
+SLACK_EVENT = "/slack/events"
+
 def build_static_select_action_value(
    action_id: str, 
    text: str, 
@@ -180,7 +182,7 @@ def get_slack_events_response(
     return SlackResponse(
         client = None,
         http_verb = "POST",
-        api_url = "/slack/events",
+        api_url = SLACK_EVENT,
         req_args = {
             "json": {
                 "view": req_args

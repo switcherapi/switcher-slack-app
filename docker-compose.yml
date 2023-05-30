@@ -2,9 +2,9 @@ version: '3.8'
 
 services:
   switcherslackapp:
-    image: trackerforce/switcher-slack-app
+    image: trackerforce/switcher-slack-app:1.0.5
     container_name: switcherslackapp
-    command: gunicorn --bind 0.0.0.0:5000 --chdir src app:flask_app
+    command: gunicorn --bind 0.0.0.0:5000 --chdir /home/app app:flask_app
     ports:
       - 5000:5000
     environment:
@@ -12,5 +12,5 @@ services:
       - SLACK_CLIENT_ID=
       - SLACK_CLIENT_SECRET=
       - SWITCHER_JWT_SECRET=
-      - SWITCHER_URL=
-      - SWITCHER_API_URL=
+      - SWITCHER_URL=https://cloud.switcherapi.com
+      - SWITCHER_API_URL=https://switcherapi.com/api

@@ -1,14 +1,17 @@
-# ---------- Base ----------
-FROM python:3.10.11-alpine AS base
+FROM python:3.10.11-alpine
 
-COPY requirements.txt /app/requirements.txt
+ENV APP_HOME=/home/app
+RUN addgroup -S app \
+    && adduser -S app -G app
 
-# ---------- Build ----------
-FROM base AS builder
+COPY requirements.txt $APP_HOME
 
-WORKDIR /app
+WORKDIR $APP_HOME
 
 RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+COPY /src .
+
+RUN chown -R app:app $APP_HOME
+USER app
