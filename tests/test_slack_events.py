@@ -13,6 +13,7 @@ from tests.utils.mock_request import (
     mock_switcher_client
 )
 from tests.fixtures.change_request import (
+    SLACK_EVENT,
     OPEN_APP_HOME_FIX1,
     GROUP_STATE_SELECTION,
     SWITCHER_STATE_SELECTION,
@@ -41,7 +42,7 @@ def client():
 @mock_event_handler
 @mock_base_client(MODAL_REQUEST)
 def test_open_app_home(client):
-    response = client.post(f"/slack/events", json = OPEN_APP_HOME_FIX1)
+    response = client.post(SLACK_EVENT, json = OPEN_APP_HOME_FIX1)
     assert response.status_code == 200
 
 @mock_gql_client({ 'configuration': { 'environments': ['default'] }})
@@ -49,7 +50,7 @@ def test_open_app_home(client):
 @mock_base_client(MODAL_REQUEST)
 def test_open_change_request_modal(client):
     response = client.post(
-        f"/slack/events", json = build_request_view(
+        SLACK_EVENT, json = build_request_view(
             actions_fixture = build_static_select_action_value(
                 action_id = "change_request",
                 text = "Request Change"
@@ -67,7 +68,7 @@ def test_open_change_request_modal(client):
 @mock_base_client(MODAL_REQUEST)
 def test_select_evironment(client):
     response = client.post(
-        f"/slack/events", json = build_request_view(
+        SLACK_EVENT, json = build_request_view(
             actions_fixture = build_static_select_action_value(
                 action_id = "selection_environment",
                 text = PRODUCTION,
@@ -86,7 +87,7 @@ def test_select_evironment(client):
 @mock_base_client(MODAL_REQUEST)
 def test_select_group(client):
     response = client.post(
-        f"/slack/events", json = build_request_view(
+        SLACK_EVENT, json = build_request_view(
             actions_fixture = build_static_select_action_value(
                 action_id = "selection_group",
                 text = RELEASE_1,
@@ -100,7 +101,7 @@ def test_select_group(client):
 @mock_base_client(MODAL_REQUEST)
 def test_select_switcher(client):
     response = client.post(
-        f"/slack/events", json = build_request_view(
+        SLACK_EVENT, json = build_request_view(
             actions_fixture = build_static_select_action_value(
                 action_id = "selection_switcher",
                 text = MY_FEATURE,
@@ -114,7 +115,7 @@ def test_select_switcher(client):
 @mock_base_client(MODAL_REQUEST)
 def test_select_status(client):
     response = client.post(
-        f"/slack/events", json = build_request_view(
+        SLACK_EVENT, json = build_request_view(
             actions_fixture = build_static_select_action_value(
                 action_id = "selection_status",
                 text = "Activate",
@@ -129,7 +130,7 @@ def test_select_status(client):
 @mock_switcher_client('post', { 'message': 'Ticket validated', 'result': 'VALIDATED' })
 def test_submit_for_review(client):
     response = client.post(
-        f"/slack/events", json = build_request_view(
+        SLACK_EVENT, json = build_request_view(
             req_type = "view_submission",
             callback_id = "change_request_review",
             state_fixture = SWITCHER_STATE_SELECTION
@@ -142,7 +143,7 @@ def test_submit_for_review(client):
 @mock_switcher_client('post', { 'message': 'Ticket validated', 'result': 'VALIDATED' })
 def test_submit_for_review_group(client):
     response = client.post(
-        f"/slack/events", json = build_request_view(
+        SLACK_EVENT, json = build_request_view(
             req_type = "view_submission",
             callback_id = "change_request_review",
             state_fixture = GROUP_STATE_SELECTION
@@ -155,7 +156,7 @@ def test_submit_for_review_group(client):
 @mock_switcher_client('post', { 'message': 'Ticket validated', 'result': 'IGNORED_ENVIRONMENT' })
 def test_submit_without_approval_ignored(client):
     response = client.post(
-        f"/slack/events", json = build_request_view(
+        SLACK_EVENT, json = build_request_view(
             req_type = "view_submission",
             callback_id = "change_request_review",
             state_fixture = GROUP_STATE_SELECTION
@@ -168,7 +169,7 @@ def test_submit_without_approval_ignored(client):
 @mock_switcher_client('post', { 'message': 'Ticket validated', 'result': 'FROZEN_ENVIRONMENT' })
 def test_submit_without_approval_frozen(client):
     response = client.post(
-        f"/slack/events", json = build_request_view(
+        SLACK_EVENT, json = build_request_view(
             req_type = "view_submission",
             callback_id = "change_request_review",
             state_fixture = GROUP_STATE_SELECTION
@@ -194,7 +195,7 @@ def test_submit_request(client):
     })
 
     response = client.post(
-        f"/slack/events", json = build_request_view(
+        SLACK_EVENT, json = build_request_view(
             private_metadata = private_metadata,
             actions_fixture = build_static_select_action_value(
                 action_id = "change_request_submit",
@@ -226,7 +227,7 @@ def test_submit_request_group(client):
     })
 
     response = client.post(
-        f"/slack/events", json = build_request_view(
+        SLACK_EVENT, json = build_request_view(
             private_metadata = private_metadata,
             actions_fixture = build_static_select_action_value(
                 action_id = "change_request_submit",
@@ -253,7 +254,7 @@ def test_submit_request_fail(client):
     })
 
     response = client.post(
-        f"/slack/events", json = build_request_view(
+        SLACK_EVENT, json = build_request_view(
             private_metadata = private_metadata,
             actions_fixture = build_static_select_action_value(
                 action_id = "change_request_submit",
@@ -271,7 +272,7 @@ def test_submit_request_fail(client):
 @mock_base_client(MODAL_REQUEST)
 def test_abort_request(client):
     response = client.post(
-        f"/slack/events", json = build_request_view(
+        SLACK_EVENT, json = build_request_view(
             actions_fixture = build_static_select_action_value(
                 action_id = "change_request_abort",
                 text = "Cancel"
@@ -285,7 +286,7 @@ def test_abort_request(client):
 @mock_switcher_client('post', {'message': 'Ticker ticket123 processed'})
 def test_approve_request(client):
     response = client.post(
-        f"/slack/events", json = build_request_message_view(
+        SLACK_EVENT, json = build_request_message_view(
             actions_fixture = build_buttom_action_value(
                 action_id = "request_approved",
                 text = "Approve",
@@ -300,7 +301,7 @@ def test_approve_request(client):
 @mock_switcher_client('post', {}, 400)
 def test_approve_request_fail(client):
     response = client.post(
-        f"/slack/events", json = build_request_message_view(
+        SLACK_EVENT, json = build_request_message_view(
             actions_fixture = build_buttom_action_value(
                 action_id = "request_approved",
                 text = "Approve",
@@ -315,7 +316,7 @@ def test_approve_request_fail(client):
 @mock_switcher_client('post', {'message': 'Ticker ticket123 processed'})
 def test_deny_request(client):
     response = client.post(
-        f"/slack/events", json = build_request_message_view(
+        SLACK_EVENT, json = build_request_message_view(
             actions_fixture = build_buttom_action_value(
                 action_id = "request_denied",
                 text = "Deny",
@@ -330,7 +331,7 @@ def test_deny_request(client):
 @mock_switcher_client('post', {}, 400)
 def test_deny_request(client):
     response = client.post(
-        f"/slack/events", json = build_request_message_view(
+        SLACK_EVENT, json = build_request_message_view(
             actions_fixture = build_buttom_action_value(
                 action_id = "request_denied",
                 text = "Deny",
