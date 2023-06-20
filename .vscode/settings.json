@@ -1,4 +1,8 @@
 {
     "python.linting.pylintEnabled": true,
-    "python.linting.enabled": false
+    "python.linting.enabled": false,
+    "sonarlint.connectedMode.project": {
+        "connectionId": "switcherapi",
+        "projectKey": "switcherapi_switcher-slack-app"
+    }
 }
