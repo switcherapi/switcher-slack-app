@@ -1,10 +1,25 @@
 version: '3.8'
 
+# TLS Enabled
+# volumes:
+#   switcherapi-tls:
+#     driver: local
+#     driver_opts:
+#       o: bind
+#       type: none
+#       device: "/data/certs"
+
 services:
   switcherslackapp:
-    image: trackerforce/switcher-slack-app:1.0.5
+    image: trackerforce/switcher-slack-app
     container_name: switcherslackapp
     command: gunicorn --bind 0.0.0.0:5000 --chdir /home/app app:flask_app
+    # TLS Enabled
+    # command: [
+    #   "gunicorn", 
+    #   "--certfile=/etc/certs/[replace].crt", "--keyfile=/etc/certs/[replace].key", 
+    #   "--bind", "0.0.0.0:5000", 
+    #   "--chdir", "/home/app", "app:flask_app"]
     ports:
       - 5000:5000
     environment:
@@ -14,3 +29,5 @@ services:
       - SWITCHER_JWT_SECRET=
       - SWITCHER_URL=https://cloud.switcherapi.com
       - SWITCHER_API_URL=https://switcherapi.com/api
+    # volumes:
+    #   - switcherapi-tls:/etc/certs
