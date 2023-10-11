@@ -43,7 +43,7 @@ A summary message containing all details about the change will be sent to a spec
 # Running locally
 
 ## Requirements  
-- Python 3.10
+- Python 3.11
 - VirtualEnv
 - Ngrok
 
