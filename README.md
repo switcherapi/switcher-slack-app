@@ -45,7 +45,7 @@ A summary message containing all details about the change will be sent to a spec
 ## Requirements  
 - Python 3.11
 - VirtualEnv
-- Ngrok
+- Ngrok (Slack Apps requires HTTPS endpoint)
 
 ## Create Slack App
 
@@ -71,7 +71,7 @@ Assuming that you have signed up for a Slack account and are logged in to a Work
 4. Create a .env file based on .env.template and paste the copied values.
 5. Make sure that the SWITCHER_JWT_SECRET matches the Switcher API env value for SWITCHER_SLACK_JWT_SECRET
 6. Make sure that Switcher Management has SWITCHERSLACKAPP_URL set to the app URL
-7. Start the API by running: py .\src\app.py
+7. Start the API by running: `python src\app.py`
 
 ## Contributing
 
