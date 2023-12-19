@@ -11,7 +11,7 @@ version: '3.8'
 
 services:
   switcherslackapp:
-    image: trackerforce/switcher-slack-app
+    image: trackerforce/switcher-slack-app:latest
     container_name: switcherslackapp
     command: gunicorn --bind 0.0.0.0:5000 --chdir /home/app app:flask_app
     # TLS Enabled
