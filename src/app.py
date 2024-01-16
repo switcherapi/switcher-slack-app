@@ -27,7 +27,7 @@ load_dotenv()
 switcher_url = os.environ.get("SWITCHER_URL")
 switcher_api_url = os.environ.get("SWITCHER_API_URL")
 release_time = os.environ.get("RELEASE_TIME", "latest")
-version = f"1.0.5 {release_time}"
+version = f"1.0.6 {release_time}"
 # logging.basicConfig(level = logging.WARNING)
 
 def success(args: SuccessArgs) -> BoltResponse:
