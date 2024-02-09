@@ -1,0 +1,13 @@
+[
+    {
+        "type": "section",
+        "text": {
+            "type": "mrkdwn",
+            "text": ":large_green_square: *Change request approved*"
+        }
+    },
+    {
+        "type": "divider"
+    },
+    {}
+]

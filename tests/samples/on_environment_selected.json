@@ -1,0 +1,120 @@
+{
+    "type": "modal",
+    "blocks": [
+        {
+            "type": "context",
+            "elements": [
+                {
+                    "type": "plain_text",
+                    "text": "Select the options below to request a Switcher status change."
+                }
+            ]
+        },
+        {
+            "type": "divider"
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "Environment"
+            },
+            "accessory": {
+                "type": "static_select",
+                "placeholder": {
+                    "type": "plain_text",
+                    "text": "-"
+                },
+                "options": [
+                    {
+                        "text": {
+                            "type": "plain_text",
+                            "text": "Production"
+                        },
+                        "value": "default"
+                    }
+                ],
+                "action_id": "selection_environment"
+            }
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "Group"
+            },
+            "accessory": {
+                "type": "static_select",
+                "placeholder": {
+                    "type": "plain_text",
+                    "text": "-"
+                },
+                "options": [
+                    {
+                        "text": {
+                            "type": "plain_text",
+                            "text": "Release 1"
+                        },
+                        "value": "Release 1"
+                    }
+                ],
+                "action_id": "selection_group"
+            }
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "Switcher"
+            },
+            "accessory": {
+                "type": "static_select",
+                "placeholder": {
+                    "type": "plain_text",
+                    "text": "-"
+                },
+                "options": [
+                    {
+                        "text": {
+                            "type": "plain_text",
+                            "text": "-"
+                        },
+                        "value": "-"
+                    }
+                ],
+                "action_id": "selection_switcher"
+            }
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "Status"
+            },
+            "accessory": {
+                "type": "static_select",
+                "placeholder": {
+                    "type": "plain_text",
+                    "text": "-"
+                },
+                "options": [
+                    {
+                        "text": {
+                            "type": "plain_text",
+                            "text": "-"
+                        },
+                        "value": "-"
+                    }
+                ],
+                "action_id": "selection_status"
+            }
+        }
+    ],
+    "private_metadata": "",
+    "callback_id": "change_request_view",
+    "title": {
+        "type": "plain_text",
+        "text": "Switcher Change Request"
+    },
+    "external_id": ""
+}

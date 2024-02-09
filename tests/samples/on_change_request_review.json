@@ -1,0 +1,86 @@
+{
+    "type": "home",
+    "blocks": [
+        {
+            "type": "header",
+            "text": {
+                "type": "plain_text",
+                "text": "Change Request Review"
+            }
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "plain_text",
+                "text": "Please, review your request and submit it for approval."
+            }
+        },
+        {
+            "type": "divider"
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "```Environment```\n> default"
+            }
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "```Group```\n> Release 1"
+            }
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "```Switcher```\n> MY_FEATURE"
+            }
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "```Status```\n> Enable"
+            }
+        },
+        {
+            "type": "input",
+            "element": {
+                "type": "plain_text_input",
+                "multiline": true,
+                "action_id": "selection_observation"
+            },
+            "label": {
+                "type": "plain_text",
+                "text": "Observations"
+            }
+        },
+        {
+            "type": "actions",
+            "elements": [
+                {
+                    "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Submit"
+                    },
+                    "style": "primary",
+                    "action_id": "change_request_submit"
+                },
+                {
+                    "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Cancel"
+                    },
+                    "style": "danger",
+                    "action_id": "change_request_abort"
+                }
+            ]
+        }
+    ],
+    "private_metadata": "{\"environment\": \"default\", \"environment_alias\": \"Production\", \"group\": \"Release 1\", \"switcher\": \"MY_FEATURE\", \"status\": \"true\"}"
+}

@@ -10,6 +10,7 @@ from slack_sdk.oauth.state_store import FileOAuthStateStore
 from slack_bolt.oauth.callback_options import CallbackOptions, SuccessArgs, FailureArgs
 from slack_bolt.response import BoltResponse
 
+from utils.constants import SWITCHER_URL, SWITCHER_API_URL, VERSION
 from store.switcher_store import SwitcherAppInstallationStore
 from controller.home import on_change_request_opened, on_home_opened
 from controller.change_request import (
@@ -23,11 +24,6 @@ from controller.change_request import (
   on_request_denied
 )
 
-load_dotenv()
-switcher_url = os.environ.get("SWITCHER_URL")
-switcher_api_url = os.environ.get("SWITCHER_API_URL")
-release_time = os.environ.get("RELEASE_TIME", "latest")
-version = f"1.0.6 {release_time}"
 # logging.basicConfig(level = logging.WARNING)
 
 def success(args: SuccessArgs) -> BoltResponse:
@@ -41,7 +37,7 @@ def success(args: SuccessArgs) -> BoltResponse:
   return BoltResponse(
     status = 308,
     headers = {
-      "Location": f"{switcher_url}/slack/authorization?e_id={e_id}&t_id={t_id}",
+      "Location": f"{SWITCHER_URL}/slack/authorization?e_id={e_id}&t_id={t_id}",
     }
   )
 
@@ -52,7 +48,7 @@ def failure(args: FailureArgs) -> BoltResponse:
   return BoltResponse(
     status = 308,
     headers = {
-      "Location": f"{switcher_url}/slack/authorization?error=1&reason={args.reason}",
+      "Location": f"{SWITCHER_URL}/slack/authorization?error=1&reason={args.reason}",
     }
   )
 
@@ -138,9 +134,9 @@ handler = SlackRequestHandler(app)
 def health_check():
   return {
     "status": "UP",
-    "version": version,
-    "switcher_cloud": switcher_url,
-    "switcher_api": switcher_api_url
+    "version": VERSION,
+    "switcher_cloud": SWITCHER_URL,
+    "switcher_api": SWITCHER_API_URL
   }
 
 # Handles requests from Slack API server

@@ -1,0 +1,62 @@
+[
+    {
+        "type": "section",
+        "text": {
+            "type": "mrkdwn",
+            "text": "The following request has been opened for approval"
+        }
+    },
+    {
+        "type": "divider"
+    },
+    {
+        "type": "section",
+        "fields": [
+            {
+                "type": "mrkdwn",
+                "text": "*Environment:*\ndefault"
+            },
+            {
+                "type": "mrkdwn",
+                "text": "*Group:*\nRelease 1"
+            },
+            {
+                "type": "mrkdwn",
+                "text": "*Switcher:*\nMY_FEATURE"
+            },
+            {
+                "type": "mrkdwn",
+                "text": "*Status:*\nEnable"
+            },
+            {
+                "type": "mrkdwn",
+                "text": "*Observations:*\n"
+            }
+        ]
+    },
+    {
+        "type": "actions",
+        "elements": [
+            {
+                "type": "button",
+                "text": {
+                    "type": "plain_text",
+                    "text": "Approve"
+                },
+                "style": "primary",
+                "value": "ticket_123",
+                "action_id": "request_approved"
+            },
+            {
+                "type": "button",
+                "text": {
+                    "type": "plain_text",
+                    "text": "Deny"
+                },
+                "style": "danger",
+                "value": "ticket_123",
+                "action_id": "request_denied"
+            }
+        ]
+    }
+]

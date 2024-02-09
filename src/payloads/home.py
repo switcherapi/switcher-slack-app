@@ -1,3 +1,5 @@
+from utils.constants import VERSION
+
 MODAL_REQUEST = {
 	"callback_id": "change_request_review",
 	"type": "modal",
@@ -123,7 +125,7 @@ APP_HOME = {
 		{
 			"type": "image",
 			"image_url": "https://raw.githubusercontent.com/switcherapi/switcherapi-assets/master/samples/slack/logo.png",
-			"alt_text": "Switcher Slack App"
+			"alt_text": f"Switcher Slack App - {VERSION}"
 		},
 		{
 			"type": "context",

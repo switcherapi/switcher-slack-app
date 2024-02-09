@@ -1,0 +1,13 @@
+[
+    {
+        "type": "section",
+        "text": {
+            "type": "mrkdwn",
+            "text": ":large_red_square: *Change request denied*"
+        }
+    },
+    {
+        "type": "divider"
+    },
+    {}
+]
