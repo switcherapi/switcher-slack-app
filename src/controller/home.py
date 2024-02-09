@@ -13,6 +13,8 @@ def on_home_opened(client, event, logger):
       user_id = event["user"],
       view = APP_HOME
     )
+
+    return APP_HOME
   except Exception as e:
     logger.error(f"Error publishing home tab: {e}")
 
@@ -39,5 +41,7 @@ def on_change_request_opened(ack, body, client, logger):
       trigger_id = body["trigger_id"],
       view = change_request
     )
+
+    return change_request
   except Exception as e:
     logger.error(f"Error opening change request form: {e}")

@@ -81,7 +81,8 @@ def build_request_view(
    callback_id: str = "change_request_view",
    private_metadata: str = "",
    actions_fixture: dict = {},
-   state_fixture: dict = {}
+   state_fixture: dict = {},
+   blocks_fixture: dict = []
 ):
    """ Create a change request input based on the action fixture """
 
@@ -106,7 +107,7 @@ def build_request_view(
          "id": "view_id",
          "team_id": "team_id",
          "type": "modal",
-         "blocks": [],
+         "blocks": blocks_fixture,
          "private_metadata": private_metadata,
          "callback_id": callback_id,
          "state": {
@@ -128,7 +129,8 @@ def build_request_view(
    }
 
 def build_request_message_view(
-   actions_fixture: dict = {}
+   actions_fixture: dict = {},
+   state_fixture: dict = {}
 ):
    """ Create a message containing a given action """
 
@@ -169,7 +171,7 @@ def build_request_message_view(
          "blocks": [{},{},{},{},{}]
       },
       "state":{
-         "values": {}
+         "values": state_fixture
       },
       "response_url": "response_url",
       "actions": [actions_fixture]
@@ -209,6 +211,15 @@ DEFAULT_ENV = "default"
 MY_FEATURE = "MY_FEATURE"
 MY_FEATURE1 = "MY_FEATURE1"
 OBSERVATION = "My observation here"
+
+ON_CHANGE_REQUEST_OPENED = "tests/samples/on_change_request_opened.json"
+ON_ENVIRONMENT_SELECTED = "tests/samples/on_environment_selected.json"
+ON_GROUP_SELECTED = "tests/samples/on_group_selected.json"
+ON_SWITCHER_SELECTED = "tests/samples/on_switcher_selected.json"
+ON_CHANGE_REQUEST_REVIEW = "tests/samples/on_change_request_review.json"
+ON_SUBMIT = "tests/samples/on_submit.json"
+ON_REQUEST_APPROVED = "tests/samples/on_request_approved.json"
+ON_REQUEST_DENIED = "tests/samples/on_request_denied.json"
 
 OPEN_APP_HOME_FIX1 = {
    "token": "token",

@@ -32,17 +32,19 @@ def on_environment_selected(ack, body, client, logger):
       item = "Group",
       values = get_keyval("name", groups)
     )
-
+    
     view_hash = body["view"]["hash"]
     view_id = body["view"]["id"]
 
     prepare_body(body)
 
     client.views_update(
-          view_id = view_id,
-          hash = view_hash,
-          view = body["view"]
-      )
+      view_id = view_id,
+      hash = view_hash,
+      view = body["view"]
+    )
+
+    return body["view"]
   except Exception as e:
     logger.error(f"Error selecting environment: {e}")
 
@@ -79,6 +81,8 @@ def on_group_selected(ack, body, client, logger):
           hash = view_hash,
           view = body["view"]
       )
+
+    return body["view"]
   except Exception as e:
     logger.error(f"Error selecting group: {e}")
 
@@ -96,6 +100,8 @@ def on_switcher_selected(ack, body, client):
       hash = view_hash,
       view = body["view"]
   )
+
+  return body["view"]
 
 def on_change_request_review(ack, body, client, view, logger):
   """ Populate context with selections, validate via Switcher API then publish view for review """
@@ -131,13 +137,15 @@ def on_change_request_review(ack, body, client, view, logger):
       user_message = ":large_green_square: *Request does not require approval*: Updated with success!"
     elif result == 'FROZEN_ENVIRONMENT':
       user_message = ":large_red_square: *Request cannot be made*: Environment is frozen."
-
+    
     if user_message is not None:
       client.chat_postMessage(
         channel = user["id"],
         text = "Change Request Review",
-        blocks = create_block_message(user_message) 
+        blocks = create_block_message(user_message)
       )
+
+    return view, user_message
   except Exception as e:
     logger.error(f"Error request review: {e}")
     client.chat_postMessage(
@@ -170,11 +178,14 @@ def on_submit(ack, body, client, logger):
     )
 
     # Redirect approval
+    request_message = get_request_message(ticket.get("ticket_id"), context)
     client.chat_postMessage(
       channel = ticket.get("channel_id"),
       text = "The following request has been opened for approval.",
-      blocks = get_request_message(ticket.get("ticket_id"), context)
+      blocks = request_message
     )
+
+    return request_message, ticket
   except SlackApiError as e:
     logger.error(f"API has errors on submitting: {e}")
     message = e.response["error"]
@@ -220,6 +231,8 @@ def on_request_approved(ack, body, client, logger):
       ts = message_ts,
       blocks = message_blocks
     )
+
+    return message_blocks
   except Exception as e:
     logger.error(f"Error on aborting: {e}")
     client.chat_update(
@@ -250,6 +263,8 @@ def on_request_denied(ack, body, client, logger):
       ts = message_ts,
       blocks = message_blocks
     )
+
+    return message_blocks
   except Exception as e:
     logger.error(f"Error on denying: {e}")
     client.chat_update(
