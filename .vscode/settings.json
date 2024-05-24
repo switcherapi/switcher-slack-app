@@ -1,7 +1,11 @@
 {
-    "python.linting.enabled": false,
     "sonarlint.connectedMode.project": {
         "connectionId": "switcherapi",
         "projectKey": "switcherapi_switcher-slack-app"
-    }
+    },
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
 }
