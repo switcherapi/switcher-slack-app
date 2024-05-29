@@ -45,7 +45,6 @@ def test_open_app_home(client):
     response = client.post(SLACK_EVENT, json = OPEN_APP_HOME_FIX1)
     assert response.status_code == 200
 
-@mock_gql_client({ 'configuration': { 'environments': ['default'] }})
 @mock_event_handler
 @mock_base_client(MODAL_REQUEST)
 def test_open_change_request_modal(client):
@@ -58,6 +57,26 @@ def test_open_change_request_modal(client):
         )
     )
     assert response.status_code == 200
+
+@mock_gql_client({ 
+    'configuration': { 
+        'environments': ['default'] 
+    }
+})
+@mock_event_handler
+@mock_base_client(MODAL_REQUEST)
+def test_select_domain(client):
+    response = client.post(
+        SLACK_EVENT, json = build_request_view(
+            actions_fixture = build_static_select_action_value(
+                action_id = "selection_domain",
+                text = "Test",
+                value = "1"
+            )
+        )
+    )
+    assert response.status_code == 200
+
 
 @mock_gql_client({
     'configuration': {
