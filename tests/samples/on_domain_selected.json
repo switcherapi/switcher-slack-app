@@ -77,9 +77,9 @@
                     {
                         "text": {
                             "type": "plain_text",
-                            "text": "Release 1"
+                            "text": "-"
                         },
-                        "value": "Release 1"
+                        "value": "-"
                     }
                 ],
                 "action_id": "selection_group"
@@ -134,7 +134,7 @@
             }
         }
     ],
-    "private_metadata": "{\"domain_id\": \"1\", \"domain_name\": \"Test\"}",
+    "private_metadata": "{\"domain_id\": \"1\", \"domain_name\": \"Domain\"}",
     "callback_id": "change_request_view",
     "title": {
         "type": "plain_text",

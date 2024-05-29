@@ -19,10 +19,24 @@ def get_keyval(key: str, values: [dict]) -> [dict]:
         key_val.append({ "name": val[key], "value": val[key] })
     return key_val
 
+def get_keyval_of_keys(keys: [str], values: [dict]) -> [dict]:
+    """ Returns a dict of key and value of a list of keys"""
+    
+    key_val: [dict] = []
+    for val in values:
+        key_val.append({ "name": val[keys[0]], "value": str(val[keys[1]]) })
+    return key_val
+
 def validate_context_request(context: dict):
     """ Validates if context input is consistent """
     
     missing = []
+    if context.get("domain_name", None) is None:
+        missing.append("Domain")
+
+    if context.get("domain_id", None) is None:
+        missing.append("Domain ID")
+        
     if context.get("environment", None) is None:
         missing.append("Environment")
 

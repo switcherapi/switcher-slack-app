@@ -1,3 +1,5 @@
+import json
+
 def populate_selection(body, item, values):
     """ Includes values to selection block """
 
@@ -15,6 +17,11 @@ def populate_selection(body, item, values):
                 })
             return block
 
+def populate_metadata(view, values: dict):
+    """ Add metadata to view """
+
+    view["private_metadata"] = json.dumps(values)
+
 def insert_summary(block, index, label, value):
     """ Add label and value to block """
 
@@ -22,7 +29,18 @@ def insert_summary(block, index, label, value):
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": f"```{label}```\n> {value}"
+				"text": f"- *{label}*: {value}"
+			}
+		})
+
+def insert_summary_value(block, index, value):
+    """ Add label and value to block """
+
+    block.insert(index, {
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": f"```{value}```"
 			}
 		})
 
@@ -48,16 +66,27 @@ def prepare_body(body):
 def get_state_value(view, option):
     """ Get selected values stored at the state element """
 
+    return get_state("value", view, option)
+
+def get_state(key, view, option):
+    """ Get selected state element """
+
     element_value = ""
     for element in view["state"]["values"]:
         element_value = view["state"]["values"][element].get(option, None)
         if element_value is not None:
             if element_value.get("selected_option", None) is not None:
-                return element_value["selected_option"]["value"]
-            return element_value.get("value", None)
+                return element_value["selected_option"][key]
+            return element_value.get(key, None)
 
 def get_selected_action(body):
     """ Get selected value from an action event """
     
     if body["actions"] is not None and len(body["actions"]) > 0:
         return body["actions"][0]["selected_option"]["value"]
+
+def get_selected_action_text(body):
+    """ Get selected value from an action event """
+    
+    if body["actions"] is not None and len(body["actions"]) > 0:
+        return body["actions"][0]["selected_option"]["text"]["text"]

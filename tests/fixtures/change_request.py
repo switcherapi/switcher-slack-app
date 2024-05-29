@@ -213,6 +213,7 @@ MY_FEATURE1 = "MY_FEATURE1"
 OBSERVATION = "My observation here"
 
 ON_CHANGE_REQUEST_OPENED = "tests/samples/on_change_request_opened.json"
+ON_DOMAIN_SELECTED = "tests/samples/on_domain_selected.json"
 ON_ENVIRONMENT_SELECTED = "tests/samples/on_environment_selected.json"
 ON_GROUP_SELECTED = "tests/samples/on_group_selected.json"
 ON_SWITCHER_SELECTED = "tests/samples/on_switcher_selected.json"

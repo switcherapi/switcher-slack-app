@@ -17,6 +17,30 @@
             "type": "section",
             "text": {
                 "type": "mrkdwn",
+                "text": "Domain"
+            },
+            "accessory": {
+                "type": "static_select",
+                "placeholder": {
+                    "type": "plain_text",
+                    "text": "-"
+                },
+                "options": [
+                    {
+                        "text": {
+                            "type": "plain_text",
+                            "text": "Domain Name"
+                        },
+                        "value": "1"
+                    }
+                ],
+                "action_id": "selection_domain"
+            }
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
                 "text": "Environment"
             },
             "accessory": {
@@ -117,7 +141,7 @@
             }
         }
     ],
-    "private_metadata": "",
+    "private_metadata": "{\"domain_id\": \"1\", \"domain_name\": \"Test\"}",
     "callback_id": "change_request_view",
     "title": {
         "type": "plain_text",

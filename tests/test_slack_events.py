@@ -7,7 +7,7 @@ from src.services.switcher_service import SwitcherService
 from src.payloads.home import MODAL_REQUEST
 
 from tests.utils.mock_request import (
-    mock_event_handler, 
+    mock_event_handler,
     mock_base_client, 
     mock_gql_client,
     mock_switcher_client
@@ -73,7 +73,10 @@ def test_select_evironment(client):
                 action_id = "selection_environment",
                 text = PRODUCTION,
                 value = DEFAULT_ENV
-            )
+            ),
+            private_metadata = json.dumps({ 
+                "domain_id": "1", "domain_name": "Test" 
+            })
         )
     )
     assert response.status_code == 200
@@ -92,7 +95,10 @@ def test_select_group(client):
                 action_id = "selection_group",
                 text = RELEASE_1,
                 value = RELEASE_1
-            )
+            ),
+            private_metadata = json.dumps({ 
+                "domain_id": "1", "domain_name": "Test" 
+            })
         )
     )
     assert response.status_code == 200
@@ -133,7 +139,10 @@ def test_submit_for_review(client):
         SLACK_EVENT, json = build_request_view(
             req_type = "view_submission",
             callback_id = "change_request_review",
-            state_fixture = SWITCHER_STATE_SELECTION
+            state_fixture = SWITCHER_STATE_SELECTION,
+            private_metadata = json.dumps({ 
+                "domain_id": "1", "domain_name": "Test" 
+            })
         )
     )
     assert response.status_code == 200
@@ -146,7 +155,10 @@ def test_submit_for_review_group(client):
         SLACK_EVENT, json = build_request_view(
             req_type = "view_submission",
             callback_id = "change_request_review",
-            state_fixture = GROUP_STATE_SELECTION
+            state_fixture = GROUP_STATE_SELECTION,
+            private_metadata = json.dumps({ 
+                "domain_id": "1", "domain_name": "Test" 
+            })
         )
     )
     assert response.status_code == 200
@@ -159,7 +171,10 @@ def test_submit_without_approval_ignored(client):
         SLACK_EVENT, json = build_request_view(
             req_type = "view_submission",
             callback_id = "change_request_review",
-            state_fixture = GROUP_STATE_SELECTION
+            state_fixture = GROUP_STATE_SELECTION,
+            private_metadata = json.dumps({ 
+                "domain_id": "1", "domain_name": "Test" 
+            })
         )
     )
     assert response.status_code == 200
@@ -172,7 +187,10 @@ def test_submit_without_approval_frozen(client):
         SLACK_EVENT, json = build_request_view(
             req_type = "view_submission",
             callback_id = "change_request_review",
-            state_fixture = GROUP_STATE_SELECTION
+            state_fixture = GROUP_STATE_SELECTION,
+            private_metadata = json.dumps({ 
+                "domain_id": "1", "domain_name": "Test" 
+            })
         )
     )
     assert response.status_code == 200
@@ -187,6 +205,8 @@ def test_submit_without_approval_frozen(client):
 )
 def test_submit_request(client):
     private_metadata = json.dumps({
+        "domain_id": "1", 
+        "domain_name": "Test",
         "environment": DEFAULT_ENV,
         "environment_alias": PRODUCTION,
         "group": RELEASE_1,
@@ -219,6 +239,8 @@ def test_submit_request(client):
 )
 def test_submit_request_group(client):
     private_metadata = json.dumps({
+        "domain_id": "1", 
+        "domain_name": "Test",
         "environment": DEFAULT_ENV,
         "environment_alias": PRODUCTION,
         "group": RELEASE_1,
@@ -246,6 +268,8 @@ def test_submit_request_group(client):
 @mock_switcher_client('post', {}, status = 400)
 def test_submit_request_fail(client):
     private_metadata = json.dumps({
+        "domain_id": "1", 
+        "domain_name": "Test",
         "environment": DEFAULT_ENV,
         "environment_alias": PRODUCTION,
         "group": RELEASE_1,
@@ -283,14 +307,19 @@ def test_abort_request(client):
 
 @mock_event_handler
 @mock_base_client(MODAL_REQUEST)
-@mock_switcher_client('post', {'message': 'Ticker ticket123 processed'})
+@mock_switcher_client('post', {'message': 'Ticket ticket123 processed'})
 def test_approve_request(client):
+    ticket_payload = {
+      "id": "ticket123",
+      "domain_id": "1",
+    }
+
     response = client.post(
         SLACK_EVENT, json = build_request_message_view(
             actions_fixture = build_buttom_action_value(
                 action_id = "request_approved",
                 text = "Approve",
-                value = "ticket_123"
+                value = json.dumps(ticket_payload)
             )
         )
     )
@@ -300,12 +329,17 @@ def test_approve_request(client):
 @mock_base_client(MODAL_REQUEST)
 @mock_switcher_client('post', {}, 400)
 def test_approve_request_fail(client):
+    ticket_payload = {
+      "id": "ticket123",
+      "domain_id": "1",
+    }
+
     response = client.post(
         SLACK_EVENT, json = build_request_message_view(
             actions_fixture = build_buttom_action_value(
                 action_id = "request_approved",
                 text = "Approve",
-                value = "ticket_123"
+                value = json.dumps(ticket_payload)
             )
         )
     )
@@ -315,12 +349,17 @@ def test_approve_request_fail(client):
 @mock_base_client(MODAL_REQUEST)
 @mock_switcher_client('post', {'message': 'Ticker ticket123 processed'})
 def test_deny_request(client):
+    ticket_payload = {
+      "id": "ticket123",
+      "domain_id": "1",
+    }
+
     response = client.post(
         SLACK_EVENT, json = build_request_message_view(
             actions_fixture = build_buttom_action_value(
                 action_id = "request_denied",
                 text = "Deny",
-                value = "ticket_123"
+                value = json.dumps(ticket_payload)
             )
         )
     )
@@ -329,13 +368,18 @@ def test_deny_request(client):
 @mock_event_handler
 @mock_base_client(MODAL_REQUEST)
 @mock_switcher_client('post', {}, 400)
-def test_deny_request(client):
+def test_deny_request_fail(client):
+    ticket_payload = {
+      "id": "ticket123",
+      "domain_id": "1",
+    }
+
     response = client.post(
         SLACK_EVENT, json = build_request_message_view(
             actions_fixture = build_buttom_action_value(
                 action_id = "request_denied",
                 text = "Deny",
-                value = "ticket_123"
+                value = json.dumps(ticket_payload)
             )
         )
     )

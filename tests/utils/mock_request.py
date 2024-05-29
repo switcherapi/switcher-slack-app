@@ -11,6 +11,7 @@ from unittest.mock import patch
 
 from slack_sdk.signature import SignatureVerifier
 from slack_sdk.web.base_client import BaseClient
+from slack_sdk.web.client import WebClient
 
 from tests.fixtures.installation import INSTALLATION_FIX1
 from tests.fixtures.change_request import get_slack_events_response
@@ -35,10 +36,13 @@ def mock_event_handler(fn):
     """Bypass content verification and find installation"""
     @wraps(fn)
     def wrapper(client, *args, **kwargs):
+        WebClient.views_publish = Mock()
+        WebClient.chat_postMessage = Mock()
+        WebClient.chat_update = Mock()
         with (
             patch.object(SignatureVerifier, "is_valid", return_value = True),
             patch.object(requests, "get", side_effect = mock_source_api),
-            patch.object(requests, 'post', side_effect = mock_source_api)
+            patch.object(requests, 'post', side_effect = mock_source_api),
         ):
             return fn(client)
     return wrapper
@@ -72,8 +76,9 @@ def mock_switcher_client(method: str, fixture: dict, status: int = 200):
     def mock_decorator(fn):
         @wraps(fn)
         def wrapper(*args, **kwargs):
-            with (patch.object(requests, method, 
-                return_value = mock_requests_factory(json.dumps(fixture), status))):
+            with (
+                patch.object(requests, method, return_value = mock_requests_factory(json.dumps(fixture), status))
+            ):
                 fn(*args, **kwargs)
         return wrapper
     return mock_decorator

@@ -17,7 +17,8 @@ def switcher_service():
 def test_get_environments(switcher_service):
     expected = ['default', 'development', 'staging']
     assert expected == switcher_service.get_environments(
-        team_id = "TEAM_ID"
+        team_id = "TEAM_ID",
+        domain_id = "DOMAIN_ID"
     )
 
 @mock_gql_client({
@@ -31,6 +32,7 @@ def test_get_groups(switcher_service):
     expected = [{'name': 'Release 1', 'activated': True}]
     assert expected == switcher_service.get_groups(
         team_id = "TEAM_ID",
+        domain_id = "DOMAIN_ID",
         environment = "default"
     )
 
@@ -44,6 +46,7 @@ def test_get_groups(switcher_service):
 def test_get_switchers(switcher_service):
     switchers = switcher_service.get_switchers(
         team_id = "TEAM_ID",
+        domain_id = "DOMAIN_ID",
         environment = "default",
         group = "Release 1"
     )
@@ -55,6 +58,7 @@ def test_validate_ticket(switcher_service):
     response = switcher_service.validate_ticket(
         team_id = "TEAM_ID", 
         context = {
+            "domain_id": "1",
             "environment": "default",
             "group": "Group",
             "switcher": "FEATURE",
@@ -69,6 +73,7 @@ def test_validate_ticket_invalid(switcher_service):
         switcher_service.validate_ticket(
             team_id = "TEAM_ID", 
             context = {
+                "domain_id": "1",
                 "environment": "default",
                 "group": "Group",
                 "switcher": "FEATURE",
@@ -87,6 +92,7 @@ def test_create_ticket(switcher_service):
     switcher_service.create_ticket(
         team_id = "TEAM_ID", 
         context = {
+            "domain_id": "1",
             "environment": "default",
             "group": "Group",
             "switcher": "FEATURE",
@@ -101,6 +107,7 @@ def test_create_ticket_fail(switcher_service):
         switcher_service.create_ticket(
             team_id = "TEAM_ID", 
             context = {
+                "domain_id": "1",
                 "environment": "default",
                 "group": "Group",
                 "switcher": "FEATURE",
@@ -115,6 +122,7 @@ def test_create_ticket_fail(switcher_service):
 def test_approve_request(switcher_service):
     switcher_service.approve_request(
         team_id = "TEAM_ID", 
+        domain_id = "DOMAIN_ID",
         ticket_id = "ticket123"
     )
 
@@ -122,6 +130,7 @@ def test_approve_request(switcher_service):
 def test_deny_request(switcher_service):
     switcher_service.deny_request(
         team_id = "TEAM_ID", 
+        domain_id = "DOMAIN_ID",
         ticket_id = "ticket123"
     )
 
@@ -130,6 +139,7 @@ def test_process_ticket_invalid(switcher_service):
     with pytest.raises(Exception) as e_info:
         switcher_service.deny_request(
             team_id = "TEAM_ID", 
+            domain_id = "DOMAIN_ID",
             ticket_id = "ticket123"
         )
 

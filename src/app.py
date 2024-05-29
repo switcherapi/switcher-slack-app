@@ -14,6 +14,7 @@ from utils.constants import SWITCHER_URL, SWITCHER_API_URL, VERSION
 from store.switcher_store import SwitcherAppInstallationStore
 from controller.home import on_change_request_opened, on_home_opened
 from controller.change_request import (
+  on_domain_selected,
   on_environment_selected,
   on_group_selected,
   on_switcher_selected,
@@ -77,6 +78,10 @@ def app_home_opened(client, event, logger):
 @app.action("change_request")
 def open_change_request(ack, body, client, logger):
   on_change_request_opened(ack, body, client, logger)
+
+@app.action("selection_domain")
+def selection_domain(ack, body, client, logger):
+  on_domain_selected(ack, body, client, logger)
 
 # Update Change Request modal with available domain groups
 @app.action("selection_environment")
