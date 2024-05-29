@@ -14,10 +14,13 @@ class SwitcherService(SwitcherClient):
             api_url or os.environ.get("SWITCHER_API_URL")
         )
 
-    def get_environments(self, team_id: str) -> [str]:
+    def get_environments(self, team_id: str, domain_id: str) -> [str]:
         response: dict = self.do_graphql(f'''
             query {{
-                configuration(slack_team_id: "{team_id}") {{
+                configuration(
+                    slack_team_id: "{team_id}",
+                    domain: "{domain_id}")
+                {{
                     environments
                 }}
             }}
@@ -30,11 +33,12 @@ class SwitcherService(SwitcherClient):
                 return environments
         return []
 
-    def get_groups(self, team_id: str, environment: str) -> [dict]:
+    def get_groups(self, team_id: str, domain_id: str, environment: str) -> [dict]:
         response: dict = self.do_graphql(f'''
             query {{
                 configuration(
                     slack_team_id: "{team_id}", 
+                    domain: "{domain_id}",
                     environment: "{environment}") 
                 {{
                     group {{
@@ -51,11 +55,12 @@ class SwitcherService(SwitcherClient):
             if groups is not None:
                 return groups
 
-    def get_switchers(self, team_id: str, environment: str, group: str) -> [dict]:
+    def get_switchers(self, team_id: str, domain_id: str, environment: str, group: str) -> [dict]:
         response: dict = self.do_graphql(f'''
             query {{
                 configuration(
-                    slack_team_id: "{team_id}", 
+                    slack_team_id: "{team_id}",
+                    domain: "{domain_id}",
                     environment: "{environment}",
                     group: "{group}") 
                 {{
@@ -80,6 +85,7 @@ class SwitcherService(SwitcherClient):
             path = "/slack/v1/ticket/validate",
             body = {
                 "team_id": team_id,
+                "domain_id": context["domain_id"],
                 "ticket_content": {
                     "environment": context["environment"],
                     "group": context["group"],
@@ -103,6 +109,7 @@ class SwitcherService(SwitcherClient):
             path = "/slack/v1/ticket/create",
             body = {
                 "team_id": team_id,
+                "domain_id": context["domain_id"],
                 "ticket_content": {
                     "environment": context["environment"],
                     "group": context["group"],
@@ -122,16 +129,17 @@ class SwitcherService(SwitcherClient):
             "channel_id": data.get("channel_id")
         }
 
-    def approve_request(self, team_id: str, ticket_id: str):
+    def approve_request(self, team_id: str, domain_id: str, ticket_id: str):
         """ Dispatch change request approval """
-        self.__process_request__(team_id, ticket_id, True)
+        self.__process_request__(team_id, domain_id, ticket_id, True)
 
-    def deny_request(self, team_id: str, ticket_id: str):
+    def deny_request(self, team_id: str, domain_id: str, ticket_id: str):
         """ Dispatch change request denied """
-        self.__process_request__(team_id, ticket_id, False)
+        self.__process_request__(team_id, domain_id, ticket_id, False)
 
     def __process_request__(self, 
         team_id: str, 
+        domain_id: str,
         ticket_id: str, 
         approved: bool
     ) -> str:
@@ -141,6 +149,7 @@ class SwitcherService(SwitcherClient):
             path = "/slack/v1/ticket/process",
             body = {
                 "team_id": team_id,
+                "domain_id": domain_id,
                 "ticket_id": ticket_id,
                 "approved": approved
             }

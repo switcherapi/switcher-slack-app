@@ -14,6 +14,10 @@
         "fields": [
             {
                 "type": "mrkdwn",
+                "text": "*Domain:*\nTest"
+            },
+            {
+                "type": "mrkdwn",
                 "text": "*Environment:*\ndefault"
             },
             {
@@ -44,7 +48,7 @@
                     "text": "Approve"
                 },
                 "style": "primary",
-                "value": "ticket_123",
+                "value": "{\"id\": \"ticket_123\", \"domain_id\": \"1\"}",
                 "action_id": "request_approved"
             },
             {
@@ -54,7 +58,7 @@
                     "text": "Deny"
                 },
                 "style": "danger",
-                "value": "ticket_123",
+                "value": "{\"id\": \"ticket_123\", \"domain_id\": \"1\"}",
                 "action_id": "request_denied"
             }
         ]

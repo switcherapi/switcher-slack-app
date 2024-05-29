@@ -3,7 +3,8 @@ import json
 
 from utils.slack_payload_util import (
   add_field,
-  insert_summary
+  insert_summary,
+  insert_summary_value
 )
 
 REQUEST_REVIEW = {
@@ -78,7 +79,7 @@ def create_block_message(text):
 		}
 	]
 
-def get_request_message(ticket_id, context):
+def get_request_message(ticket_payload, context):
 	message = [
 		{
 			"type": "section",
@@ -104,7 +105,7 @@ def get_request_message(ticket_id, context):
 						"text": "Approve"
 					},
 					"style": "primary",
-					"value": ticket_id,
+					"value": ticket_payload,
 					"action_id": "request_approved"
 				},
 				{
@@ -114,13 +115,14 @@ def get_request_message(ticket_id, context):
 						"text": "Deny"
 					},
 					"style": "danger",
-					"value": ticket_id,
+					"value": ticket_payload,
 					"action_id": "request_denied"
 				}
 			]
 		}
 	]
 
+	add_field(message[2]["fields"], "Domain", context["domain_name"])
 	add_field(message[2]["fields"], "Environment", context["environment"])
 	add_field(message[2]["fields"], "Group", context["group"])
 	if context["switcher"] is not None:
@@ -132,15 +134,16 @@ def get_request_message(ticket_id, context):
 
 def create_request_review(context):
 	view = copy.deepcopy(REQUEST_REVIEW)
-	insert_summary(view["blocks"], 3, "Environment", context["environment"])
-	insert_summary(view["blocks"], 4, "Group", context["group"])
+	insert_summary(view["blocks"], 3, "Domain", context["domain_name"])
+	insert_summary(view["blocks"], 4, "Environment", context["environment"])
+	insert_summary(view["blocks"], 5, "Group", context["group"])
 
 	status = "Enable" if context["status"] == "true" else "Disable"
 	if context["switcher"] is not None:
-		insert_summary(view["blocks"], 5, "Switcher", context["switcher"])
-		insert_summary(view["blocks"], 6, "Status", status)
+		insert_summary(view["blocks"], 6, "Switcher", context["switcher"])
+		insert_summary_value(view["blocks"], 7, status)
 	else:
-		insert_summary(view["blocks"], 5, "Status", status)
+		insert_summary_value(view["blocks"], 6, status)
 	
 	return view
 

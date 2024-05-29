@@ -22,28 +22,35 @@
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": "```Environment```\n> default"
+                "text": "- *Domain*: Test"
             }
         },
         {
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": "```Group```\n> Release 1"
+                "text": "- *Environment*: default"
             }
         },
         {
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": "```Switcher```\n> MY_FEATURE"
+                "text": "- *Group*: Release 1"
             }
         },
         {
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": "```Status```\n> Enable"
+                "text": "- *Switcher*: MY_FEATURE"
+            }
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "```Enable```"
             }
         },
         {
@@ -82,5 +89,5 @@
             ]
         }
     ],
-    "private_metadata": "{\"environment\": \"default\", \"environment_alias\": \"Production\", \"group\": \"Release 1\", \"switcher\": \"MY_FEATURE\", \"status\": \"true\"}"
+    "private_metadata": "{\"domain_id\": \"1\", \"domain_name\": \"Test\", \"environment\": \"default\", \"environment_alias\": \"Production\", \"group\": \"Release 1\", \"switcher\": \"MY_FEATURE\", \"status\": \"true\"}"
 }

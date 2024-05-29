@@ -30,6 +30,30 @@
             "type": "section",
             "text": {
                 "type": "mrkdwn",
+                "text": "Domain"
+            },
+            "accessory": {
+                "type": "static_select",
+                "placeholder": {
+                    "type": "plain_text",
+                    "text": "-"
+                },
+                "options": [
+                    {
+                        "text": {
+                            "type": "plain_text",
+                            "text": "Domain Name"
+                        },
+                        "value": "1"
+                    }
+                ],
+                "action_id": "selection_domain"
+            }
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
                 "text": "Environment"
             },
             "accessory": {
@@ -42,9 +66,9 @@
                     {
                         "text": {
                             "type": "plain_text",
-                            "text": "Production"
+                            "text": "-"
                         },
-                        "value": "default"
+                        "value": "-"
                     }
                 ],
                 "action_id": "selection_environment"

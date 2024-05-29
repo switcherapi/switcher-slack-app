@@ -25,4 +25,4 @@ def test_validate_context_request():
   with pytest.raises(Exception) as e_info:
     validate_context_request({})
 
-  assert e_info.value.args[0] == "Missing [Environment - Group - Status]"
+  assert e_info.value.args[0] == "Missing [Domain - Domain ID - Environment - Group - Status]"

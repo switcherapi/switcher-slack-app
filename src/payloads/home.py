@@ -32,7 +32,7 @@ MODAL_REQUEST = {
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": "Environment"
+				"text": "Domain"
 			},
 			"accessory": {
 				"type": "static_select",
@@ -41,6 +41,30 @@ MODAL_REQUEST = {
 					"text": "-"
 				},
 				"options": [],
+				"action_id": "selection_domain"
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "Environment"
+			},
+			"accessory": {
+				"type": "static_select",
+				"placeholder": {
+					"type": "plain_text",
+					"text": "-"
+				},
+				"options": [
+					{
+						"text": {
+							"type": "plain_text",
+							"text": "-"
+						},
+						"value": "-"
+					}
+				],
 				"action_id": "selection_environment"
 			}
 		},

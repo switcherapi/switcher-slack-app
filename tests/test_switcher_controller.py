@@ -5,6 +5,7 @@ from unittest.mock import Mock
 
 from src.controller.home import on_home_opened, on_change_request_opened
 from src.controller.change_request import (
+    on_domain_selected,
     on_environment_selected,
     on_group_selected,
     on_switcher_selected,
@@ -32,6 +33,7 @@ from tests.fixtures.change_request import (
     MY_FEATURE,
 
     ON_CHANGE_REQUEST_OPENED,
+    ON_DOMAIN_SELECTED,
     ON_ENVIRONMENT_SELECTED,
     ON_GROUP_SELECTED,
     ON_SWITCHER_SELECTED,
@@ -58,7 +60,11 @@ def test_open_app_home(client):
 
     assert result == APP_HOME
 
-@mock_gql_client({ 'configuration': { 'environments': ['default'] }})
+@mock_gql_client({ 
+    'configuration': {
+        'domain': [{'name': 'Domain', 'id': '1'}]
+    }
+})
 def test_open_change_request_modal(client):
     result = on_change_request_opened(
         ack = Mock(),
@@ -71,8 +77,36 @@ def test_open_change_request_modal(client):
         client = client,
         logger = logging.getLogger()
     )
-
+    
     with open(ON_CHANGE_REQUEST_OPENED) as f:
+        expected_result = json.load(f)
+
+    assert result == expected_result
+
+@mock_gql_client({ 
+    'configuration': { 
+        'environments': ['default'] 
+    }
+})
+def test_select_domain(client):
+    with open(ON_CHANGE_REQUEST_OPENED) as f:
+        modal = json.load(f)
+
+    result = on_domain_selected(
+        ack = Mock(),
+        body = build_request_view(
+            actions_fixture = build_static_select_action_value(
+                action_id = "selection_domain",
+                text = "Domain",
+                value = "1"
+            ),
+            blocks_fixture = modal['blocks']
+        ),
+        client = client,
+        logger = logging.getLogger()
+    )
+
+    with open(ON_DOMAIN_SELECTED) as f:
         expected_result = json.load(f)
 
     assert result == expected_result
@@ -83,7 +117,7 @@ def test_open_change_request_modal(client):
     }
 })
 def test_select_evironment(client):
-    with open(ON_CHANGE_REQUEST_OPENED) as f:
+    with open(ON_DOMAIN_SELECTED) as f:
         modal = json.load(f)
 
     result = on_environment_selected(
@@ -94,12 +128,15 @@ def test_select_evironment(client):
                 text = PRODUCTION,
                 value = DEFAULT_ENV
             ),
+            private_metadata = json.dumps({ 
+                "domain_id": "1", "domain_name": "Test" 
+            }),
             blocks_fixture = modal['blocks']
         ),
         client = client,
         logger = logging.getLogger()
     )
-    
+
     with open(ON_ENVIRONMENT_SELECTED) as f:
         expected_result = json.load(f)
 
@@ -122,12 +159,15 @@ def test_select_group(client):
                 text = RELEASE_1,
                 value = RELEASE_1
             ),
+            private_metadata = json.dumps({ 
+                "domain_id": "1", "domain_name": "Test" 
+            }),
             blocks_fixture = modal['blocks']
         ),
         client = client,
         logger = logging.getLogger()
     )
-
+    
     with open(ON_GROUP_SELECTED) as f:
         expected_result = json.load(f)
 
@@ -145,6 +185,9 @@ def test_select_switcher(client):
                 text = MY_FEATURE,
                 value = MY_FEATURE
             ),
+            private_metadata = json.dumps({ 
+                "domain_id": "1", "domain_name": "Test" 
+            }),
             blocks_fixture = modal['blocks']
         ),
         client = client
@@ -168,6 +211,9 @@ def test_submit_for_review(client):
                 text = "Activate",
                 value = "true"
             ),
+            private_metadata = json.dumps({ 
+                "domain_id": "1", "domain_name": "Test" 
+            }),
             blocks_fixture = modal['blocks']
         ),
         client = client,
@@ -196,6 +242,9 @@ def test_submit_without_approval_ignored(client):
                 text = "Activate",
                 value = "true"
             ),
+            private_metadata = json.dumps({ 
+                "domain_id": "1", "domain_name": "Test" 
+            }),
             blocks_fixture = modal['blocks']
         ),
         client = client,
@@ -224,6 +273,9 @@ def test_submit_without_approval_frozen(client):
                 text = "Activate",
                 value = "true"
             ),
+            private_metadata = json.dumps({ 
+                "domain_id": "1", "domain_name": "Test" 
+            }),
             blocks_fixture = modal['blocks']
         ),
         client = client,
@@ -278,7 +330,7 @@ def test_approve_request(client):
             actions_fixture = build_buttom_action_value(
                 action_id = "request_approved",
                 text = "Approve",
-                value = "ticket_123"
+                value = json.dumps({ 'id': 'ticket_123', 'domain_id': '1' })
             )
         ),
         client = client,
@@ -298,7 +350,7 @@ def test_deny_request(client):
             actions_fixture = build_buttom_action_value(
                 action_id = "request_denied",
                 text = "Deny",
-                value = "ticket_123"
+                value = json.dumps({ 'id': 'ticket_123', 'domain_id': '1' })
             )
         ),
         client = client,
