@@ -28,9 +28,7 @@ def on_change_request_opened(ack, body, client, logger):
     team_id = body["team"]["id"]
     logger.warning(f"Team ID: {team_id}")
 
-    domains = [
-      {"name": "Domain Name", "id": 1}
-    ]
+    domains = SwitcherService().get_domains(team_id)
 
     # Populate view
     populate_selection(

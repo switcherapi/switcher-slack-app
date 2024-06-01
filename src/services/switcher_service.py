@@ -14,6 +14,19 @@ class SwitcherService(SwitcherClient):
             api_url or os.environ.get("SWITCHER_API_URL")
         )
 
+    def get_domains(self, team_id: str) -> [dict]:
+        response = self.do_get(
+            path = "/slack/v1/domains",
+            params = {
+                "team_id": team_id
+            }
+        )
+        
+        if response.status_code != 200:
+            raise SwitcherValidationError("Error fetching domains")
+        
+        return json.loads(response.data.decode('UTF-8'))
+
     def get_environments(self, team_id: str, domain_id: str) -> [str]:
         response: dict = self.do_graphql(f'''
             query {{

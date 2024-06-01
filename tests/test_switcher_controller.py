@@ -60,11 +60,7 @@ def test_open_app_home(client):
 
     assert result == APP_HOME
 
-@mock_gql_client({ 
-    'configuration': {
-        'domain': [{'name': 'Domain', 'id': '1'}]
-    }
-})
+@mock_switcher_client('get', [{ 'name': 'Domain Name', 'id': '1' }])
 def test_open_change_request_modal(client):
     result = on_change_request_opened(
         ack = Mock(),
@@ -83,6 +79,22 @@ def test_open_change_request_modal(client):
 
     assert result == expected_result
 
+@mock_switcher_client('get', { 'error': 'Server unavailable' }, 500)
+def test_open_change_request_modal_with_error(client):
+    result = on_change_request_opened(
+        ack = Mock(),
+        body = build_request_view(
+            actions_fixture = build_buttom_action_value(
+                action_id = "change_request",
+                text = "Request Change"
+            )
+        ),
+        client = client,
+        logger = logging.getLogger()
+    )
+    
+    assert result == None
+    
 @mock_gql_client({ 
     'configuration': { 
         'environments': ['default'] 
