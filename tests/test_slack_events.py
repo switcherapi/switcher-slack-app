@@ -10,7 +10,8 @@ from tests.utils.mock_request import (
     mock_event_handler,
     mock_base_client, 
     mock_gql_client,
-    mock_switcher_client
+    mock_switcher_client,
+    set_mock_response
 )
 from tests.fixtures.change_request import (
     SLACK_EVENT,
@@ -48,6 +49,11 @@ def test_open_app_home(client):
 @mock_event_handler
 @mock_base_client(MODAL_REQUEST)
 def test_open_change_request_modal(client):
+    set_mock_response(
+        path = "api/slack/v1/domains",
+        fixture = [{ 'name': 'Domain Name', 'id': '1' }]
+    )
+
     response = client.post(
         SLACK_EVENT, json = build_request_view(
             actions_fixture = build_static_select_action_value(

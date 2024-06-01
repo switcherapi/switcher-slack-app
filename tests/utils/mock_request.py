@@ -16,6 +16,16 @@ from slack_sdk.web.client import WebClient
 from tests.fixtures.installation import INSTALLATION_FIX1
 from tests.fixtures.change_request import get_slack_events_response
 
+mock_response = mock.Mock(**{})
+mock_response_path = ""
+
+def set_mock_response(path: str, fixture: dict, status_code: int = 200):
+    global mock_response
+    global mock_response_path
+
+    mock_response_path = path
+    mock_response = mock_requests_factory(json.dumps(fixture), status_code)
+
 def mock_requests_factory(response_stub: str, status_code: int = 200):
     return mock.Mock(**{
         "json.return_value": json.loads(response_stub),
@@ -32,6 +42,9 @@ def mock_source_api(*args, **kwargs):
     if kwargs["url"].endswith("slack/v1/findinstallation"):
         return mock_requests_factory(json.dumps(INSTALLATION_FIX1), 200)
 
+    if kwargs["url"].endswith(mock_response_path):
+        return mock_response
+
 def mock_event_handler(fn):
     """Bypass content verification and find installation"""
     @wraps(fn)
@@ -39,6 +52,8 @@ def mock_event_handler(fn):
         WebClient.views_publish = Mock()
         WebClient.chat_postMessage = Mock()
         WebClient.chat_update = Mock()
+        WebClient.views_open = Mock()
+        
         with (
             patch.object(SignatureVerifier, "is_valid", return_value = True),
             patch.object(requests, "get", side_effect = mock_source_api),
