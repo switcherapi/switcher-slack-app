@@ -13,5 +13,5 @@ RUN pip install --upgrade pip && \
 
 COPY /src .
 
-RUN chown -R app:app $APP_HOME
+RUN chown -R app:app "$APP_HOME"
 USER app
