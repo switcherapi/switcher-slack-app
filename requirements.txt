@@ -7,10 +7,10 @@ pyjwt==2.9.0
 gql==3.5.0
 requests-toolbelt==1.0.0
 certifi>=2024.8.30 # not directly required, pinned by Snyk to avoid a vulnerability
-setuptools>=74.1.2 # not directly required, pinned by Snyk to avoid a vulnerability
+setuptools>=75.1.0 # not directly required, pinned by Snyk to avoid a vulnerability
 werkzeug>=3.0.4 # not directly required, pinned by Snyk to avoid a vulnerability
-urllib3>=2.2.2 # not directly required, pinned by Snyk to avoid a vulnerability
+urllib3>=2.2.3 # not directly required, pinned by Snyk to avoid a vulnerability
 jinja2>=3.1.4 # not directly required, pinned by Snyk to avoid a vulnerability
-idna>=3.8 # not directly required, pinned by Snyk to avoid a vulnerability
-anyio>=4.4.0 # not directly required, pinned by Snyk to avoid a vulnerability
-zipp>=3.20.1 # not directly required, pinned by Snyk to avoid a vulnerability
+idna>=3.10 # not directly required, pinned by Snyk to avoid a vulnerability
+anyio>=4.6.0 # not directly required, pinned by Snyk to avoid a vulnerability
+zipp>=3.20.2 # not directly required, pinned by Snyk to avoid a vulnerability

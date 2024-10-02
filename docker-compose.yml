@@ -29,5 +29,6 @@ services:
       - SWITCHER_JWT_SECRET=
       - SWITCHER_URL=https://cloud.switcherapi.com
       - SWITCHER_API_URL=https://switcherapi.com/api
+      - SWITCHER_CERT_PATH=/etc/certs/[replace].crt
     # volumes:
     #   - switcherapi-tls:/etc/certs
