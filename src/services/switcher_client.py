@@ -26,7 +26,7 @@ class SwitcherClient:
                     resource = path
                 ),
                 json = body,
-                cert = self.__cert_path
+                verify = self.__cert_path
             )
         )
 
@@ -37,7 +37,7 @@ class SwitcherClient:
                     resource = path
                 ),
                 params = params,
-                cert = self.__cert_path
+                verify = self.__cert_path
             )
         )
 
@@ -48,7 +48,7 @@ class SwitcherClient:
                     resource = path
                 ),
                 params = params,
-                cert = self.__cert
+                verify = self.__cert
             )
         )
 
@@ -94,6 +94,6 @@ class SwitcherClient:
                 },
                 use_json = True,
                 retries = 3,
-                cert = self.__cert_path
+                verify = self.__cert_path
             )
         )
