@@ -14,6 +14,7 @@ class SwitcherClient:
 
     def __init__(self, api_url: str):
         self.__secret = os.environ.get("SWITCHER_JWT_SECRET")
+        self.__cert_path = os.environ.get("SWITCHER_CERT_PATH")
         self.__algorithm: str = "HS256"
         self.__issuer: str = "Switcher Slack App"
         self._api_url = api_url
@@ -24,7 +25,8 @@ class SwitcherClient:
                     url = self._api_url + path,
                     resource = path
                 ),
-                json = body
+                json = body,
+                cert = self.__cert_path
             )
         )
 
@@ -34,7 +36,8 @@ class SwitcherClient:
                     url = self._api_url + path,
                     resource = path
                 ),
-                params = params
+                params = params,
+                cert = self.__cert_path
             )
         )
 
@@ -44,7 +47,8 @@ class SwitcherClient:
                     url = self._api_url + path,
                     resource = path
                 ),
-                params = params
+                params = params,
+                cert = self.__cert
             )
         )
 
@@ -89,7 +93,7 @@ class SwitcherClient:
                     "Authorization": f"Bearer {self.__generate_token__(resource)}"
                 },
                 use_json = True,
-                verify = False,
-                retries = 3
+                retries = 3,
+                cert = self.__cert_path
             )
         )

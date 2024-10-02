@@ -4,8 +4,9 @@
         "projectKey": "switcherapi_switcher-slack-app"
     },
     "python.testing.pytestArgs": [
-        "tests"
+        "tests", "-s"
     ],
     "python.testing.unittestEnabled": false,
-    "python.testing.pytestEnabled": true
+    "python.testing.pytestEnabled": true,
+    "python.envFile": "${workspaceFolder}/.test.env"
 }
