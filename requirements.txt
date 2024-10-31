@@ -1,4 +1,4 @@
-slack_bolt==1.20.1
+slack_bolt==1.21.2
 python_dotenv==1.0.1
 gunicorn==23.0.0
 flask==3.0.3
@@ -7,10 +7,10 @@ pyjwt==2.9.0
 gql==3.5.0
 requests-toolbelt==1.0.0
 certifi>=2024.8.30 # not directly required, pinned by Snyk to avoid a vulnerability
-setuptools>=75.1.0 # not directly required, pinned by Snyk to avoid a vulnerability
-werkzeug>=3.0.4 # not directly required, pinned by Snyk to avoid a vulnerability
+setuptools>=75.3.0 # not directly required, pinned by Snyk to avoid a vulnerability
+werkzeug>=3.0.6 # not directly required, pinned by Snyk to avoid a vulnerability
 urllib3>=2.2.3 # not directly required, pinned by Snyk to avoid a vulnerability
 jinja2>=3.1.4 # not directly required, pinned by Snyk to avoid a vulnerability
 idna>=3.10 # not directly required, pinned by Snyk to avoid a vulnerability
-anyio>=4.6.0 # not directly required, pinned by Snyk to avoid a vulnerability
+anyio>=4.6.2.post1 # not directly required, pinned by Snyk to avoid a vulnerability
 zipp>=3.20.2 # not directly required, pinned by Snyk to avoid a vulnerability

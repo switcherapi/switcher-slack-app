@@ -12,6 +12,7 @@ from utils.slack_payload_util import (
   get_selected_action_text
 )
 from payloads.home import APP_HOME
+from payloads.change_request import NEW_SELECTION
 from payloads.change_request import (
   create_request_review,
   create_block_message,
@@ -72,6 +73,11 @@ def on_environment_selected(ack, body, client, logger):
 
     groups = SwitcherService().get_groups(team_id, domain_id, env_selected)
 
+    # Clear previous selection
+    populate_selection(body["view"], "Group", NEW_SELECTION)
+    populate_selection(body["view"], "Switcher", NEW_SELECTION)
+    populate_selection(body["view"], "Status", NEW_SELECTION)
+
     # Populate view
     populate_selection(
       body = body["view"],
@@ -109,6 +115,10 @@ def on_group_selected(ack, body, client, logger):
     switchers = SwitcherService().get_switchers(
       team_id, domain_id, env_selected, group_selected
     )
+
+    # Clear previous selection
+    populate_selection(body["view"], "Switcher", NEW_SELECTION)
+    populate_selection(body["view"], "Status", NEW_SELECTION)
 
     # Populate view
     populate_selection(

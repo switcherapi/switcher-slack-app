@@ -7,6 +7,8 @@ from utils.slack_payload_util import (
   insert_summary_value
 )
 
+NEW_SELECTION = [{ "name": "-", "value": "-" }]
+
 REQUEST_REVIEW = {
 	"type": "home",
 	"blocks": [
