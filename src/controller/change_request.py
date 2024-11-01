@@ -4,12 +4,16 @@ from slack_sdk.errors import SlackApiError
 from services.switcher_service import SwitcherService
 from utils.switcher_util import get_environment_keyval, get_keyval, validate_context_request
 from utils.slack_payload_util import (
-  populate_selection, 
+  populate_selection,
   populate_metadata,
+  populate_selection_status,
   prepare_body, 
+  get_status,
   get_state_value,
+  get_state_name,
   get_selected_action,
-  get_selected_action_text
+  get_selected_action_text,
+  get_selected_action_status
 )
 from payloads.home import APP_HOME
 from payloads.change_request import NEW_SELECTION
@@ -32,6 +36,11 @@ def on_domain_selected(ack, body, client, logger):
     domain_name = get_selected_action_text(body)
     
     envs = SwitcherService().get_environments(team_id, domain_id)
+
+    # Clear previous selection
+    populate_selection(body["view"], "Group", NEW_SELECTION)
+    populate_selection(body["view"], "Switcher", NEW_SELECTION)
+    populate_selection(body["view"], "Status", NEW_SELECTION)
 
     # Populate view and metadata
     populate_selection(
@@ -58,7 +67,9 @@ def on_domain_selected(ack, body, client, logger):
 
     return body["view"]
   except Exception as e:
-    logger.error(f"Error opening change request form: {e}")
+    error = f"Error opening change request form: {e}"
+    logger.error(error)
+    return error
 
 def on_environment_selected(ack, body, client, logger):
   """ Load groups when environment is selected """
@@ -98,7 +109,9 @@ def on_environment_selected(ack, body, client, logger):
 
     return body["view"]
   except Exception as e:
-    logger.error(f"Error selecting environment: {e}")
+    error = f"Error selecting environment: {e}"
+    logger.error(error)
+    return error
 
 def on_group_selected(ack, body, client, logger):
   """ Load switchers when group is selected """
@@ -109,6 +122,7 @@ def on_group_selected(ack, body, client, logger):
     # Collect args
     env_selected = get_state_value(body["view"], "selection_environment")
     group_selected = get_selected_action(body)
+    group_status = get_selected_action_status(body)
     team_id = body["team"]["id"]
     domain_id = read_request_metadata(body["view"])["domain_id"]
 
@@ -118,19 +132,17 @@ def on_group_selected(ack, body, client, logger):
 
     # Clear previous selection
     populate_selection(body["view"], "Switcher", NEW_SELECTION)
-    populate_selection(body["view"], "Status", NEW_SELECTION)
 
     # Populate view
+    values = get_keyval("key", switchers)
+    values.append({ "name": "-", "value": "-" })
     populate_selection(
       body = body["view"],
       item = "Switcher",
-      values = get_keyval("key", switchers)
+      values = values
     )
 
-    populate_selection(body["view"], "Status", [
-      { "name": "Enable", "value": "true" },
-      { "name": "Disable", "value": "false" }
-    ])
+    populate_selection_status(body["view"], group_status)
 
     # Push changes to view
     view_hash = body["view"]["hash"]
@@ -145,12 +157,23 @@ def on_group_selected(ack, body, client, logger):
 
     return body["view"]
   except Exception as e:
-    logger.error(f"Error selecting group: {e}")
+    error = f"Error selecting group: {e}"
+    logger.error(error)
+    return error
 
 def on_switcher_selected(ack, body, client):
   """ Updates view's metadata with switcher selection """
 
   ack()
+
+  # Populate view
+  selected_switcher = get_selected_action_text(body)
+  if selected_switcher != "-":
+    switcher_status = get_selected_action_status(body)
+    populate_selection_status(body["view"], switcher_status)
+  else:
+    selected_group = get_state_name(body["view"], "selection_group")
+    populate_selection_status(body["view"], get_status(selected_group))
 
   view_hash = body["view"]["hash"]
   view_id = body["view"]["id"]
@@ -213,11 +236,14 @@ def on_change_request_review(ack, body, client, view, logger):
     
     return view, user_message
   except Exception as e:
-    logger.error(f"Error on change request review: {e}")
     client.chat_postMessage(
       channel = user["id"], 
       text = f"There was an error with your request: {e}"
     )
+
+    error = f"Error on change request review: {e}"
+    logger.error(error)
+    return error
 
 def on_submit(ack, body, client, logger):
   """ Create ticket, return to home view then publish approval message """
@@ -258,13 +284,6 @@ def on_submit(ack, body, client, logger):
     )
 
     return request_message, ticket
-  except SlackApiError as e:
-    logger.error(f"API has errors on submitting: {e}")
-    message = e.response["error"]
-    client.chat_postMessage(
-      channel = user["id"], 
-      text = f"There was an error with your submission: {message}"
-    )
   except Exception as e:
     logger.error(f"Error on submitting: {e}")
     client.chat_postMessage(

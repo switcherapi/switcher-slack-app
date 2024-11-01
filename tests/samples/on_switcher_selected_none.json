@@ -132,9 +132,9 @@
                     {
                         "text": {
                             "type": "plain_text",
-                            "text": "Enable"
+                            "text": "Disable"
                         },
-                        "value": "true"
+                        "value": "false"
                     }
                 ],
                 "action_id": "selection_status"

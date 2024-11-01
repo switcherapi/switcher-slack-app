@@ -16,7 +16,8 @@ def get_keyval(key: str, values: [dict]) -> [dict]:
     
     key_val: [dict] = []
     for val in values:
-        key_val.append({ "name": val[key], "value": val[key] })
+        activated = "[on]" if val["activated"] else "[off]"
+        key_val.append({ "name": f"{activated} {val[key]}", "value": val[key] })
     return key_val
 
 def get_keyval_of_keys(keys: [str], values: [dict]) -> [dict]:

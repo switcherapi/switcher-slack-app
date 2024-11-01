@@ -64,14 +64,17 @@ Assuming that you have signed up for a Slack account and are logged in to a Work
 
 (*) Do not install the app via 'Install to Workspace' button
 
+In order to install the app, you will need to run `https://[SWITCHER_SLACK_APP_ENDPOINT]/slack/install` in your browser.<br>
+This will trigger the callback to Switcher Management [SWITCHER_URL] to proceed with the Domain authorization.
+
 ### App: Configure & Deploy
 1. Create a new Virtual Env
-2. Install dependencies: pip install -r requirements.txt
+2. Install dependencies: `make install`
 3. Copy the values Client ID, Secret and Signing Secret.
 4. Create a .env file based on .env.template and paste the copied values.
 5. Make sure that the SWITCHER_JWT_SECRET matches the Switcher API env value for SWITCHER_SLACK_JWT_SECRET
 6. Make sure that Switcher Management has SWITCHERSLACKAPP_URL set to the app URL
-7. Start the API by running: `python src\app.py`
+7. Start the API by running: `make run`
 
 ## Contributing
 
@@ -84,15 +87,16 @@ Here are some important guidelines:
 
 Below some basics steps that you probably are familiar with when contributing to open source projects.
 
-> (Before) Check if all tests are passing:
+[Before] Check if all tests are passing:
 
 ```
-pip install -r tests/requirements.txt
-pytest
+make install-test
+make test
 ```
 
-> (After) Check if all tests are passing and covers the change being made:
+[Chaging] Check if all tests are passing and covers the change being made:
 
 ```
-pytest --cov=src
+make test
+make cover
 ```
