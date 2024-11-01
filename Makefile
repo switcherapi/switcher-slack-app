@@ -7,7 +7,7 @@ install-test:
 	pip install -r tests/requirements.txt
 
 run:
-	python src\app.py
+	python src/app.py
 
 test:
 	pytest --cov=src
