@@ -1,5 +1,7 @@
 import json
 
+from datetime import datetime
+
 def populate_selection(body, item, values):
     """ Includes values to selection block """
 
@@ -7,6 +9,7 @@ def populate_selection(body, item, values):
         text = block.get("text", {})
         if text.get("text", None) == item:
             block["accessory"]["options"] = []
+            block["block_id"] = __generate_block_id(item)
             for value in values:
                 block["accessory"]["options"].append({
                     "text": {
@@ -16,6 +19,18 @@ def populate_selection(body, item, values):
                     "value": value["value"]
                 })
             return block
+
+def populate_selection_status(view, status):
+    """ Includes Status selection block """
+
+    if status:
+        populate_selection(view, "Status", [
+          { "name": "Disable", "value": "false" }
+        ])
+    else:
+        populate_selection(view, "Status", [
+        { "name": "Enable", "value": "true" },
+        ])
 
 def populate_metadata(view, values: dict):
     """ Add metadata to view """
@@ -66,16 +81,25 @@ def prepare_body(body):
 def get_state_value(view, option):
     """ Get selected values stored at the state element """
 
-    return get_state("value", view, option)
+    return __get_state("value", view, option)
 
-def get_state(key, view, option):
+def get_state_name(view, option):
+    """ Get selected values stored at the state element """
+
+    element_name = ""
+    for element in view["state"]["values"]:
+        element_name = view["state"]["values"][element].get(option, None)
+        if element_name is not None:
+            return element_name.get("selected_option", None).get("text", None).get("text", None)
+
+def __get_state(key, view, option):
     """ Get selected state element """
 
     element_value = ""
     for element in view["state"]["values"]:
         element_value = view["state"]["values"][element].get(option, None)
         if element_value is not None:
-            if element_value.get("selected_option", None) is not None:
+            if element_value.get("selected_option", None) is not None and element_value["selected_option"].get(key, "-") != "-":
                 return element_value["selected_option"][key]
             return element_value.get(key, None)
 
@@ -90,3 +114,20 @@ def get_selected_action_text(body):
     
     if body["actions"] is not None and len(body["actions"]) > 0:
         return body["actions"][0]["selected_option"]["text"]["text"]
+
+def get_selected_action_status(body):
+    """ Get selected value from an action event """
+    
+    selected_action_text = get_selected_action_text(body)
+    return get_status(selected_action_text)
+
+def get_status(element_name):
+    """ Get status value """
+
+    return element_name.lower().startswith("[on]")
+
+def __generate_block_id(prefix):
+    """ Generate block id """
+
+    time = datetime.now()
+    return f"{prefix}_{time}"

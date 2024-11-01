@@ -64,6 +64,9 @@ Assuming that you have signed up for a Slack account and are logged in to a Work
 
 (*) Do not install the app via 'Install to Workspace' button
 
+In order to install the app, you will need to run `https://[SWITCHER_SLACK_APP_ENDPOINT]/slack/install` in your browser.<br>
+This will trigger the callback to Switcher Management [SWITCHER_URL] to proceed with the Domain authorization.
+
 ### App: Configure & Deploy
 1. Create a new Virtual Env
 2. Install dependencies: pip install -r requirements.txt

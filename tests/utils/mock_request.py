@@ -87,6 +87,18 @@ def mock_gql_client(fixture: dict):
         return wrapper
     return mock_decorator
 
+def mock_gql_client_error():
+    def mock_decorator(fn):
+        @wraps(fn)
+        def wrapper(*args, **kwargs):
+            with (
+                patch.object(Client, '__init__', return_value = None),
+                patch.object(Client, 'execute', side_effect = Exception)
+            ):
+                fn(*args, **kwargs)
+        return wrapper
+    return mock_decorator
+
 def mock_switcher_client(method: str, fixture: dict, status: int = 200):
     def mock_decorator(fn):
         @wraps(fn)

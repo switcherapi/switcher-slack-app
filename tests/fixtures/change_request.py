@@ -217,6 +217,7 @@ ON_DOMAIN_SELECTED = "tests/samples/on_domain_selected.json"
 ON_ENVIRONMENT_SELECTED = "tests/samples/on_environment_selected.json"
 ON_GROUP_SELECTED = "tests/samples/on_group_selected.json"
 ON_SWITCHER_SELECTED = "tests/samples/on_switcher_selected.json"
+ON_SWITCHER_SELECTED_NONE = "tests/samples/on_switcher_selected_none.json"
 ON_CHANGE_REQUEST_REVIEW = "tests/samples/on_change_request_review.json"
 ON_SUBMIT = "tests/samples/on_submit.json"
 ON_REQUEST_APPROVED = "tests/samples/on_request_approved.json"
@@ -287,12 +288,12 @@ SWITCHER_STATE_SELECTION = {
    ),
    **build_static_select_state_value(
       action_id = "selection_group",
-      text = RELEASE_1,
+      text = f"[on] {RELEASE_1}",
       value = RELEASE_1
    ),
    **build_static_select_state_value(
       action_id = "selection_switcher",
-      text = MY_FEATURE,
+      text = f"[off] {MY_FEATURE}",
       value = MY_FEATURE
    ),
    **build_static_select_state_value(
