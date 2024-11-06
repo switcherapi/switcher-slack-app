@@ -1,7 +1,7 @@
 import os
 import pytest
 
-from src.app import flask_app
+from src.app import slack_app
 
 from unittest.mock import patch
 
@@ -20,8 +20,8 @@ callback_url = os.environ.get("SWITCHER_URL")
 
 @pytest.fixture
 def client():
-    flask_app.config['TESTING'] = True
-    with flask_app.test_client() as client:
+    slack_app.config['TESTING'] = True
+    with slack_app.test_client() as client:
         yield client
 
 @mock_event_handler

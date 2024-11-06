@@ -14,9 +14,9 @@ from slack_sdk.oauth.installation_store.async_installation_store import (
 )
 
 class SwitcherAppInstallationStore(InstallationStore, AsyncInstallationStore):
-    def __init__(self, *, logger: Logger = logging.getLogger(__name__)):
+    def __init__(self, api_url: str, logger: Logger = logging.getLogger(__name__)):
         self._logger = logger
-        self._store_service = SwitcherInstallationStoreService()
+        self._store_service = SwitcherInstallationStoreService(api_url)
 
     @property
     def logger(self) -> Logger:

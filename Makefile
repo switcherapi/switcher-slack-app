@@ -1,7 +1,7 @@
 .PHONY: build run test cover
 
 install:
-	pip install -r tests/requirements.txt
+	pip install -r requirements.txt
 
 install-test:
 	pip install -r tests/requirements.txt

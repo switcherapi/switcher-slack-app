@@ -8,11 +8,8 @@ from errors import SwitcherSlackInstallationError
 class SwitcherInstallationStoreService(SwitcherClient):
     """ Service responsible to handle the app installation and authentication """
 
-    def __init__(self, *, api_url: Optional[str] = None):
-        SwitcherClient.__init__(
-            self, 
-            api_url or os.environ.get("SWITCHER_API_URL")
-        )
+    def __init__(self, api_url: str):
+        SwitcherClient.__init__(self, api_url)
 
     def save_installation(
         self,
