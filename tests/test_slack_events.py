@@ -2,7 +2,7 @@ import os
 import json
 import pytest
 
-from src.app import flask_app
+from src.app import slack_app
 from src.services.switcher_service import SwitcherService
 from src.payloads.home import MODAL_REQUEST
 
@@ -36,8 +36,8 @@ from tests.fixtures.change_request import (
 
 @pytest.fixture
 def client():
-    flask_app.config['TESTING'] = True
-    with flask_app.test_client() as client:
+    slack_app.config['TESTING'] = True
+    with slack_app.test_client() as client:
         yield client
 
 @mock_event_handler
