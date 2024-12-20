@@ -1,4 +1,4 @@
-slack_bolt==1.21.3
+slack_bolt==1.22.0
 python_dotenv==1.0.1
 gunicorn==23.0.0
 flask==3.1.0
