@@ -1,10 +1,10 @@
 slack_bolt==1.22.0
-python_dotenv==1.0.1
+python_dotenv==1.1.0
 gunicorn==23.0.0
 flask==3.1.0
 requests==2.32.3
 pyjwt==2.10.1
-gql==3.5.1
+gql==3.5.2
 requests-toolbelt==1.0.0
 pytest==8.3.5
 pytest-cov==6.0.0
