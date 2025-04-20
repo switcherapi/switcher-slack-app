@@ -1,4 +1,4 @@
-FROM python:3.11-alpine
+FROM python:3.13-alpine
 
 ENV APP_HOME=/home/app
 RUN addgroup -S app \

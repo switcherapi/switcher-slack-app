@@ -1,0 +1,21 @@
+{
+    "name": "Switcher Slack App Dev Container",
+    "dockerComposeFile": [
+        "docker-compose.yml"
+    ],
+    "service": "switcher-slack-app",
+    "workspaceFolder": "/workspace",
+	"customizations":{
+		"vscode": {
+			"extensions": [
+				"ms-python.debugpy",
+				"ms-python.python",
+				"ms-python.vscode-pylance"
+			],
+			"settings": {
+				"terminal.integrated.shell.linux": "/bin/bash"
+			}
+		}
+	},
+	"postCreateCommand": "python3 -m venv /workspace/.venv"
+}
