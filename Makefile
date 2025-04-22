@@ -1,4 +1,4 @@
-.PHONY: build run test cover
+.PHONY: install install-test run test cover
 
 install:
 	pip install -r requirements.txt
@@ -10,7 +10,7 @@ run:
 	python src/app.py
 
 test:
-	pytest --cov=src
+	pytest -v --cov=./src --cov-report xml
 
 cover:
 	coverage html
