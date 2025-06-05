@@ -30,7 +30,7 @@ jobs:
           pipenv install --dev
       
       - name: Test
-        run: pytest -v --cov=./ --cov-report xml
+        run: pipenv run pytest -v --cov=./ --cov-report xml
 
       - name: Fix code coverage path
         working-directory: ./

@@ -31,7 +31,7 @@ jobs:
           pipenv install --dev
       
       - name: Test
-        run: pytest
+        run: pipenv run pytest
   
   docker:
     name: Publish Docker Image
