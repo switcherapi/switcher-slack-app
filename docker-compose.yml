@@ -11,15 +11,15 @@ version: '3.8'
 
 services:
   switcherslackapp:
-    image: trackerforce/switcher-slack-app:latest
+    image: trackerforce/switcher-slack-app:dev
     container_name: switcherslackapp
-    command: gunicorn --bind 0.0.0.0:5000 --chdir /home/app app:flask_app
+    command: gunicorn --bind 0.0.0.0:5000 --chdir /home/app app:slack_app
     # TLS Enabled
     # command: [
     #   "gunicorn", 
     #   "--certfile=/etc/certs/[replace].crt", "--keyfile=/etc/certs/[replace].key", 
     #   "--bind", "0.0.0.0:5000", 
-    #   "--chdir", "/home/app", "app:flask_app"]
+    #   "--chdir", "/home/app", "app:slack_app"]
     ports:
       - 5000:5000
     environment:
