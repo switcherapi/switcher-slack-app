@@ -4,12 +4,14 @@ ENV APP_HOME=/home/app
 RUN addgroup -S app \
     && adduser -S app -G app
 
-COPY requirements.txt $APP_HOME
+COPY Pipfile Pipfile.lock $APP_HOME
 
 WORKDIR $APP_HOME
 
 RUN pip install --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
+    pip install pipenv && \
+    pipenv install --deploy --system --ignore-pipfile && \
+    pip uninstall -y pipenv
 
 COPY /src .
 

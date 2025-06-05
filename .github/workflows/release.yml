@@ -22,11 +22,11 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt
-          pip install -r tests/requirements.txt
+          pip install pipenv
+          pipenv install --dev
       
       - name: Test
-        run: pytest
+        run: pipenv run pytest
   
   docker:
     name: Publish Docker Image
