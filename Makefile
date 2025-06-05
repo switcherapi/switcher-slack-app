@@ -1,10 +1,7 @@
-.PHONY: install install-test run test cover
+.PHONY: install run test cover
 
 install:
-	pip install -r requirements.txt
-
-install-test:
-	pip install -r tests/requirements.txt
+	pipenv install --dev
 
 run:
 	python src/app.py
