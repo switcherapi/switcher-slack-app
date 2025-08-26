@@ -94,6 +94,6 @@ class SwitcherClient:
                 },
                 use_json = True,
                 retries = 3,
-                verify = self.__cert_path is not None
+                verify = self.__cert_path or ""
             )
         )
