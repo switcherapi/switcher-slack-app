@@ -488,7 +488,7 @@ def test_submit_request(client):
         ),
         client = client,
         logger = logging.getLogger()
-    )
+    ) or {}
 
     with open(ON_SUBMIT) as f:
         expected_result = json.load(f)

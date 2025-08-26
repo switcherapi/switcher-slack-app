@@ -35,7 +35,7 @@ def on_domain_selected(ack, body, client, logger):
         domain_id = get_selected_action(body)
         domain_name = get_selected_action_text(body)
         
-        envs = SwitcherService().get_environments(team_id, domain_id)
+        envs = SwitcherService().get_environments(team_id, domain_id or "") or []
 
         # Clear previous selection
         populate_selection(body["view"], "Group", NEW_SELECTION)
@@ -82,7 +82,7 @@ def on_environment_selected(ack, body, client, logger):
         team_id = body["team"]["id"]
         domain_id = read_request_metadata(body["view"])["domain_id"]
 
-        groups = SwitcherService().get_groups(team_id, domain_id, env_selected)
+        groups = SwitcherService().get_groups(team_id, domain_id, env_selected or "") or []
 
         # Clear previous selection
         populate_selection(body["view"], "Group", NEW_SELECTION)
@@ -120,15 +120,15 @@ def on_group_selected(ack, body, client, logger):
 
     try:
         # Collect args
-        env_selected = get_state_value(body["view"], "selection_environment")
+        env_selected = get_state_value(body["view"], "selection_environment") or ""
         group_selected = get_selected_action(body)
         group_status = get_selected_action_status(body)
         team_id = body["team"]["id"]
         domain_id = read_request_metadata(body["view"])["domain_id"]
 
         switchers = SwitcherService().get_switchers(
-            team_id, domain_id, env_selected, group_selected
-        )
+            team_id, domain_id, env_selected, group_selected or ""
+        ) or []
 
         # Clear previous selection
         populate_selection(body["view"], "Switcher", NEW_SELECTION)
@@ -191,11 +191,11 @@ def on_change_request_review(ack, body, client, view, logger):
     """ Populate context with selections, validate via Switcher API then publish view for review """
 
     ack()
+    user = body["user"]
+    team_id = body["team"]["id"]
 
     try:
         # Collect args
-        user = body["user"]
-        team_id = body["team"]["id"]
         environment = get_state_value(view, "selection_environment")
 
         # Create context and validate
@@ -249,7 +249,9 @@ def on_submit(ack, body, client, logger):
     """ Create ticket, return to home view then publish approval message """
 
     ack()
-
+    user = body["user"]
+    team_id = body["team"]["id"]
+    
     try:
         # Collect args
         observation = get_state_value(body["view"], "selection_observation")
@@ -259,8 +261,6 @@ def on_submit(ack, body, client, logger):
         }
 
         domain_id = context["domain_id"]
-        user = body["user"]
-        team_id = body["team"]["id"]
 
         # Return to initial state
         client.views_publish(
@@ -306,13 +306,11 @@ def on_request_approved(ack, body, client, logger):
     """ Approve ticket through Switcher API and update chat message """
     
     ack()
+    message_ts = body["message"]["ts"]
+    team_id = body["team"]["id"]
+    channel_id = body["channel"]["id"]
 
     try:
-        # Collect args
-        message_ts = body["message"]["ts"]
-        team_id = body["team"]["id"]
-        channel_id = body["channel"]["id"]
-
         ticket_payload = json.loads(body["actions"][0]["value"])
         domain_id = ticket_payload["domain_id"]
         ticket_id = ticket_payload["id"]
@@ -343,13 +341,11 @@ def on_request_denied(ack, body, client, logger):
     """ Deny ticket through Switcher API and update chat message """
     
     ack()
+    message_ts = body["message"]["ts"]
+    team_id = body["team"]["id"]
+    channel_id = body["channel"]["id"]
 
     try:
-        # Collect args
-        message_ts = body["message"]["ts"]
-        team_id = body["team"]["id"]
-        channel_id = body["channel"]["id"]
-
         ticket_payload = json.loads(body["actions"][0]["value"])
         domain_id = ticket_payload["domain_id"]
         ticket_id = ticket_payload["id"]

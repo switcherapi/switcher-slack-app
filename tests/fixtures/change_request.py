@@ -82,7 +82,7 @@ def build_request_view(
    private_metadata: str = "",
    actions_fixture: dict = {},
    state_fixture: dict = {},
-   blocks_fixture: dict = []
+   blocks_fixture: dict | list = []
 ):
    """ Create a change request input based on the action fixture """
 

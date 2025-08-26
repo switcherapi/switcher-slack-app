@@ -48,13 +48,13 @@ class SwitcherClient:
                     resource = path
                 ),
                 params = params,
-                verify = self.__cert
+                verify = self.__cert_path
             )
         )
 
-    def do_graphql(self, query: str) -> dict:
+    def do_graphql(self, query_request: str) -> dict:
         client = self.__gql_client__("slack-graphql")
-        query = gql(query)
+        query = gql(query_request)
         return client.execute(query)
 
     def __generate_token__(self, resource: str) -> str:
@@ -94,6 +94,6 @@ class SwitcherClient:
                 },
                 use_json = True,
                 retries = 3,
-                verify = self.__cert_path
+                verify = self.__cert_path is not None
             )
         )

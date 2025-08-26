@@ -19,7 +19,7 @@ from tests.fixtures.change_request import get_slack_events_response
 mock_response = mock.Mock(**{})
 mock_response_path = ""
 
-def set_mock_response(path: str, fixture: dict, status_code: int = 200):
+def set_mock_response(path: str, fixture: dict | list, status_code: int = 200):
     global mock_response
     global mock_response_path
 
@@ -99,7 +99,7 @@ def mock_gql_client_error():
         return wrapper
     return mock_decorator
 
-def mock_switcher_client(method: str, fixture: dict, status: int = 200):
+def mock_switcher_client(method: str, fixture: dict | list, status: int = 200):
     def mock_decorator(fn):
         @wraps(fn)
         def wrapper(*args, **kwargs):

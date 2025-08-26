@@ -28,9 +28,9 @@ class SwitcherAppInstallationStore(InstallationStore, AsyncInstallationStore):
         return self.save(installation)
 
     def save(self, installation: Installation):
-        e_id = installation.enterprise_id
-        t_id = installation.team_id
-        u_id = installation.user_id
+        e_id = installation.enterprise_id or ""
+        t_id = installation.team_id or ""
+        u_id = installation.user_id or ""
 
         try:
             self._store_service.save_installation(
