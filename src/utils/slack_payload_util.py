@@ -92,7 +92,7 @@ def get_state_name(view, option):
         if element_name is not None:
             return element_name.get("selected_option", None).get("text", None).get("text", None)
 
-def __get_state(key, view, option):
+def __get_state(key, view, option) -> str | None:
     """ Get selected state element """
 
     element_value = ""

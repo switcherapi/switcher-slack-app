@@ -13,7 +13,7 @@ from utils.constants import SWITCHER_URL, SWITCHER_API_URL, VERSION
 from store.switcher_store import SwitcherAppInstallationStore
         
 class SlackAppHandler:
-    def build_app(self, api_url: str = os.environ.get("SWITCHER_API_URL")):
+    def build_app(self, api_url: str = os.environ.get("SWITCHER_API_URL") or "") -> App:
         """ Build the Slack App Settings """
         
         return App(

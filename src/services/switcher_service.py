@@ -11,10 +11,10 @@ class SwitcherService(SwitcherClient):
     def __init__(self, *, api_url: Optional[str] = None):
         SwitcherClient.__init__(
             self, 
-            api_url or os.environ.get("SWITCHER_API_URL")
+            api_url or os.environ.get("SWITCHER_API_URL") or ""
         )
 
-    def get_domains(self, team_id: str) -> [dict]:
+    def get_domains(self, team_id: str) -> list[dict]:
         response = self.do_get(
             path = "/slack/v1/domains",
             params = {
@@ -27,7 +27,7 @@ class SwitcherService(SwitcherClient):
         
         return json.loads(response.data.decode('UTF-8'))
 
-    def get_environments(self, team_id: str, domain_id: str) -> [str]:
+    def get_environments(self, team_id: str, domain_id: str) -> list[str] | None:
         response: dict = self.do_graphql(f'''
             query {{
                 configuration(
@@ -44,9 +44,8 @@ class SwitcherService(SwitcherClient):
             environments = configuration.get("environments", None)
             if environments is not None:
                 return environments
-        return []
 
-    def get_groups(self, team_id: str, domain_id: str, environment: str) -> [dict]:
+    def get_groups(self, team_id: str, domain_id: str, environment: str) -> list[dict] | None:
         response: dict = self.do_graphql(f'''
             query {{
                 configuration(
@@ -68,7 +67,7 @@ class SwitcherService(SwitcherClient):
             if groups is not None:
                 return groups
 
-    def get_switchers(self, team_id: str, domain_id: str, environment: str, group: str) -> [dict]:
+    def get_switchers(self, team_id: str, domain_id: str, environment: str, group: str) -> list[dict] | None:
         response: dict = self.do_graphql(f'''
             query {{
                 configuration(

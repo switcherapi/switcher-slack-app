@@ -4,7 +4,7 @@ class SwitcherSlackAppError(Exception):
 class SwitcherContextError(SwitcherSlackAppError):
     """ Error raised when Context has missing attributes """
 
-    def __init__(self, missing: [str]):
+    def __init__(self, missing: list[str]):
         attributes = " - ".join([str(elem) for elem in missing])
         msg = f"Missing [{attributes}]"
         super(SwitcherContextError, self).__init__(msg)
