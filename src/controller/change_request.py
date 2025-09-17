@@ -1,6 +1,5 @@
 import json
 
-from slack_sdk.errors import SlackApiError
 from services.switcher_service import SwitcherService
 from utils.switcher_util import get_environment_keyval, get_keyval, validate_context_request
 from utils.slack_payload_util import (

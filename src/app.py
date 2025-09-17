@@ -1,5 +1,3 @@
-from dotenv import load_dotenv
-
 from events.request_change import RequestChangeEventHandler
 from controller.slack_app import SlackAppHandler
 
