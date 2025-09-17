@@ -1,7 +1,6 @@
 import pytest
 
 from src.services.switcher_service import SwitcherService
-from src.errors import SwitcherValidationError
 
 from tests.utils.mock_request import mock_gql_client, mock_switcher_client
 

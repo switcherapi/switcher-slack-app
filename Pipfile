@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-slack-bolt = "==1.23.0"
+slack-bolt = "==1.25.0"
 python-dotenv = "==1.1.1"
 gunicorn = "==23.0.0"
 flask = "==3.1.2"
@@ -23,8 +23,8 @@ anyio = ">=4.10.0"
 zipp = ">=3.23.0"
 
 [dev-packages]
-pytest = "==8.4.1"
-pytest-cov = "==6.2.1"
+pytest = "==8.4.2"
+pytest-cov = "==7.0.0"
 pytest-dotenv = "==0.5.2"
 
 [requires]

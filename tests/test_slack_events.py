@@ -1,9 +1,7 @@
-import os
 import json
 import pytest
 
 from src.app import slack_app
-from src.services.switcher_service import SwitcherService
 from src.payloads.home import MODAL_REQUEST
 
 from tests.utils.mock_request import (

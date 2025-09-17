@@ -1,5 +1,3 @@
-import os
-
 from flask import Response
 from typing import Optional
 from .switcher_client import SwitcherClient
