@@ -43,7 +43,7 @@ A summary message containing all details about the change will be sent to a spec
 # Running locally
 
 ## Requirements  
-- Python 3.13
+- Python 3.14
 - VirtualEnv - `pip install virtualenv`
 - Pipenv - `pip install pipenv`
 - Ngrok (Slack Apps requires HTTPS endpoint)
