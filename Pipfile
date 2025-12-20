@@ -16,16 +16,16 @@ gql = "==4.0.0"
 requests-toolbelt = "==1.0.0"
 certifi = ">=2025.11.12"
 werkzeug = ">=3.1.4"
-urllib3 = ">=2.6.0"
+urllib3 = ">=2.6.2"
 jinja2 = ">=3.1.6"
 idna = ">=3.11"
 anyio = ">=4.12.0"
 zipp = ">=3.23.0"
 
 [dev-packages]
-pytest = "==9.0.1"
+pytest = "==9.0.2"
 pytest-cov = "==7.0.0"
 pytest-dotenv = "==0.5.2"
 
 [requires]
-python_version = "3.13"
+python_version = "3.14"
