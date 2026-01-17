@@ -39,7 +39,7 @@ jobs:
         uses: sonarsource/sonarqube-scan-action@v7.0.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        if: ${{ secrets.SONAR_TOKEN }}
+        if: env.SONAR_TOKEN != ''
   
   docker:
     name: Publish Docker Image
