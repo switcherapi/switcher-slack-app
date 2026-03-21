@@ -24,7 +24,7 @@ zipp = ">=3.23.0"
 
 [dev-packages]
 pytest = "==9.0.2"
-pytest-cov = "==7.0.0"
+pytest-cov = "==7.1.0"
 pytest-dotenv = "==0.5.2"
 
 [requires]
