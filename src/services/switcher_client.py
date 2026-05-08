@@ -92,7 +92,7 @@ class SwitcherClient:
 
     def __gql_client__(self, resource: str) -> Client:
         return Client(
-            fetch_schema_from_transport = True,
+            fetch_schema_from_transport = False,
             transport = RequestsHTTPTransport(
                 url = f'{self._api_url}/slack-graphql',
                 headers = {
