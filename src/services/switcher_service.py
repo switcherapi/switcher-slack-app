@@ -10,24 +10,26 @@ class SwitcherService(SwitcherClient):
 
     def __init__(self, *, api_url: Optional[str] = None):
         SwitcherClient.__init__(
-            self, 
+            self,
             api_url or os.environ.get("SWITCHER_API_URL") or ""
         )
 
     def get_domains(self, team_id: str) -> list[dict]:
+        """ Fetch all Domains linked to the Team """
         response = self.do_get(
             path = "/slack/v1/domains",
             params = {
                 "team_id": team_id
             }
         )
-        
+
         if response.status_code != 200:
             raise SwitcherValidationError("Error fetching domains")
-        
+
         return json.loads(response.data.decode('UTF-8'))
 
     def get_environments(self, team_id: str, domain_id: str) -> list[str] | None:
+        """ Fetch all Environments linked to the Domain """
         response: dict = self.do_graphql(f'''
             query {{
                 configuration(
@@ -46,12 +48,13 @@ class SwitcherService(SwitcherClient):
                 return environments
 
     def get_groups(self, team_id: str, domain_id: str, environment: str) -> list[dict] | None:
+        """ Fetch all Groups linked to the Environment """
         response: dict = self.do_graphql(f'''
             query {{
                 configuration(
-                    slack_team_id: "{team_id}", 
+                    slack_team_id: "{team_id}",
                     domain: "{domain_id}",
-                    environment: "{environment}") 
+                    environment: "{environment}")
                 {{
                     group {{
                         name
@@ -68,13 +71,14 @@ class SwitcherService(SwitcherClient):
                 return groups
 
     def get_switchers(self, team_id: str, domain_id: str, environment: str, group: str) -> list[dict] | None:
+        """ Fetch all Switchers linked to the Group """
         response: dict = self.do_graphql(f'''
             query {{
                 configuration(
                     slack_team_id: "{team_id}",
                     domain: "{domain_id}",
                     environment: "{environment}",
-                    group: "{group}") 
+                    group: "{group}")
                 {{
                     config {{
                         key
@@ -92,7 +96,7 @@ class SwitcherService(SwitcherClient):
 
     def validate_ticket(self, team_id: str, context: dict) -> str:
         """ Validates if Ticket content is valid """
-        
+
         response = self.do_post(
             path = "/slack/v1/ticket/validate",
             body = {
@@ -110,7 +114,7 @@ class SwitcherService(SwitcherClient):
         if response.status_code != 200:
             data = json.loads(response.data.decode('UTF-8'))
             raise SwitcherValidationError(data.get("error"))
-        
+
         data = json.loads(response.data.decode('UTF-8'))
         return data.get("result")
 
@@ -149,10 +153,10 @@ class SwitcherService(SwitcherClient):
         """ Dispatch change request denied """
         self.__process_request__(team_id, domain_id, ticket_id, False)
 
-    def __process_request__(self, 
-        team_id: str, 
+    def __process_request__(self,
+        team_id: str,
         domain_id: str,
-        ticket_id: str, 
+        ticket_id: str,
         approved: bool
     ) -> str:
         """ Dispatch change request approval action """

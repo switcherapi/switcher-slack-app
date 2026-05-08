@@ -45,3 +45,4 @@ def on_change_request_opened(ack, body, client, logger):
         return change_request
     except Exception as e:
         logger.error(f"Error opening change request form: {e}")
+        return None

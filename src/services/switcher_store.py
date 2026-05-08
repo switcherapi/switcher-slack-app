@@ -12,11 +12,12 @@ class SwitcherInstallationStoreService(SwitcherClient):
     def save_installation(
         self,
         enterprise_id: str,
-        team_id: str, 
-        user_id: str, 
+        team_id: str,
+        user_id: str,
         installation_payload: dict,
         bot_payload: dict
     ) -> Response:
+        """ Save the installation payload received from Slack during the app installation process and link it to the corresponding Domain """
         response = self.do_post(
             path = "/slack/v1/installation",
             body = {
@@ -27,17 +28,18 @@ class SwitcherInstallationStoreService(SwitcherClient):
                 "bot_payload": bot_payload
             }
         )
-        
+
         if response.status_code != 201:
             raise SwitcherSlackInstallationError(response.data)
 
         return response
 
     def find_bot(
-        self, 
-        enterprise_id: Optional[str], 
+        self,
+        enterprise_id: Optional[str],
         team_id: Optional[str]
     ) -> Response:
+        """ Find the bot linked to the Team and Enterprise IDs received from Slack during the app installation process """
         return self.do_get(
             path = "/slack/v1/findbot",
             params = {
@@ -47,10 +49,11 @@ class SwitcherInstallationStoreService(SwitcherClient):
         )
 
     def find_installation(
-        self, 
-        enterprise_id: Optional[str], 
+        self,
+        enterprise_id: Optional[str],
         team_id: Optional[str]
     ) -> Response:
+        """ Find the installation linked to the Team and Enterprise IDs received from Slack during the app installation process """
         return self.do_get(
             path = "/slack/v1/findinstallation",
             params = {
@@ -58,13 +61,14 @@ class SwitcherInstallationStoreService(SwitcherClient):
                 "team_id": team_id
             }
         )
-        
+
     def delete_installation(
-        self, 
-        enterprise_id: Optional[str], 
+        self,
+        enterprise_id: Optional[str],
         team_id: Optional[str],
         user_id: Optional[str] = None
     ) -> Response:
+        """ Delete the installation linked to the Team and Enterprise IDs received from Slack during the app uninstallation process """
         return self.do_delete(
             path = "/slack/v1/installation",
             params = {

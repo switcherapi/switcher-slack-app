@@ -19,6 +19,7 @@ def populate_selection(body, item, values):
                     "value": value["value"]
                 })
             return block
+    return None
 
 def populate_selection_status(view, status):
     """ Includes Status selection block """
@@ -60,6 +61,7 @@ def insert_summary_value(block, index, value):
 		})
 
 def add_field(fields, label, value):
+    """ Add field to summary block """
     fields.append({
             "type": "mrkdwn",
             "text": f"*{label}:*\n{value}"
@@ -86,38 +88,49 @@ def get_state_value(view, option):
 def get_state_name(view, option):
     """ Get selected values stored at the state element """
 
+    value = None
     element_name = ""
     for element in view["state"]["values"]:
         element_name = view["state"]["values"][element].get(option, None)
         if element_name is not None:
-            return element_name.get("selected_option", None).get("text", None).get("text", None)
+            value = element_name.get("selected_option", None).get("text", None).get("text", None)
+            break
+    return value
 
 def __get_state(key, view, option) -> str | None:
     """ Get selected state element """
 
+    value = None
     element_value = ""
     for element in view["state"]["values"]:
         element_value = view["state"]["values"][element].get(option, None)
         if element_value is not None:
             if element_value.get("selected_option", None) is not None and element_value["selected_option"].get(key, "-") != "-":
-                return element_value["selected_option"][key]
-            return element_value.get(key, None)
+                value = element_value["selected_option"][key]
+                break
+            value = element_value.get(key, None)
+            break
+    return value
 
 def get_selected_action(body):
     """ Get selected value from an action event """
-    
+
+    value = None
     if body["actions"] is not None and len(body["actions"]) > 0:
-        return body["actions"][0]["selected_option"]["value"]
+        value = body["actions"][0]["selected_option"]["value"]
+    return value
 
 def get_selected_action_text(body):
     """ Get selected value from an action event """
-    
+
+    value = None
     if body["actions"] is not None and len(body["actions"]) > 0:
-        return body["actions"][0]["selected_option"]["text"]["text"]
+        value = body["actions"][0]["selected_option"]["text"]["text"]
+    return value
 
 def get_selected_action_status(body):
     """ Get selected value from an action event """
-    
+
     selected_action_text = get_selected_action_text(body)
     return get_status(selected_action_text)
 

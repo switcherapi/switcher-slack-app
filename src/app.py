@@ -10,7 +10,7 @@ app = slack_handler.build_app()
 # Register App Events
 request_change_handler.register_events(app)
 
-# Register App APIs 
+# Register App APIs
 slack_app = slack_handler.register_handler(app)
 
 if __name__ == "__main__":

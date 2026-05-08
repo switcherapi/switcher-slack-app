@@ -15,7 +15,7 @@ class RequestChangeEventHandler:
     def register_events(self, app):
         """ Register events for the Request Change feature """
 
-        # Show the app landing page 
+        # Show the app landing page
         @app.event("app_home_opened")
         def app_home_opened(client, event, logger):
             on_home_opened(client, event, logger)
@@ -34,20 +34,20 @@ class RequestChangeEventHandler:
         @app.action("selection_environment")
         def selection_environment(ack, body, client, logger):
             on_environment_selected(ack, body, client, logger)
-            
+
         # Update Change Request modal with available group switchers
         @app.action("selection_group")
-        def selection_group(ack, body, client, view, logger):
+        def selection_group(ack, body, client, logger):
             on_group_selected(ack, body, client, logger)
 
         # Update Change Request modal with status options
         @app.action("selection_switcher")
-        def selection_switcher(ack, body, client, logger):
+        def selection_switcher(ack, body, client):
             on_switcher_selected(ack, body, client)
 
         # Confirm status selection
         @app.action("selection_status")
-        def selection_status(ack, body, client, logger):
+        def selection_status(ack):
             ack()
 
         # Submit Change Request for review
@@ -57,12 +57,12 @@ class RequestChangeEventHandler:
 
         # Submit Change Request for verification and approval
         @app.action("change_request_submit")
-        def handle_submission(ack, body, client, view, logger):
+        def handle_submission(ack, body, client, logger):
             on_submit(ack, body, client, logger)
 
         # Abort Change Request
         @app.action("change_request_abort")
-        def handle_change_request_abort(ack, body, client, view, logger):
+        def handle_change_request_abort(ack, body, client):
             on_change_request_abort(ack, body, client)
 
         # Request approved
