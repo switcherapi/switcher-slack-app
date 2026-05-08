@@ -7,15 +7,15 @@ from slack_bolt.response import BoltResponse
 from slack_bolt.adapter.flask import SlackRequestHandler
 from slack_sdk.oauth.state_store import FileOAuthStateStore
 
-from flask import Flask, request, session, make_response
+from flask import Flask, request
 
 from utils.constants import SWITCHER_URL, SWITCHER_API_URL, VERSION
 from store.switcher_store import SwitcherAppInstallationStore
-        
+
 class SlackAppHandler:
     def build_app(self, api_url: str = os.environ.get("SWITCHER_API_URL") or "") -> App:
         """ Build the Slack App Settings """
-        
+
         return App(
             signing_secret = os.environ.get("SLACK_SIGNING_SECRET"),
             installation_store = SwitcherAppInstallationStore(api_url),
@@ -66,12 +66,10 @@ class SlackAppHandler:
         return flask_app
 
     def success(self, args: SuccessArgs) -> BoltResponse:
+        """ Handles the redirection from Slack's OAuth flow when the installation is successful """
         assert args.request is not None
-        t_id = args.installation.team_id
-        e_id = args.installation.enterprise_id
-
-        if e_id is None: e_id = ""
-        if t_id is None: t_id = ""
+        t_id = args.installation.team_id if args.installation.team_id is not None else ""
+        e_id = args.installation.enterprise_id if args.installation.enterprise_id is not None else ""
 
         return BoltResponse(
             status = 308,
@@ -81,6 +79,7 @@ class SlackAppHandler:
         )
 
     def failure(self, args: FailureArgs) -> BoltResponse:
+        """ Handles the redirection from Slack's OAuth flow when the installation fails """
         assert args.request is not None
         assert args.reason is not None
 

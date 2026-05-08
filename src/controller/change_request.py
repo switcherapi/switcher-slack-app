@@ -6,7 +6,7 @@ from utils.slack_payload_util import (
     populate_selection,
     populate_metadata,
     populate_selection_status,
-    prepare_body, 
+    prepare_body,
     get_status,
     get_state_value,
     get_state_name,
@@ -33,7 +33,7 @@ def on_domain_selected(ack, body, client, logger):
         team_id = body["team"]["id"]
         domain_id = get_selected_action(body)
         domain_name = get_selected_action_text(body)
-        
+
         envs = SwitcherService().get_environments(team_id, domain_id or "") or []
 
         # Clear previous selection
@@ -48,7 +48,7 @@ def on_domain_selected(ack, body, client, logger):
             values = get_environment_keyval(envs)
         )
 
-        populate_metadata(body["view"], { 
+        populate_metadata(body["view"], {
             "domain_id": domain_id,
             "domain_name": domain_name
         })
@@ -94,7 +94,7 @@ def on_environment_selected(ack, body, client, logger):
             item = "Group",
             values = get_keyval("name", groups)
         )
-        
+
         # Push changes to view
         view_hash = body["view"]["hash"]
         view_id = body["view"]["id"]
@@ -225,18 +225,18 @@ def on_change_request_review(ack, body, client, view, logger):
             user_message = ":large_green_square: *Request does not require approval*: Updated with success!"
         elif result == 'FROZEN_ENVIRONMENT':
             user_message = ":large_red_square: *Request cannot be made*: Environment is frozen."
-        
+
         if user_message is not None:
             client.chat_postMessage(
                 channel = user["id"],
                 text = "Change Request Review",
                 blocks = create_block_message(user_message)
             )
-        
+
         return view, user_message
     except Exception as e:
         client.chat_postMessage(
-            channel = user["id"], 
+            channel = user["id"],
             text = f"There was an error with your request: {e}"
         )
 
@@ -250,7 +250,7 @@ def on_submit(ack, body, client, logger):
     ack()
     user = body["user"]
     team_id = body["team"]["id"]
-    
+
     try:
         # Collect args
         observation = get_state_value(body["view"], "selection_observation")
@@ -286,10 +286,11 @@ def on_submit(ack, body, client, logger):
     except Exception as e:
         logger.error(f"Error on submitting: {e}")
         client.chat_postMessage(
-            channel = user["id"], 
+            channel = user["id"],
             text = f"There was an error with your request: {e}"
         )
-    
+        return e
+
 def on_change_request_abort(ack, body, client):
     """ Return to home view """
 
@@ -303,7 +304,7 @@ def on_change_request_abort(ack, body, client):
 
 def on_request_approved(ack, body, client, logger):
     """ Approve ticket through Switcher API and update chat message """
-    
+
     ack()
     message_ts = body["message"]["ts"]
     team_id = body["team"]["id"]
@@ -335,10 +336,11 @@ def on_request_approved(ack, body, client, logger):
             ts = message_ts,
             blocks = create_block_message(f":large_yellow_square: *{e.args[0]}*")
         )
+        return e
 
 def on_request_denied(ack, body, client, logger):
     """ Deny ticket through Switcher API and update chat message """
-    
+
     ack()
     message_ts = body["message"]["ts"]
     team_id = body["team"]["id"]
@@ -360,7 +362,7 @@ def on_request_denied(ack, body, client, logger):
             ts = message_ts,
             blocks = message_blocks
         )
-        
+
         return message_blocks
     except Exception as e:
         logger.error(f"Error on denying: {e}")
@@ -370,3 +372,4 @@ def on_request_denied(ack, body, client, logger):
             ts = message_ts,
             blocks = create_block_message(f":large_yellow_square: *{e.args[0]}*")
         )
+        return e

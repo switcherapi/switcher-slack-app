@@ -20,39 +20,46 @@ class SwitcherClient:
         self._api_url = api_url
 
     def do_post(self, path: str, body: Optional[dict]) -> Response:
+        """ do_post sends a POST request to the Switcher API with the given path and body """
         return self.__response_handler__(requests.post(
                 **self.__request_builder__(
                     url = self._api_url + path,
                     resource = path
                 ),
                 json = body,
+                timeout = 5,
                 verify = self.__cert_path
             )
         )
 
     def do_get(self, path: str, params: Optional[dict]) -> Response:
+        """ do_get sends a GET request to the Switcher API with the given path and query parameters """
         return self.__response_handler__(requests.get(
                 **self.__request_builder__(
                     url = self._api_url + path,
                     resource = path
                 ),
                 params = params,
+                timeout = 5,
                 verify = self.__cert_path
             )
         )
 
     def do_delete(self, path: str, params: Optional[dict]) -> Response:
+        """ do_delete sends a DELETE request to the Switcher API with the given path and query parameters """
         return self.__response_handler__(requests.delete(
                 **self.__request_builder__(
                     url = self._api_url + path,
                     resource = path
                 ),
                 params = params,
+                timeout = 5,
                 verify = self.__cert_path
             )
         )
 
     def do_graphql(self, query_request: str) -> dict:
+        """ do_graphql sends a GraphQL request to the Switcher API with the given query string """
         client = self.__gql_client__("slack-graphql")
         query = gql(query_request)
         return client.execute(query)
@@ -71,7 +78,7 @@ class SwitcherClient:
     def __request_builder__(self, url: str, resource: str) -> dict:
         return {
             "url": url,
-            "headers": { 
+            "headers": {
                 "Authorization": f"Bearer {self.__generate_token__(resource)}"
             }
         }

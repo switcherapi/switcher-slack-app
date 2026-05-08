@@ -44,7 +44,7 @@ class SwitcherAppInstallationStore(InstallationStore, AsyncInstallationStore):
             message = \
                 "Failed to save installation data for enterprise:" \
                 f"{e_id}, team: {t_id}: {e}"
-                
+
             self.logger.warning(message)
 
     async def async_find_bot(
@@ -73,14 +73,14 @@ class SwitcherAppInstallationStore(InstallationStore, AsyncInstallationStore):
                 enterprise_id = enterprise_id,
                 team_id = team_id
             )
-            
+
             bot_payload = json.loads(response.data)
             return Bot(**bot_payload)
         except Exception as e:
             message = \
                 "Failed to find bot installation data for enterprise:" \
                 f"{enterprise_id}, team: {team_id}: {e}"
-            
+
             self.logger.warning(message)
             return None
 
@@ -120,7 +120,7 @@ class SwitcherAppInstallationStore(InstallationStore, AsyncInstallationStore):
             message = \
                 "Failed to find an installation data for enterprise:" \
                 f"{enterprise_id}, team: {team_id}: {e}"
-            
+
             self.logger.warning(message)
             return None
 
@@ -130,9 +130,9 @@ class SwitcherAppInstallationStore(InstallationStore, AsyncInstallationStore):
         return self.delete_bot(enterprise_id = enterprise_id, team_id = team_id)
 
     def delete_bot(
-        self, 
-        *, 
-        enterprise_id: Optional[str], 
+        self,
+        *,
+        enterprise_id: Optional[str],
         team_id: Optional[str]
     ) -> None:
         enterprise_id, team_id = self._input_sanitize(enterprise_id, team_id)
@@ -163,13 +163,13 @@ class SwitcherAppInstallationStore(InstallationStore, AsyncInstallationStore):
             self._store_service.delete_installation(
                 enterprise_id = enterprise_id,
                 team_id = team_id,
-                user_id = user_id 
+                user_id = user_id
             )
         except Exception as e:
             message = \
                 "Failed to delete installation data for enterprise:" \
                 f"{enterprise_id}, team: {team_id}: {e}"
-            
+
             self.logger.warning(message)
 
     @staticmethod

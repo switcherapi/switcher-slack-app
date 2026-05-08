@@ -30,14 +30,14 @@ def get_keyval_of_keys(keys: list[str], values: list[dict]) -> list[dict]:
 
 def validate_context_request(context: dict):
     """ Validates if context input is consistent """
-    
+
     missing = []
     if context.get("domain_name", None) is None:
         missing.append("Domain")
 
     if context.get("domain_id", None) is None:
         missing.append("Domain ID")
-        
+
     if context.get("environment", None) is None:
         missing.append("Environment")
 
@@ -46,6 +46,6 @@ def validate_context_request(context: dict):
 
     if context.get("status", None) is None:
         missing.append("Status")
-        
-    if len(missing):
+
+    if missing:
         raise SwitcherContextError(missing)

@@ -8,5 +8,22 @@
     ],
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
-    "python.envFile": "${workspaceFolder}/.test.env"
+    "pylint.ignorePatterns": ["**/tests/**"],
+    "pylint.args": [
+        // broad-exception-caught
+        "--disable=W0718",
+        // missing-module-docstring
+        "--disable=C0114",
+        // missing-class-docstring
+        "--disable=C0115",
+        // too-few-public-methods
+        "--disable=R0903",
+        // line-too-long
+        "--disable=C0301",
+        // abstract-method
+        "--disable=W0223",
+    ],
+    "python.envFile": "${workspaceFolder}/.test.env",
+    "python-envs.defaultEnvManager": "ms-python.python:pipenv",
+    "files.trimTrailingWhitespace": true
 }
