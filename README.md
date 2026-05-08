@@ -41,7 +41,7 @@ A summary message containing all details about the change will be sent to a spec
 
 # Running locally
 
-## Requirements  
+## Requirements
 - Python 3.14
 - VirtualEnv - `pip install virtualenv`
 - Pipenv - `pip install pipenv`
@@ -72,13 +72,14 @@ This will trigger the callback to Switcher Management [SWITCHER_URL] to proceed 
 2. Install dependencies: `make install`
 3. Copy the values Client ID, Secret and Signing Secret.
 4. Create a .env file based on .env.template and paste the copied values.
+   - `LOG_LEVEL` controls application and root logger verbosity. Use values such as `DEBUG`, `INFO`, `WARNING`, `ERROR`, or `CRITICAL`.
 5. Make sure that the SWITCHER_JWT_SECRET matches the Switcher API env value for SWITCHER_SLACK_JWT_SECRET
 6. Make sure that Switcher Management has SWITCHERSLACKAPP_URL set to the app URL
 7. Start the API by running: `make run`
 
 ## Contributing
 
-You are more than welcome to contribute to the project. 
+You are more than welcome to contribute to the project.
 Here are some important guidelines:
 
 1. Suggestions: Open a discussion topic or issue and describe clearly what you have in mind.

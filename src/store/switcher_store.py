@@ -13,15 +13,17 @@ from slack_sdk.oauth.installation_store.async_installation_store import (
     AsyncInstallationStore,
 )
 
+LOGGER = logging.getLogger(__name__)
+
 class SwitcherAppInstallationStore(InstallationStore, AsyncInstallationStore):
-    def __init__(self, api_url: str, logger: Logger = logging.getLogger(__name__)):
-        self._logger = logger
+    def __init__(self, api_url: str, logger: Optional[Logger] = None):
+        self._logger = logger or LOGGER
         self._store_service = SwitcherInstallationStoreService(api_url)
 
     @property
     def logger(self) -> Logger:
         if self._logger is None:
-            self._logger = logging.getLogger(__name__)
+            self._logger = LOGGER
         return self._logger
 
     async def async_save(self, installation: Installation):
@@ -41,11 +43,10 @@ class SwitcherAppInstallationStore(InstallationStore, AsyncInstallationStore):
                 bot_payload = installation.to_bot().__dict__
             )
         except Exception as e:
-            message = \
-                "Failed to save installation data for enterprise:" \
-                f"{e_id}, team: {t_id}: {e}"
-
-            self.logger.warning(message)
+            self.logger.error(
+                f"Failed to save installation data for enterprise: {e_id}, team: {t_id}: {e}",
+                exc_info = True,
+            )
 
     async def async_find_bot(
         self,
@@ -77,11 +78,10 @@ class SwitcherAppInstallationStore(InstallationStore, AsyncInstallationStore):
             bot_payload = json.loads(response.data)
             return Bot(**bot_payload)
         except Exception as e:
-            message = \
-                "Failed to find bot installation data for enterprise:" \
-                f"{enterprise_id}, team: {team_id}: {e}"
-
-            self.logger.warning(message)
+            self.logger.warning(
+                f"Failed to find bot installation data for enterprise: {enterprise_id}, team: {team_id}: {e}",
+                exc_info = True,
+            )
             return None
 
     async def async_find_installation(
@@ -117,11 +117,10 @@ class SwitcherAppInstallationStore(InstallationStore, AsyncInstallationStore):
             installation_payload = json.loads(response.data)
             return Installation(**installation_payload)
         except Exception as e:
-            message = \
-                "Failed to find an installation data for enterprise:" \
-                f"{enterprise_id}, team: {team_id}: {e}"
-
-            self.logger.warning(message)
+            self.logger.warning(
+                f"Failed to find an installation data for enterprise: {enterprise_id}, team: {team_id}: {e}",
+                exc_info = True,
+            )
             return None
 
     async def async_delete_bot(
@@ -166,11 +165,10 @@ class SwitcherAppInstallationStore(InstallationStore, AsyncInstallationStore):
                 user_id = user_id
             )
         except Exception as e:
-            message = \
-                "Failed to delete installation data for enterprise:" \
-                f"{enterprise_id}, team: {team_id}: {e}"
-
-            self.logger.warning(message)
+            self.logger.warning(
+                f"Failed to delete installation data for enterprise: {enterprise_id}, team: {team_id}: {e}",
+                exc_info = True,
+            )
 
     @staticmethod
     def _input_sanitize(

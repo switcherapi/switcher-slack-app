@@ -27,7 +27,7 @@ from tests.fixtures.change_request import (
     build_static_select_action_value,
     build_buttom_action_value,
 
-    # Constants 
+    # Constants
     RELEASE_1,
     PRODUCTION,
     DEFAULT_ENV,
@@ -79,7 +79,7 @@ def test_open_change_request_modal(client):
         client = client,
         logger = logging.getLogger()
     )
-    
+
     with open(ON_CHANGE_REQUEST_OPENED) as f:
         expected_result = json.load(f)
 
@@ -101,12 +101,12 @@ def test_open_change_request_modal_with_error(client):
         client = client,
         logger = logging.getLogger()
     )
-    
+
     assert result == None
-    
-@mock_gql_client({ 
-    'configuration': { 
-        'environments': ['default'] 
+
+@mock_gql_client({
+    'configuration': {
+        'environments': ['default']
     }
 })
 def test_select_domain(client):
@@ -131,7 +131,7 @@ def test_select_domain(client):
 
     with open(ON_DOMAIN_SELECTED) as f:
         expected_result = json.load(f)
-    
+
     result = __remove_block_id(result)
     assert result == expected_result
 
@@ -155,7 +155,7 @@ def test_select_domain_error(client):
         client = client,
         logger = logging.getLogger()
     )
-    
+
     assert "Error opening change request form" in result
 
 @mock_gql_client({
@@ -177,8 +177,8 @@ def test_select_evironment(client):
                 text = PRODUCTION,
                 value = DEFAULT_ENV
             ),
-            private_metadata = json.dumps({ 
-                "domain_id": "1", "domain_name": "Test" 
+            private_metadata = json.dumps({
+                "domain_id": "1", "domain_name": "Test"
             }),
             blocks_fixture = modal['blocks']
         ),
@@ -207,8 +207,8 @@ def test_select_evironment_error(client):
                 text = PRODUCTION,
                 value = DEFAULT_ENV
             ),
-            private_metadata = json.dumps({ 
-                "domain_id": "1", "domain_name": "Test" 
+            private_metadata = json.dumps({
+                "domain_id": "1", "domain_name": "Test"
             }),
             blocks_fixture = modal['blocks']
         ),
@@ -237,15 +237,15 @@ def test_select_group(client):
                 text = RELEASE_1,
                 value = RELEASE_1
             ),
-            private_metadata = json.dumps({ 
-                "domain_id": "1", "domain_name": "Test" 
+            private_metadata = json.dumps({
+                "domain_id": "1", "domain_name": "Test"
             }),
             blocks_fixture = modal['blocks']
         ),
         client = client,
         logger = logging.getLogger()
     )
-    
+
     with open(ON_GROUP_SELECTED) as f:
         expected_result = json.load(f)
 
@@ -267,15 +267,15 @@ def test_select_group_error(client):
                 text = RELEASE_1,
                 value = RELEASE_1
             ),
-            private_metadata = json.dumps({ 
-                "domain_id": "1", "domain_name": "Test" 
+            private_metadata = json.dumps({
+                "domain_id": "1", "domain_name": "Test"
             }),
             blocks_fixture = modal['blocks']
         ),
         client = client,
         logger = logging.getLogger()
     )
-    
+
     assert "Error selecting group" in result
 
 def test_select_switcher(client):
@@ -292,8 +292,8 @@ def test_select_switcher(client):
                 text = MY_FEATURE,
                 value = MY_FEATURE
             ),
-            private_metadata = json.dumps({ 
-                "domain_id": "1", "domain_name": "Test" 
+            private_metadata = json.dumps({
+                "domain_id": "1", "domain_name": "Test"
             }),
             blocks_fixture = modal['blocks']
         ),
@@ -321,8 +321,8 @@ def test_select_switcher_none(client):
                 value = "-"
             ),
             state_fixture = SWITCHER_STATE_SELECTION,
-            private_metadata = json.dumps({ 
-                "domain_id": "1", "domain_name": "Test" 
+            private_metadata = json.dumps({
+                "domain_id": "1", "domain_name": "Test"
             }),
             blocks_fixture = modal['blocks']
         ),
@@ -350,8 +350,8 @@ def test_submit_for_review(client):
                 text = "Activate",
                 value = "true"
             ),
-            private_metadata = json.dumps({ 
-                "domain_id": "1", "domain_name": "Test" 
+            private_metadata = json.dumps({
+                "domain_id": "1", "domain_name": "Test"
             }),
             blocks_fixture = modal['blocks']
         ),
@@ -383,8 +383,8 @@ def test_submit_without_approval_ignored(client):
                 text = "Activate",
                 value = "true"
             ),
-            private_metadata = json.dumps({ 
-                "domain_id": "1", "domain_name": "Test" 
+            private_metadata = json.dumps({
+                "domain_id": "1", "domain_name": "Test"
             }),
             blocks_fixture = modal['blocks']
         ),
@@ -416,8 +416,8 @@ def test_submit_without_approval_frozen(client):
                 text = "Activate",
                 value = "true"
             ),
-            private_metadata = json.dumps({ 
-                "domain_id": "1", "domain_name": "Test" 
+            private_metadata = json.dumps({
+                "domain_id": "1", "domain_name": "Test"
             }),
             blocks_fixture = modal['blocks']
         ),
@@ -449,8 +449,8 @@ def test_submit_for_review_error(client):
                 text = "Activate",
                 value = "true"
             ),
-            private_metadata = json.dumps({ 
-                "domain_id": "1", "domain_name": "Test" 
+            private_metadata = json.dumps({
+                "domain_id": "1", "domain_name": "Test"
             }),
             blocks_fixture = modal['blocks']
         ),
@@ -488,7 +488,7 @@ def test_submit_request(client):
         ),
         client = client,
         logger = logging.getLogger()
-    ) or {}
+    ) or {} # type: ignore
 
     with open(ON_SUBMIT) as f:
         expected_result = json.load(f)

@@ -6,5 +6,6 @@ load_dotenv()
 
 SWITCHER_URL = os.environ.get("SWITCHER_URL")
 SWITCHER_API_URL = os.environ.get("SWITCHER_API_URL")
+LOG_LEVEL = os.environ.get("LOG_LEVEL", "INFO")
 RELEASE_TIME = os.environ.get("RELEASE_TIME", "latest")
 VERSION = f"2.1.1 {RELEASE_TIME}"
