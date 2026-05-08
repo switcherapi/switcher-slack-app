@@ -1,14 +1,18 @@
 import copy
+import logging
 
 from services.switcher_service import SwitcherService
 from payloads.home import MODAL_REQUEST, APP_HOME
 from utils.slack_payload_util import populate_selection
 from utils.switcher_util import get_keyval_of_keys
 
+LOGGER = logging.getLogger(__name__)
+
 def on_home_opened(client, event, logger):
     """ Displays the home view """
 
-    logger.warning(f"Home view opened by {event['user']}")
+    current_logger = logger or LOGGER
+    current_logger.info("Home view opened by %s", event["user"])
     client.views_publish(
         user_id = event["user"],
         view = APP_HOME
@@ -20,13 +24,14 @@ def on_change_request_opened(ack, body, client, logger):
     """ Displays the change request modal """
 
     ack()
+    current_logger = logger or LOGGER
 
     try:
         change_request = copy.deepcopy(MODAL_REQUEST)
 
         # Collect args
         team_id = body["team"]["id"]
-        logger.warning(f"Team ID: {team_id}")
+        current_logger.debug("Opening change request modal for team %s", team_id)
 
         domains = SwitcherService().get_domains(team_id)
 
@@ -44,5 +49,5 @@ def on_change_request_opened(ack, body, client, logger):
 
         return change_request
     except Exception as e:
-        logger.error(f"Error opening change request form: {e}")
+        current_logger.exception(f"Error opening change request form: {e}")
         return None

@@ -41,11 +41,11 @@ class SwitcherService(SwitcherClient):
             }}
         ''')
 
+        environments = None
         configuration = response.get("configuration", None)
         if configuration is not None:
             environments = configuration.get("environments", None)
-            if environments is not None:
-                return environments
+        return environments
 
     def get_groups(self, team_id: str, domain_id: str, environment: str) -> list[dict] | None:
         """ Fetch all Groups linked to the Environment """
@@ -64,11 +64,11 @@ class SwitcherService(SwitcherClient):
             }}
         ''')
 
+        groups = None
         configuration = response.get("configuration", None)
         if configuration is not None:
             groups = configuration.get("group", None)
-            if groups is not None:
-                return groups
+        return groups
 
     def get_switchers(self, team_id: str, domain_id: str, environment: str, group: str) -> list[dict] | None:
         """ Fetch all Switchers linked to the Group """
