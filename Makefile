@@ -1,4 +1,4 @@
-.PHONY: install run test cover
+.PHONY: install run gunicorn test cover
 
 install:
 	pipenv install --dev
