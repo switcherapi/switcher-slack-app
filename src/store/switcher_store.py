@@ -43,7 +43,7 @@ class SwitcherAppInstallationStore(InstallationStore, AsyncInstallationStore):
                 bot_payload = installation.to_bot().__dict__
             )
         except Exception as e:
-            self.logger.error(
+            self.logger.exception(
                 f"Failed to save installation data for enterprise: {e_id}, team: {t_id}: {e}",
                 exc_info = True,
             )
@@ -78,7 +78,7 @@ class SwitcherAppInstallationStore(InstallationStore, AsyncInstallationStore):
             bot_payload = json.loads(response.data)
             return Bot(**bot_payload)
         except Exception as e:
-            self.logger.warning(
+            self.logger.exception(
                 f"Failed to find bot installation data for enterprise: {enterprise_id}, team: {team_id}: {e}",
                 exc_info = True,
             )
@@ -117,7 +117,7 @@ class SwitcherAppInstallationStore(InstallationStore, AsyncInstallationStore):
             installation_payload = json.loads(response.data)
             return Installation(**installation_payload)
         except Exception as e:
-            self.logger.warning(
+            self.logger.exception(
                 f"Failed to find an installation data for enterprise: {enterprise_id}, team: {team_id}: {e}",
                 exc_info = True,
             )
@@ -165,7 +165,7 @@ class SwitcherAppInstallationStore(InstallationStore, AsyncInstallationStore):
                 user_id = user_id
             )
         except Exception as e:
-            self.logger.warning(
+            self.logger.exception(
                 f"Failed to delete installation data for enterprise: {enterprise_id}, team: {team_id}: {e}",
                 exc_info = True,
             )
