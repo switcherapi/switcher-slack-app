@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "54162cc77c634104183313814e7f9380e3939e075217969a5735c3c0160f38a8"
+            "sha256": "ce697b4f9ec99464602e29edb4c4dde8567f3e9b0629e45ba114c4484a3c1094"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -221,11 +221,11 @@
         },
         "graphql-core": {
             "hashes": [
-                "sha256:015457da5d996c924ddf57a43f4e959b0b94fb695b85ed4c29446e508ed65cf3",
-                "sha256:cbee07bee1b3ed5e531723685369039f32ff815ef60166686e0162f540f1520c"
+                "sha256:0b3e35ff41e9adba53021ab0cef475eb18f57c7f53f0f2ca55567fbf3c537ea0",
+                "sha256:e7e156d10beb127cab5c89ff0da71416fc73d27c484a4757d3b2d35633774802"
             ],
             "markers": "python_version >= '3.7' and python_version < '4'",
-            "version": "==3.2.8"
+            "version": "==3.2.11"
         },
         "gunicorn": {
             "hashes": [
@@ -238,12 +238,12 @@
         },
         "idna": {
             "hashes": [
-                "sha256:cc246e3a3f89580c3a951b5ad298ca4638078b2cdd4f115654332b5c26daded5",
-                "sha256:d7a6da03db833450fca25d2358ac9ff06cd624577a4aea3a596d5c0f77b8e03d"
+                "sha256:7f952cbe720b688055e3f87de14f5c3e5fdaa8bc3928985c4077ca689de849a2",
+                "sha256:ffb385a7e039654cef1ab9ef32c6fafe283c0c0467bba1d9029738ce4a14a848"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.9'",
-            "version": "==3.16"
+            "version": "==3.18"
         },
         "itsdangerous": {
             "hashes": [
@@ -993,12 +993,12 @@
         },
         "pytest": {
             "hashes": [
-                "sha256:2c5efc453d45394fdd706ade797c0a81091eccd1d6e4bccfcd476e2b8e0ab5d9",
-                "sha256:b86ada508af81d19edeb213c681b1d48246c1a91d304c6c81a427674c17eb91c"
+                "sha256:41dd9148c08072446394cefd3d79701701335a9f4cae69ba92e39f6c7f5c061c",
+                "sha256:8ebb0e7888bdf2bdfc602ec51f8f62d50200af37356c74e503c79a94f5c81f32"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.10'",
-            "version": "==9.0.3"
+            "version": "==9.1.0"
         },
         "pytest-cov": {
             "hashes": [
