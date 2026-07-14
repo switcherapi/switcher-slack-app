@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - name: Git checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
           ref: ${{ github.event.inputs.tag }}
@@ -29,10 +29,10 @@ jobs:
         run: |
           pip install pipenv
           pipenv install --dev
-      
+
       - name: Test
         run: pipenv run pytest
-  
+
   docker:
     name: Publish Docker Image
     needs: [ build-test ]
@@ -40,7 +40,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
           ref: ${{ github.event.inputs.tag }}
@@ -51,7 +51,7 @@ jobs:
         with:
           images: trackerforce/switcher-slack-app
           tags: ${{ github.event.inputs.tag }}
-      
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v4
 
