@@ -34,7 +34,7 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Python 3.14
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: "3.14"
 
@@ -47,7 +47,7 @@ jobs:
         run: pipenv run pytest -v --cov=./ --cov-report xml
 
       - name: SonarCloud Scan
-        uses: sonarsource/sonarqube-scan-action@v8.2.0
+        uses: sonarsource/sonarqube-scan-action@v8.2.1
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         if: env.SONAR_TOKEN != ''
