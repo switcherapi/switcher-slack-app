@@ -57,11 +57,13 @@ Assuming that you have signed up for a Slack account and are logged in to a Work
 
 1. Open https://api.slack.com/
 2. Click on 'Your Apps'
-3. Hit 'Create an App' and then select 'From an app manifest'
-4. Select the Workspace to install the app
-5. Open 'switcher-slack-app.yaml' and replace the EDNPOINTS with the app URL e.g. https://switcher-slack-app.ngrok.io
-6. Copy all the content and paste to the manifest YAML space, then hit next
-7. Review the summary provided, then click on 'Create'
+3. Hit 'Create an App' and then select 'Blank app'
+4. Input any App Name (e.g. Switcher API) and select Workspace. Click on 'Create'
+5. Go to 'Basic Information' and copy 'Client ID', 'Client Secret' and 'Signing Secret'. Launch Switcher Slack App with the copied credentials.
+6. Open 'switcher-slack-app.yaml' and replace the ENDPOINTS with the app URL e.g. https://switcher-slack-app.ngrok.io
+7. Copy all the content and paste to the manifest YAML space in the 'App Manifest', then hit 'Save Changes'
+8. Go to 'Event Subscriptions' and click on 'Retry' to verify the endpoint.
+9. Click on 'Save Changes'.
 
 (*) Do not install the app via 'Install to Workspace' button
 
