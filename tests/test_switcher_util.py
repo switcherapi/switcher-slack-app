@@ -1,6 +1,7 @@
 import os
 import pytest
 
+from errors import SwitcherContextError
 from src.utils.switcher_util import (
     get_environment_keyval,
     get_keyval,
@@ -16,14 +17,14 @@ def test_get_environment_keyval():
 
 def test_get_keyval():
     RELEASE1 = "Release 1"
-    
+
     expected = [
         { "name": f"[on] {RELEASE1}", "value": RELEASE1 }
     ]
     assert expected == get_keyval("name", [{"name": RELEASE1, "activated": True}])
 
 def test_validate_context_request():
-    with pytest.raises(Exception) as e_info:
+    with pytest.raises(SwitcherContextError) as e_info:
         validate_context_request({})
 
     assert e_info.value.args[0] == "Missing [Domain - Domain ID - Environment - Group - Status]"

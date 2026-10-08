@@ -1,7 +1,8 @@
-from flask import Response
 from typing import Optional
-from .switcher_client import SwitcherClient
+
+from flask import Response
 from errors import SwitcherSlackInstallationError
+from .switcher_client import SwitcherClient
 
 class SwitcherInstallationStoreService(SwitcherClient):
     """ Service responsible to handle the app installation and authentication """

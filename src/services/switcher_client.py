@@ -1,12 +1,12 @@
-import os
 import datetime
+import os
+from typing import Optional
+
 import jwt
 import requests
 
 from flask import Response
-from typing import Optional
-
-from gql import gql, Client
+from gql import Client, gql
 from gql.transport.requests import RequestsHTTPTransport
 
 class SwitcherClient:

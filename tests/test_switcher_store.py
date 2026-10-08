@@ -12,7 +12,7 @@ from slack_sdk.oauth.state_store import FileOAuthStateStore
 
 from tests.fixtures.installation import INSTALLATION_FIX1
 from tests.utils.mock_request import (
-    mock_event_handler, 
+    mock_event_handler,
     mock_switcher_client
 )
 
@@ -34,7 +34,7 @@ def test_health(client):
 def test_save_installation_success(client):
     with (
         # Bypass browser and state validations
-        patch.object(OAuthStateUtils, 'is_valid_browser', return_value = True), 
+        patch.object(OAuthStateUtils, 'is_valid_browser', return_value = True),
         patch.object(FileOAuthStateStore, 'consume', return_value = True),
 
         # Inject Installation result
@@ -50,13 +50,13 @@ def test_save_installation_success(client):
         t_id = INSTALLATION_FIX1["team_id"]
 
         assert response.status_code == 308
-        assert f"{callback_url}/slack/authorization?e_id={e_id}&t_id={t_id}" == response.headers["Location"]
+        assert response.headers["Location"] == f"{callback_url}/slack/authorization?e_id={e_id}&t_id={t_id}"
 
 @mock_switcher_client("post", {}, 400)
 def test_save_installation_fail(client):
     with (
         # Bypass browser and state validations
-        patch.object(OAuthStateUtils, 'is_valid_browser', return_value = True), 
+        patch.object(OAuthStateUtils, 'is_valid_browser', return_value = True),
         patch.object(FileOAuthStateStore, 'consume', return_value = True),
 
         # Inject Installation result
@@ -69,7 +69,7 @@ def test_save_installation_fail(client):
 def test_save_installation_invalid_store(client):
     with (
         # Bypass browser validation
-        patch.object(OAuthStateUtils, 'is_valid_browser', return_value = True), 
+        patch.object(OAuthStateUtils, 'is_valid_browser', return_value = True),
 
         # Force invalid state
         patch.object(FileOAuthStateStore, 'consume', return_value = False),
@@ -79,4 +79,4 @@ def test_save_installation_invalid_store(client):
 
         # Then
         assert response.status_code == 308
-        assert f"{callback_url}/slack/authorization?error=1&reason=invalid_state" == response.headers["Location"]
+        assert response.headers["Location"] == f"{callback_url}/slack/authorization?error=1&reason=invalid_state"
