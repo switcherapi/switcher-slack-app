@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: Get PR details
         id: pr
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const pr = await github.rest.pulls.get({
@@ -47,7 +47,7 @@ jobs:
         run: pipenv run pytest -v --cov=./ --cov-report xml
 
       - name: SonarCloud Scan
-        uses: sonarsource/sonarqube-scan-action@v8.4.0
+        uses: sonarsource/sonarqube-scan-action@v8.4.1
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         if: env.SONAR_TOKEN != ''
